@@ -2,4 +2,4 @@
 
 | Assemblies                                                                         | |
 |:-----------------------------------------------------------------------------------| :--- |
-| [PreciseCalc](PreciseCalc.ConstructiveReal.md 'PreciseCalc') | |
+| [PreciseCalc](PreciseCalc.md 'PreciseCalc') | |
