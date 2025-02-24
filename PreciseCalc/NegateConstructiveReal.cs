@@ -7,5 +7,5 @@ namespace PreciseCalc;
 /// </summary>
 internal sealed class NegateConstructiveReal(ConstructiveReal x) : ConstructiveReal
 {
-    protected override BigInteger Approximate(int precision) => -x.GetApproximation(precision);
+    private protected override BigInteger Approximate(int precision) => -x.GetApproximation(precision);
 }

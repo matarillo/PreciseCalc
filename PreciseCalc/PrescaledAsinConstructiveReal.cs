@@ -7,7 +7,7 @@ namespace PreciseCalc;
 /// </summary>
 internal class PrescaledAsinConstructiveReal(ConstructiveReal x) : SlowConstructiveReal
 {
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         // The Taylor series is the sum of x^(2n+1) * (2n)!/(4^n n!^2 (2n+1))
         // Note that (2n)!/(4^n n!^2) is always less than one.

@@ -14,7 +14,7 @@ internal sealed class InverseConstructiveReal(ConstructiveReal x) : Constructive
     /// </summary>
     /// <param name="precision">The precision at which to approximate the value.</param>
     /// <returns>The approximation of 1/x.</returns>
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         int msd = x.GetMsd();
         int invMsd = 1 - msd;

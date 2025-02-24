@@ -14,5 +14,5 @@ internal sealed class IntConstructiveReal(BigInteger n) : ConstructiveReal
     /// </summary>
     /// <param name="precision">The precision at which to approximate the value.</param>
     /// <returns>The approximation of the integer scaled by 2^precision.</returns>
-    protected override BigInteger Approximate(int precision) => Scale(n, -precision);
+    private protected override BigInteger Approximate(int precision) => Scale(n, -precision);
 }

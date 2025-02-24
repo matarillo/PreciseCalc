@@ -36,7 +36,7 @@ internal class GaussLegendrePiConstructiveReal : SlowConstructiveReal
         _bVal.Add(default);
     }
 
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         // Get us back into a consistent state if the last computation
         // was interrupted after pushing onto b_prec.

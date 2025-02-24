@@ -16,7 +16,7 @@ internal sealed class MultiplyConstructiveReal : ConstructiveReal
         _op2 = y;
     }
 
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         int halfPrec = (precision >> 1) - 1;
         int msdOp1 = _op1.GetMsd(halfPrec);

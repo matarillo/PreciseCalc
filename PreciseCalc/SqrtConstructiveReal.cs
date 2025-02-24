@@ -32,7 +32,7 @@ internal sealed class SqrtConstructiveReal(ConstructiveReal x) : ConstructiveRea
     /// </summary>
     /// <param name="precision">The precision at which to approximate the square root.</param>
     /// <returns>The approximation of sqrt(x) scaled by 2^precision.</returns>
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         int maxOpPrecNeeded = 2 * precision - 1;
         int msd = x.RefineMsd(maxOpPrecNeeded);

@@ -8,7 +8,7 @@ namespace PreciseCalc;
 /// </summary>
 internal class PrescaledCosConstructiveReal(ConstructiveReal x) : SlowConstructiveReal
 {
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         if (precision >= 1) return Big0;
 

@@ -32,7 +32,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
         return 0;
     }
 
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         const int extraArgPrec = 4;
         const int smallStepThreshold = 30;

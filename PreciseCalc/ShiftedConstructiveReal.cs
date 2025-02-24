@@ -14,5 +14,5 @@ internal sealed class ShiftedConstructiveReal(ConstructiveReal x, int n) : Const
     /// </summary>
     /// <param name="precision">The precision at which to approximate the value.</param>
     /// <returns>The approximation of the shifted value.</returns>
-    protected override BigInteger Approximate(int precision) => x.GetApproximation(precision - n);
+    private protected override BigInteger Approximate(int precision) => x.GetApproximation(precision - n);
 }

@@ -12,6 +12,6 @@ namespace PreciseCalc;
 /// </remarks>
 internal class AddConstructiveReal(ConstructiveReal x, ConstructiveReal y) : ConstructiveReal
 {
-    protected override BigInteger Approximate(int precision) =>
+    private protected override BigInteger Approximate(int precision) =>
         Scale(x.GetApproximation(precision - 2) + y.GetApproximation(precision - 2), -2);
 }

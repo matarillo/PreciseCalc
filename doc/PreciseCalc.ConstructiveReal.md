@@ -12,11 +12,8 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 | Fields | |
 | :--- | :--- |
-| [ApprValid](PreciseCalc.ConstructiveReal.ApprValid.md 'PreciseCalc.ConstructiveReal.ApprValid') | The scaled approximation corresponding to min_prec. |
 | [AtanPI](PreciseCalc.ConstructiveReal.AtanPI.md 'PreciseCalc.ConstructiveReal.AtanPI') | Our old PI implementation. pi/4 = 4*atan(1/5) - atan(1/239) |
 | [HalfPI](PreciseCalc.ConstructiveReal.HalfPI.md 'PreciseCalc.ConstructiveReal.HalfPI') | pi/2 |
-| [MaxAppr](PreciseCalc.ConstructiveReal.MaxAppr.md 'PreciseCalc.ConstructiveReal.MaxAppr') | The scaled approximation corresponding to min_prec. |
-| [MinPrec](PreciseCalc.ConstructiveReal.MinPrec.md 'PreciseCalc.ConstructiveReal.MinPrec') | The smallest precision value with which the above has been called. |
 | [PI](PreciseCalc.ConstructiveReal.PI.md 'PreciseCalc.ConstructiveReal.PI') | The ratio of a circle's circumference to its diameter. |
 | [PleaseStop](PreciseCalc.ConstructiveReal.PleaseStop.md 'PreciseCalc.ConstructiveReal.PleaseStop') | Setting this to true requests that all computations be aborted by<br/>throwing AbortedException.<br/>Must be rest to false before any further<br/>computation. |
 
@@ -25,7 +22,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | [Abs()](PreciseCalc.ConstructiveReal.Abs().md 'PreciseCalc.ConstructiveReal.Abs()') | Returns the absolute value of the constructive real. |
 | [Acos()](PreciseCalc.ConstructiveReal.Acos().md 'PreciseCalc.ConstructiveReal.Acos()') | Computes the trigonometric arc cosine function. |
 | [Add(ConstructiveReal)](PreciseCalc.ConstructiveReal.Add(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Add(PreciseCalc.ConstructiveReal)') | Add two constructive reals. |
-| [Approximate(int)](PreciseCalc.ConstructiveReal.Approximate(int).md 'PreciseCalc.ConstructiveReal.Approximate(int)') | Subclasses must implement this method to approximate the value to a given precision. |
 | [Asin()](PreciseCalc.ConstructiveReal.Asin().md 'PreciseCalc.ConstructiveReal.Asin()') | Computes the trigonometric arc sine function. |
 | [AssumeInt()](PreciseCalc.ConstructiveReal.AssumeInt().md 'PreciseCalc.ConstructiveReal.AssumeInt()') | Assumes the constructive real is an integer, preventing unnecessary evaluations. |
 | [BigIntegerValue()](PreciseCalc.ConstructiveReal.BigIntegerValue().md 'PreciseCalc.ConstructiveReal.BigIntegerValue()') | Returns a BigInteger which differs by less than one from the constructive real. |

@@ -11,7 +11,7 @@ namespace PreciseCalc;
 /// </remarks>
 internal class IntegralAtanConstructiveReal(int x) : SlowConstructiveReal
 {
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         if (precision >= 1) return Big0;
 

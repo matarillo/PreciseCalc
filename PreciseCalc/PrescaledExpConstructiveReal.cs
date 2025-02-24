@@ -13,7 +13,7 @@ namespace PreciseCalc;
 /// </remarks>
 internal class PrescaledExpConstructiveReal(ConstructiveReal x) : ConstructiveReal
 {
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         if (precision >= 1) return Big0;
 

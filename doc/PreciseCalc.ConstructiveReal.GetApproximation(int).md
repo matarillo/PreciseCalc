@@ -18,8 +18,8 @@ public virtual System.Numerics.BigInteger GetApproximation(int precision);
 [System.Numerics.BigInteger](https://docs.microsoft.com/en-us/dotnet/api/System.Numerics.BigInteger 'System.Numerics.BigInteger')
 
 ### Remarks
-Produces the same answer as [Approximate(int)](PreciseCalc.ConstructiveReal.Approximate(int).md 'PreciseCalc.ConstructiveReal.Approximate(int)'), but uses and  
+Produces the same answer as [PreciseCalc.ConstructiveReal.Approximate(System.Int32)](https://docs.microsoft.com/en-us/dotnet/api/PreciseCalc.ConstructiveReal.Approximate#PreciseCalc_ConstructiveReal_Approximate_System_Int32_ 'PreciseCalc.ConstructiveReal.Approximate(System.Int32)'), but uses and  
 maintains a cached approximation.  
-Normally not overridden, and called only from [Approximate(int)](PreciseCalc.ConstructiveReal.Approximate(int).md 'PreciseCalc.ConstructiveReal.Approximate(int)')  
+Normally not overridden, and called only from [PreciseCalc.ConstructiveReal.Approximate(System.Int32)](https://docs.microsoft.com/en-us/dotnet/api/PreciseCalc.ConstructiveReal.Approximate#PreciseCalc_ConstructiveReal_Approximate_System_Int32_ 'PreciseCalc.ConstructiveReal.Approximate(System.Int32)')  
 methods in subclasses.  Not needed if the provided operations  
 on constructive reals suffice.

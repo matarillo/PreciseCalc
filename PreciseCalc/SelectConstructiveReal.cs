@@ -25,7 +25,7 @@ internal class SelectConstructiveReal : ConstructiveReal
         _op2 = y;
     }
 
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         if (_selectorSign < 0) return _op1.GetApproximation(precision);
         if (_selectorSign > 0) return _op2.GetApproximation(precision);

@@ -20,7 +20,7 @@ internal class PrescaledLnConstructiveReal(ConstructiveReal x) : SlowConstructiv
     /// appear to require precomputed tabular information.
     /// </remarks>
     /// <exception cref="OperationCanceledException"></exception>
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         if (precision >= 0) return Big0;
 

@@ -48,18 +48,18 @@ public abstract class ConstructiveReal
     /// Called only with the lock on the <see cref="ConstructiveReal"/> object
     /// already held.
     /// </remarks>
-    protected abstract BigInteger Approximate(int precision);
+    private protected abstract BigInteger Approximate(int precision);
 
     // Caching fields (mutable state)
 
     /// <summary>The smallest precision value with which the above has been called.</summary>
-    protected int MinPrec;
+    private protected int MinPrec;
 
     /// <summary>The scaled approximation corresponding to min_prec.</summary>
-    protected BigInteger MaxAppr;
+    private protected BigInteger MaxAppr;
 
     /// <summary>The scaled approximation corresponding to min_prec.</summary>
-    protected bool ApprValid;
+    private protected bool ApprValid;
 
     /// <summary>
     /// Computes the logarithm base 2 of an integer, rounded up.

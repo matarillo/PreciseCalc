@@ -32,7 +32,7 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         _maxDeltaMsd = Math.Min(maxDeltaLeftMsd, maxDeltaRightMsd);
     }
 
-    protected override BigInteger Approximate(int precision)
+    private protected override BigInteger Approximate(int precision)
     {
         const int extraPrec = 4;
         var logDelta = precision - _data.Deriv2Msd;
