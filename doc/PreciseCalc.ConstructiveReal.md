@@ -14,8 +14,10 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | :--- | :--- |
 | [AtanPI](PreciseCalc.ConstructiveReal.AtanPI.md 'PreciseCalc.ConstructiveReal.AtanPI') | Our old PI implementation. pi/4 = 4*atan(1/5) - atan(1/239) |
 | [HalfPI](PreciseCalc.ConstructiveReal.HalfPI.md 'PreciseCalc.ConstructiveReal.HalfPI') | pi/2 |
+| [One](PreciseCalc.ConstructiveReal.One.md 'PreciseCalc.ConstructiveReal.One') | Predefined constant for the value 1. |
 | [PI](PreciseCalc.ConstructiveReal.PI.md 'PreciseCalc.ConstructiveReal.PI') | The ratio of a circle's circumference to its diameter. |
 | [PleaseStop](PreciseCalc.ConstructiveReal.PleaseStop.md 'PreciseCalc.ConstructiveReal.PleaseStop') | Setting this to true requests that all computations be aborted by<br/>throwing AbortedException.<br/>Must be rest to false before any further<br/>computation. |
+| [Zero](PreciseCalc.ConstructiveReal.Zero.md 'PreciseCalc.ConstructiveReal.Zero') | Predefined constant for the value 0. |
 
 | Methods | |
 | :--- | :--- |

@@ -17,18 +17,69 @@ public abstract class UnaryCRFunction
     public abstract ConstructiveReal Execute(ConstructiveReal x);
 
     // --- Predefined Functions ---
+    /// <summary>
+    /// The identity function f(x) = x.
+    /// </summary>
     public static readonly UnaryCRFunction IdentityFunction = new IdentityUnaryCRFunction();
+
+    /// <summary>
+    /// The negation function f(x) = -x.
+    /// </summary>
     public static readonly UnaryCRFunction NegateFunction = new NegateUnaryCRFunction();
+
+    /// <summary>
+    /// The inverse function f(x) = 1/x.
+    /// </summary>
     public static readonly UnaryCRFunction InverseFunction = new InverseUnaryCRFunction();
+
+    /// <summary>
+    /// The absolute value function f(x) = |x|.
+    /// </summary>
     public static readonly UnaryCRFunction AbsFunction = new AbsUnaryCRFunction();
+
+    /// <summary>
+    /// The exponential function f(x) = exp(x).
+    /// </summary>
     public static readonly UnaryCRFunction ExpFunction = new ExpUnaryCRFunction();
+
+    /// <summary>
+    /// The cosine function f(x) = cos(x).
+    /// </summary>
     public static readonly UnaryCRFunction CosFunction = new CosUnaryCRFunction();
+
+    /// <summary>
+    /// The sine function f(x) = sin(x).
+    /// </summary>
     public static readonly UnaryCRFunction SinFunction = new SinUnaryCRFunction();
+
+    /// <summary>
+    /// The tangent function f(x) = tan(x).
+    /// </summary>
     public static readonly UnaryCRFunction TanFunction = new TanUnaryCRFunction();
+
+    /// <summary>
+    /// The arcsine function f(x) = asin(x).
+    /// </summary>
     public static readonly UnaryCRFunction AsinFunction = new AsinUnaryCRFunction();
+
+    /// <summary>
+    /// The arccosine function f(x) = acos(x).
+    /// </summary>
     public static readonly UnaryCRFunction AcosFunction = new AcosUnaryCRFunction();
+
+    /// <summary>
+    /// The arctangent function f(x) = atan(x).
+    /// </summary>
     public static readonly UnaryCRFunction AtanFunction = new AtanUnaryCRFunction();
+
+    /// <summary>
+    /// The natural logarithm function f(x) = ln(x).
+    /// </summary>
     public static readonly UnaryCRFunction LnFunction = new LnUnaryCRFunction();
+
+    /// <summary>
+    /// The square root function f(x) = sqrt(x).
+    /// </summary>
     public static readonly UnaryCRFunction SqrtFunction = new SqrtUnaryCRFunction();
 
     /// <summary>

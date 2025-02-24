@@ -142,7 +142,14 @@ public abstract class ConstructiveReal
 
     // Predefined constants
 
+    /// <summary>
+    /// Predefined constant for the value 0.
+    /// </summary>
     public static readonly ConstructiveReal Zero = FromInt(0);
+
+    /// <summary>
+    /// Predefined constant for the value 1.
+    /// </summary>
     public static readonly ConstructiveReal One = FromInt(1);
 
     /// <summary>
