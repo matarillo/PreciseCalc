@@ -1,11 +1,11 @@
 ### [PreciseCalc](PreciseCalc.md 'PreciseCalc').[BoundedRational](PreciseCalc.BoundedRational.md 'PreciseCalc.BoundedRational')
 
-## BoundedRational.IsValid Property
+## BoundedRational.IsNull Property
 
-Returns true if the bounded rational is valid.
+Returns true if the bounded rational is null (not valid).
 
 ```csharp
-public bool IsValid { get; }
+public bool IsNull { get; }
 ```
 
 #### Property Value

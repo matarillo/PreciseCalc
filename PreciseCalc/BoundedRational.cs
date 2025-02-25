@@ -191,9 +191,9 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     #region Properties
 
     /// <summary>
-    /// Returns true if the bounded rational is valid.
+    /// Returns true if the bounded rational is null (not valid).
     /// </summary>
-    public bool IsValid => _isValid;
+    public bool IsNull => !_isValid;
 
     /// <summary>
     /// Returns the denominator of the bounded rational.
@@ -1010,7 +1010,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public BoundedRational[] ExtractSquareReduced()
     {
-        if (!IsValid)
+        if (!IsNull)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
