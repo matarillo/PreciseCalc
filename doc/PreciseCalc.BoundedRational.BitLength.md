@@ -6,13 +6,16 @@ Number of bits in the representation. Makes the most sense for the result of Red
 since it does not implicitly reduce.
 
 ```csharp
-public long BitLength { get; }
+public int BitLength { get; }
 ```
 
 #### Property Value
-[System.Int64](https://docs.microsoft.com/en-us/dotnet/api/System.Int64 'System.Int64')
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
 
 #### Exceptions
 
 [System.InvalidOperationException](https://docs.microsoft.com/en-us/dotnet/api/System.InvalidOperationException 'System.InvalidOperationException')  
 When invalid
+
+### Remarks
+<= MaxSize

@@ -30,12 +30,46 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     private const int ExtractSquareMaxLen = 5000;
     private static readonly Random ReduceRng = new();
 
+    /// <summary>
+    /// Max integer for which <see cref="ExtractSquare"/> is guaranteed to be optimal.
+    /// </summary>
+    /// <remarks>
+    /// We currently fail to do so for 44 = 11*4, but succeed for all perfect squares*n, with n &lt;= 10
+    /// and numerator and denominator size &lt; <see cref="ExtractSquareMaxLen"/>.
+    /// </remarks>
+    public const int ExtractSquareMaxOpt = 43;
+
     #region Constants
 
     /// <summary>
     /// Singleton for zero.
     /// </summary>
     public static readonly BoundedRational Zero = new(0);
+
+    /// <summary>
+    /// Singleton for one half.
+    /// </summary>
+    public static readonly BoundedRational Half = new(1, 2);
+
+    /// <summary>
+    /// Singleton for minus one half.
+    /// </summary>
+    public static readonly BoundedRational MinusHalf = new(-1, 2);
+
+    /// <summary>
+    /// Singleton for one third.
+    /// </summary>
+    public static readonly BoundedRational Third = new(-1, 2);
+
+    /// <summary>
+    /// Singleton for one fourth.
+    /// </summary>
+    public static readonly BoundedRational Quarter = new(-1, 2);
+
+    /// <summary>
+    /// Singleton for one sixth.
+    /// </summary>
+    public static readonly BoundedRational Sixth = new(-1, 2);
 
     /// <summary>
     /// Singleton for one.
@@ -58,15 +92,25 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     public static readonly BoundedRational MinusTwo = new(-2);
 
     /// <summary>
+    /// Singleton for three.
+    /// </summary>
+    public static readonly BoundedRational Three = new(3);
+
+    /// <summary>
     /// Singleton for ten.
     /// </summary>
     public static readonly BoundedRational Ten = new(10);
 
     /// <summary>
+    /// Singleton for twelve.
+    /// </summary>
+    public static readonly BoundedRational Twelve = new(12);
+
+    /// <summary>
     /// Singleton for an invalid bounded rational.
     /// </summary>
     public static readonly BoundedRational Null = new();
-
+   
     #endregion
 
     private readonly BigInteger _numerator;
@@ -295,19 +339,25 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// Number of bits in the representation. Makes the most sense for the result of Reduce(),
     /// since it does not implicitly reduce.
     /// </summary>
+    /// <remarks>
+    /// &lt;= MaxSize
+    /// </remarks>
     /// <exception cref="InvalidOperationException">When invalid</exception>
-    public long BitLength =>
+    public int BitLength =>
         _isValid
-            ? _numerator.GetBitLength() + _denominator.GetBitLength()
+            ? (int)(_numerator.GetBitLength() + _denominator.GetBitLength())
             : throw new InvalidOperationException("Invalid bounded rational.");
 
     /// <summary>
     /// Approximate number of bits to left of binary point.
     /// Negative indicates leading zeroes to the right of binary point.
     /// </summary>
+    /// <remarks>
+    /// &lt;= MaxSize
+    /// </remarks>
     /// <exception cref="InvalidOperationException">When invalid</exception>
-    public long WholeNumberBits => _isValid
-        ? _numerator.Sign == 0 ? long.MinValue : _numerator.GetBitLength() - _denominator.GetBitLength()
+    public int WholeNumberBits => _isValid
+        ? _numerator.Sign == 0 ? int.MinValue : (int)(_numerator.GetBitLength() - _denominator.GetBitLength())
         : throw new InvalidOperationException("Invalid bounded rational.");
 
     #endregion
@@ -445,19 +495,19 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
             return -(-this).ToDouble();
         }
 
-        var apprExp = (int)_numerator.GetBitLength() - (int)_denominator.GetBitLength();
-        if (apprExp < -1100 || sign == 0)
+        var approxExp = (int)_numerator.GetBitLength() - (int)_denominator.GetBitLength();
+        if (approxExp < -1100 || sign == 0)
         {
             return 0.0;
         }
 
-        var neededPrec = apprExp - 80;
-        var dividend = neededPrec < 0 ? _numerator << -neededPrec : _numerator;
-        var divisor = neededPrec > 0 ? _denominator << neededPrec : _denominator;
+        var neededPrecision = approxExp - 80;
+        var dividend = neededPrecision < 0 ? _numerator << -neededPrecision : _numerator;
+        var divisor = neededPrecision > 0 ? _denominator << neededPrecision : _denominator;
         var quotient = BigInteger.Divide(dividend, divisor);
         var qLength = (int)quotient.GetBitLength();
         var extraBits = qLength - 53;
-        var exponent = neededPrec + qLength;
+        var exponent = neededPrecision + qLength;
 
         if (exponent >= -1021)
         {
@@ -772,7 +822,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
 
     #region Other arithmetic operations
 
-    private static BoundedRational RawMultiply(BoundedRational left, BoundedRational right)
+    internal static BoundedRational RawMultiply(BoundedRational left, BoundedRational right)
     {
         if (!left._isValid || !right._isValid)
         {

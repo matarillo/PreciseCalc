@@ -31,11 +31,19 @@ These return a non-null result only when the result is known to be rational.
 
 | Fields | |
 | :--- | :--- |
+| [ExtractSquareMaxOpt](PreciseCalc.BoundedRational.ExtractSquareMaxOpt.md 'PreciseCalc.BoundedRational.ExtractSquareMaxOpt') | Max integer for which [PreciseCalc.BoundedRational.ExtractSquare(System.Numerics.BigInteger)](https://docs.microsoft.com/en-us/dotnet/api/PreciseCalc.BoundedRational.ExtractSquare#PreciseCalc_BoundedRational_ExtractSquare_System_Numerics_BigInteger_ 'PreciseCalc.BoundedRational.ExtractSquare(System.Numerics.BigInteger)') is guaranteed to be optimal. |
+| [Half](PreciseCalc.BoundedRational.Half.md 'PreciseCalc.BoundedRational.Half') | Singleton for one half. |
+| [MinusHalf](PreciseCalc.BoundedRational.MinusHalf.md 'PreciseCalc.BoundedRational.MinusHalf') | Singleton for minus one half. |
 | [MinusOne](PreciseCalc.BoundedRational.MinusOne.md 'PreciseCalc.BoundedRational.MinusOne') | Singleton for minus one. |
 | [MinusTwo](PreciseCalc.BoundedRational.MinusTwo.md 'PreciseCalc.BoundedRational.MinusTwo') | Singleton for minus two. |
 | [Null](PreciseCalc.BoundedRational.Null.md 'PreciseCalc.BoundedRational.Null') | Singleton for an invalid bounded rational. |
 | [One](PreciseCalc.BoundedRational.One.md 'PreciseCalc.BoundedRational.One') | Singleton for one. |
+| [Quarter](PreciseCalc.BoundedRational.Quarter.md 'PreciseCalc.BoundedRational.Quarter') | Singleton for one fourth. |
+| [Sixth](PreciseCalc.BoundedRational.Sixth.md 'PreciseCalc.BoundedRational.Sixth') | Singleton for one sixth. |
 | [Ten](PreciseCalc.BoundedRational.Ten.md 'PreciseCalc.BoundedRational.Ten') | Singleton for ten. |
+| [Third](PreciseCalc.BoundedRational.Third.md 'PreciseCalc.BoundedRational.Third') | Singleton for one third. |
+| [Three](PreciseCalc.BoundedRational.Three.md 'PreciseCalc.BoundedRational.Three') | Singleton for three. |
+| [Twelve](PreciseCalc.BoundedRational.Twelve.md 'PreciseCalc.BoundedRational.Twelve') | Singleton for twelve. |
 | [Two](PreciseCalc.BoundedRational.Two.md 'PreciseCalc.BoundedRational.Two') | Singleton for two. |
 | [Zero](PreciseCalc.BoundedRational.Zero.md 'PreciseCalc.BoundedRational.Zero') | Singleton for zero. |
 

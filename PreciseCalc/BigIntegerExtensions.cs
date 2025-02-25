@@ -38,6 +38,11 @@ internal static class BigIntegerExtensions
             value /= radix;
         }
 
-        return isNegative ? "-" + result.ToString() : result.ToString();
+        if (isNegative)
+        {
+            result.Insert(0, '-');
+        }
+
+        return result.ToString();
     }
 }

@@ -17,4 +17,4 @@ Should be called only if `this != 0`.
 In the `0` case, this will not terminate correctly; typically it  
 will run until it exhausts memory.  
 If the two constructive reals may be equal, the one or two argument  
-version of signum should be used.
+version of Sign should be used.

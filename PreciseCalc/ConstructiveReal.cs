@@ -55,10 +55,10 @@ public abstract class ConstructiveReal
     /// <summary>The smallest precision value with which the above has been called.</summary>
     private protected int MinPrec;
 
-    /// <summary>The scaled approximation corresponding to min_prec.</summary>
+    /// <summary>The scaled approximation corresponding to <see cref="MinPrec"/>.</summary>
     private protected BigInteger MaxAppr;
 
-    /// <summary>The scaled approximation corresponding to min_prec.</summary>
+    /// <summary>The scaled approximation corresponding to <see cref="MinPrec"/>.</summary>
     private protected bool ApprValid;
 
     /// <summary>
@@ -72,7 +72,7 @@ public abstract class ConstructiveReal
 
     /// <summary>
     /// Check that a precision is at least a factor of 8 away from
-    /// overflowng the integer used to hold a precision spec.
+    /// overflowing the integer used to hold a precision spec.
     /// We generally perform this check early on, and then convince
     /// ourselves that none of the operations performed on precisions
     /// inside a function can generate an overflow.
@@ -276,7 +276,7 @@ public abstract class ConstructiveReal
     internal int GetMsd() => RefineMsd(int.MinValue);
 
     /// <summary>
-    /// Natural log of 2. Needed for some prescaling below.
+    /// Natural log of 2. Needed for some pre-scaling below.
     /// </summary>
     /// <remarks>
     /// ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)
@@ -298,7 +298,7 @@ public abstract class ConstructiveReal
     // ReSharper disable once InconsistentNaming
     private static readonly ConstructiveReal Ln2_3 = FromInt(3).Multiply(EightyOneEightieths.SimpleLn());
 
-    /// <summary>Natural log of 2.  Needed for some prescaling below.</summary>
+    /// <summary>Natural log of 2.  Needed for some pre-scaling below.</summary>
     /// <remarks>ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)</remarks>
     internal static readonly ConstructiveReal Ln2 = Ln2_1.Subtract(Ln2_2).Add(Ln2_3);
 
@@ -343,8 +343,8 @@ public abstract class ConstructiveReal
 
         CheckPrecision(relPrecision);
         int rel = maxMsd + relPrecision;
-        int absPrec = Math.Max(rel, absPrecision);
-        return CompareTo(x, absPrec);
+        int abs = Math.Max(rel, absPrecision);
+        return CompareTo(x, abs);
     }
 
     /// <summary>
@@ -359,12 +359,12 @@ public abstract class ConstructiveReal
     /// </remarks>
     public int CompareTo(ConstructiveReal x, int absPrecision)
     {
-        int neededPrec = absPrecision - 1;
-        BigInteger thisAppr = GetApproximation(neededPrec);
-        BigInteger xAppr = x.GetApproximation(neededPrec);
-        int comp1 = thisAppr.CompareTo(xAppr + Big1);
+        int neededPrecision = absPrecision - 1;
+        BigInteger thisApprox = GetApproximation(neededPrecision);
+        BigInteger xApprox = x.GetApproximation(neededPrecision);
+        int comp1 = thisApprox.CompareTo(xApprox + Big1);
         if (comp1 > 0) return 1;
-        int comp2 = thisAppr.CompareTo(xAppr - Big1);
+        int comp2 = thisApprox.CompareTo(xApprox - Big1);
         if (comp2 < 0) return -1;
         return 0;
     }
@@ -405,9 +405,9 @@ public abstract class ConstructiveReal
             if (quickTry != 0) return quickTry;
         }
 
-        int neededPrec = precision - 1;
-        BigInteger thisAppr = GetApproximation(neededPrec);
-        return thisAppr.Sign;
+        int neededPrecision = precision - 1;
+        BigInteger thisApprox = GetApproximation(neededPrecision);
+        return thisApprox.Sign;
     }
 
     /// <summary>
@@ -419,7 +419,7 @@ public abstract class ConstructiveReal
     /// In the <c>0</c> case, this will not terminate correctly; typically it
     /// will run until it exhausts memory.
     /// If the two constructive reals may be equal, the one or two argument
-    /// version of signum should be used.
+    /// version of Sign should be used.
     /// </remarks>
     public int Sign()
     {
@@ -549,12 +549,12 @@ public abstract class ConstructiveReal
 
         double log2Radix = Math.Log(radix) / Math.Log(2);
         BigInteger bigRadix = new BigInteger(radix);
-        long longMsdPrec = (long)(log2Radix * minPrecision);
-        if (longMsdPrec is > int.MaxValue or < int.MinValue)
+        long longMsdPrecision = (long)(log2Radix * minPrecision);
+        if (longMsdPrecision is > int.MaxValue or < int.MinValue)
             throw new PrecisionOverflowException();
-        int msdPrec = (int)longMsdPrec;
-        CheckPrecision(msdPrec);
-        int msd = RefineMsd(msdPrec - 2);
+        int msdPrecision = (int)longMsdPrecision;
+        CheckPrecision(msdPrecision);
+        int msd = RefineMsd(msdPrecision - 2);
 
         if (msd == int.MinValue)
             return new StringFloatRep(0, "0", radix, 0);
@@ -616,12 +616,12 @@ public abstract class ConstructiveReal
         int myMsd = GetMsd(-1080);
         if (myMsd == int.MinValue) return 0.0;
 
-        int neededPrec = myMsd - 60;
-        double scaledInt = (double)GetApproximation(neededPrec);
-        bool mayUnderflow = neededPrec < -1000;
+        int neededPrecision = myMsd - 60;
+        double scaledInt = (double)GetApproximation(neededPrecision);
+        bool mayUnderflow = neededPrecision < -1000;
 
         long scaledIntRep = BitConverter.DoubleToInt64Bits(scaledInt);
-        long expAdj = mayUnderflow ? neededPrec + 96 : neededPrec;
+        long expAdj = mayUnderflow ? neededPrecision + 96 : neededPrecision;
         long origExp = (scaledIntRep >> 52) & 0x7FF;
 
         if (origExp + expAdj >= 0x7FF)
@@ -751,11 +751,11 @@ public abstract class ConstructiveReal
     /// </summary>
     public ConstructiveReal Exp()
     {
-        const int lowPrec = -10;
-        BigInteger roughAppr = GetApproximation(lowPrec);
+        const int lowPrecision = -10;
+        BigInteger roughApprox = GetApproximation(lowPrecision);
         // Handle negative arguments directly;
         // negating and computing inverse can be very expensive.
-        if (roughAppr.CompareTo(Big2) > 0 || roughAppr.CompareTo(BigM2) < 0)
+        if (roughApprox.CompareTo(Big2) > 0 || roughApprox.CompareTo(BigM2) < 0)
         {
             ConstructiveReal squareRoot = ShiftRight(1).Exp();
             return squareRoot.Multiply(squareRoot);
@@ -769,7 +769,6 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The ratio of a circle's circumference to its diameter.
     /// </summary>
-    // ReSharper disable once InconsistentNaming
     public static readonly ConstructiveReal PI = new GaussLegendrePiConstructiveReal();
 
     /// <summary>
@@ -780,18 +779,16 @@ public abstract class ConstructiveReal
     /// This implementation may also be faster for BigInteger implementations
     /// that support only quadratic multiplication, but exhibit high performance
     /// for small computations.  (The standard Android 6 implementation supports
-    /// subquadratic multiplication, but has high constant overhead.) Many other
+    /// sub-quadratic multiplication, but has high constant overhead.) Many other
     /// atan-based formulas are possible, but based on superficial
     /// experimentation, this is roughly as good as the more complex formulas.
     /// </remarks>
-    // ReSharper disable once InconsistentNaming
     public static readonly ConstructiveReal AtanPI =
         Four.Multiply(Four.Multiply(AtanReciprocal(5)).Subtract(AtanReciprocal(239)));
 
     /// <summary>
     /// pi/2
     /// </summary>
-    // ReSharper disable once InconsistentNaming
     public static readonly ConstructiveReal HalfPI = PI.ShiftRight(1);
 
     /// <summary>
@@ -829,13 +826,13 @@ public abstract class ConstructiveReal
     /// </summary>
     public ConstructiveReal Asin()
     {
-        BigInteger roughAppr = GetApproximation(-10);
-        if (roughAppr.CompareTo(Big750) > 0) // 1/sqrt(2) + a bit
+        BigInteger roughApprox = GetApproximation(-10);
+        if (roughApprox.CompareTo(Big750) > 0) // 1/sqrt(2) + a bit
         {
             ConstructiveReal newArg = One.Subtract(Multiply(this)).Sqrt();
             return newArg.Acos();
         }
-        else if (roughAppr.CompareTo(BigM750) < 0)
+        else if (roughApprox.CompareTo(BigM750) < 0)
         {
             return Negate().Asin().Negate();
         }
@@ -859,29 +856,29 @@ public abstract class ConstructiveReal
     /// </summary>
     public ConstructiveReal Ln()
     {
-        const int lowPrec = -4;
-        BigInteger roughAppr = GetApproximation(lowPrec);
+        const int lowPrecision = -4;
+        BigInteger roughApprox = GetApproximation(lowPrecision);
 
-        if (roughAppr.CompareTo(Big0) < 0)
+        if (roughApprox.CompareTo(Big0) < 0)
         {
             throw new ArithmeticException("ln(negative)");
         }
 
-        if (roughAppr.CompareTo(LowLnLimit) <= 0)
+        if (roughApprox.CompareTo(LowLnLimit) <= 0)
         {
             return Inverse().Ln().Negate();
         }
 
-        if (roughAppr.CompareTo(HighLnLimit) >= 0)
+        if (roughApprox.CompareTo(HighLnLimit) >= 0)
         {
-            if (roughAppr.CompareTo(Scaled4) <= 0)
+            if (roughApprox.CompareTo(Scaled4) <= 0)
             {
                 ConstructiveReal quarter = Sqrt().Sqrt().Ln();
                 return quarter.ShiftLeft(2);
             }
             else
             {
-                int extraBits = (int)roughAppr.GetBitLength() - 3;
+                int extraBits = (int)roughApprox.GetBitLength() - 3;
                 ConstructiveReal scaledResult = ShiftRight(extraBits).Ln();
                 return scaledResult.Add(FromInt(extraBits).Multiply(Ln2));
             }
