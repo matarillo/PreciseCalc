@@ -1,15 +1,15 @@
 ### [PreciseCalc](PreciseCalc.md 'PreciseCalc').[BoundedRational](PreciseCalc.BoundedRational.md 'PreciseCalc.BoundedRational')
 
-## BoundedRational.WholeNumberBits() Method
+## BoundedRational.BitLength Property
 
-Approximate number of bits to left of binary point.  
-Negative indicates leading zeroes to the right of binary point.
+Number of bits in the representation. Makes the most sense for the result of Reduce(),  
+since it does not implicitly reduce.
 
 ```csharp
-public long WholeNumberBits();
+public long BitLength { get; }
 ```
 
-#### Returns
+#### Property Value
 [System.Int64](https://docs.microsoft.com/en-us/dotnet/api/System.Int64 'System.Int64')
 
 #### Exceptions

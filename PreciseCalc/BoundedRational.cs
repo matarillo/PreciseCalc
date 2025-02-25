@@ -235,6 +235,81 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
     }
 
+    /// <summary>
+    /// Computes the number of decimal digits required for exact representation.
+    /// </summary>
+    /// <remarks>
+    /// Return the number of decimal digits to the right of the decimal point
+    /// required to represent the argument exactly.
+    /// Return <see cref="int.MaxValue"/> if that's not possible.
+    /// Never returns a value less than zero, even if r is a power of ten.
+    /// </remarks>
+    public int DigitsRequired
+    {
+        get
+        {
+            if (!_isValid)
+            {
+                return int.MaxValue;
+            }
+
+            int powersOfTwo = 0;
+            int powersOfFive = 0;
+
+            if (_denominator == BigInteger.One)
+            {
+                return 0;
+            }
+
+            var r = Reduce();
+            var den = r._denominator;
+
+            if (den.GetBitLength() > MaxSize)
+            {
+                return int.MaxValue;
+            }
+
+            while (den.IsEven)
+            {
+                powersOfTwo++;
+                den >>= 1;
+            }
+
+            var five = new BigInteger(5);
+            while (den % five == BigInteger.Zero)
+            {
+                powersOfFive++;
+                den /= five;
+            }
+
+            if (den != BigInteger.One && den != BigInteger.MinusOne)
+            {
+                return int.MaxValue;
+            }
+
+            return Math.Max(powersOfTwo, powersOfFive);
+        }
+    }
+
+    /// <summary>
+    /// Number of bits in the representation. Makes the most sense for the result of Reduce(),
+    /// since it does not implicitly reduce.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">When invalid</exception>
+    public long BitLength =>
+        _isValid
+            ? _numerator.GetBitLength() + _denominator.GetBitLength()
+            : throw new InvalidOperationException("Invalid bounded rational.");
+
+    /// <summary>
+    /// Approximate number of bits to left of binary point.
+    /// Negative indicates leading zeroes to the right of binary point.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">When invalid</exception>
+    public long WholeNumberBits => _isValid
+        ? _numerator.Sign == 0 ? long.MinValue : _numerator.GetBitLength() - _denominator.GetBitLength()
+        : throw new InvalidOperationException("Invalid bounded rational.");
+
     #endregion
 
     #region ToString variants
@@ -452,24 +527,6 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     }
 
     /// <summary>
-    /// Approximate number of bits to left of binary point.
-    /// Negative indicates leading zeroes to the right of binary point.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">When invalid</exception>
-    public long WholeNumberBits() => _isValid
-        ? _numerator.Sign == 0 ? long.MinValue : _numerator.GetBitLength() - _denominator.GetBitLength()
-        : throw new InvalidOperationException("Invalid bounded rational.");
-
-    /// <summary>
-    /// Number of bits in the representation. Makes the most sense for the result of Reduce(),
-    /// since it does not implicitly reduce.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">When invalid</exception>
-    public long BitLength() => _isValid
-        ? _numerator.GetBitLength() + _denominator.GetBitLength()
-        : throw new InvalidOperationException("Invalid bounded rational.");
-
-    /// <summary>
     /// Returns an approximation of the base 2 log of the absolute value.
     /// We assume this is nonzero.
     /// The result is either 0 or within 20% of the truth.
@@ -482,7 +539,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
             throw new InvalidOperationException("Invalid bounded rational.");
         }
 
-        var wholeBits = WholeNumberBits();
+        var wholeBits = WholeNumberBits;
         if (wholeBits > 10 || wholeBits < -10)
         {
             // Bit lengths suffice for our purposes.
@@ -1094,57 +1151,4 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     }
 
     #endregion
-
-    /// <summary>
-    /// Computes the number of decimal digits required for exact representation.
-    /// </summary>
-    /// <remarks>
-    /// Return the number of decimal digits to the right of the decimal point
-    /// required to represent the argument exactly.
-    /// Return <see cref="int.MaxValue"/> if that's not possible.
-    /// Never returns a value less than zero, even if r is a power of ten.
-    /// </remarks>
-    public static int DigitsRequired(BoundedRational r)
-    {
-        if (!r._isValid)
-        {
-            return int.MaxValue;
-        }
-
-        int powersOfTwo = 0;
-        int powersOfFive = 0;
-
-        if (r._denominator == BigInteger.One)
-        {
-            return 0;
-        }
-
-        r = r.Reduce();
-        var den = r._denominator;
-
-        if (den.GetBitLength() > MaxSize)
-        {
-            return int.MaxValue;
-        }
-
-        while (den.IsEven)
-        {
-            powersOfTwo++;
-            den >>= 1;
-        }
-
-        var five = new BigInteger(5);
-        while (den % five == BigInteger.Zero)
-        {
-            powersOfFive++;
-            den /= five;
-        }
-
-        if (den != BigInteger.One && den != BigInteger.MinusOne)
-        {
-            return int.MaxValue;
-        }
-
-        return Math.Max(powersOfTwo, powersOfFive);
-    }
 }

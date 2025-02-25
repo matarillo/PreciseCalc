@@ -1,19 +1,14 @@
 ### [PreciseCalc](PreciseCalc.md 'PreciseCalc').[BoundedRational](PreciseCalc.BoundedRational.md 'PreciseCalc.BoundedRational')
 
-## BoundedRational.DigitsRequired(BoundedRational) Method
+## BoundedRational.DigitsRequired Property
 
 Computes the number of decimal digits required for exact representation.
 
 ```csharp
-public static int DigitsRequired(PreciseCalc.BoundedRational r);
+public int DigitsRequired { get; }
 ```
-#### Parameters
 
-<a name='PreciseCalc.BoundedRational.DigitsRequired(PreciseCalc.BoundedRational).r'></a>
-
-`r` [BoundedRational](PreciseCalc.BoundedRational.md 'PreciseCalc.BoundedRational')
-
-#### Returns
+#### Property Value
 [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
 
 ### Remarks

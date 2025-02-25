@@ -41,19 +41,20 @@ These return a non-null result only when the result is known to be rational.
 
 | Properties | |
 | :--- | :--- |
+| [BitLength](PreciseCalc.BoundedRational.BitLength.md 'PreciseCalc.BoundedRational.BitLength') | Number of bits in the representation. Makes the most sense for the result of Reduce(),<br/>since it does not implicitly reduce. |
 | [Denominator](PreciseCalc.BoundedRational.Denominator.md 'PreciseCalc.BoundedRational.Denominator') | Returns the denominator of the bounded rational. |
+| [DigitsRequired](PreciseCalc.BoundedRational.DigitsRequired.md 'PreciseCalc.BoundedRational.DigitsRequired') | Computes the number of decimal digits required for exact representation. |
 | [IsValid](PreciseCalc.BoundedRational.IsValid.md 'PreciseCalc.BoundedRational.IsValid') | Returns true if the bounded rational is valid. |
 | [NumDen](PreciseCalc.BoundedRational.NumDen.md 'PreciseCalc.BoundedRational.NumDen') | Returns the pair of numerator and denominator. |
 | [Numerator](PreciseCalc.BoundedRational.Numerator.md 'PreciseCalc.BoundedRational.Numerator') | Returns the denominator of the bounded rational. |
 | [Sign](PreciseCalc.BoundedRational.Sign.md 'PreciseCalc.BoundedRational.Sign') | Returns the sign of this rational number. |
+| [WholeNumberBits](PreciseCalc.BoundedRational.WholeNumberBits.md 'PreciseCalc.BoundedRational.WholeNumberBits') | Approximate number of bits to left of binary point.<br/>Negative indicates leading zeroes to the right of binary point. |
 
 | Methods | |
 | :--- | :--- |
 | [ApproxLog2Abs()](PreciseCalc.BoundedRational.ApproxLog2Abs().md 'PreciseCalc.BoundedRational.ApproxLog2Abs()') | Returns an approximation of the base 2 log of the absolute value.<br/>We assume this is nonzero.<br/>The result is either 0 or within 20% of the truth. |
-| [BitLength()](PreciseCalc.BoundedRational.BitLength().md 'PreciseCalc.BoundedRational.BitLength()') | Number of bits in the representation. Makes the most sense for the result of Reduce(),<br/>since it does not implicitly reduce. |
 | [CompareTo(BoundedRational)](PreciseCalc.BoundedRational.CompareTo(PreciseCalc.BoundedRational).md 'PreciseCalc.BoundedRational.CompareTo(PreciseCalc.BoundedRational)') | Compares this bounded rational to another. |
 | [CompareToOne()](PreciseCalc.BoundedRational.CompareToOne().md 'PreciseCalc.BoundedRational.CompareToOne()') | Equivalent to CompareTo(BoundedRational.One) but faster. |
-| [DigitsRequired(BoundedRational)](PreciseCalc.BoundedRational.DigitsRequired(PreciseCalc.BoundedRational).md 'PreciseCalc.BoundedRational.DigitsRequired(PreciseCalc.BoundedRational)') | Computes the number of decimal digits required for exact representation. |
 | [Equals(object)](PreciseCalc.BoundedRational.Equals(object).md 'PreciseCalc.BoundedRational.Equals(object)') | Compares this bounded rational to another. |
 | [Equals(BoundedRational)](PreciseCalc.BoundedRational.Equals(PreciseCalc.BoundedRational).md 'PreciseCalc.BoundedRational.Equals(PreciseCalc.BoundedRational)') | Compares this bounded rational to another. |
 | [ExtractSquareReduced()](PreciseCalc.BoundedRational.ExtractSquareReduced().md 'PreciseCalc.BoundedRational.ExtractSquareReduced()') | Returns a pair p such that p[0]^2 * p[1] = this.<br/>Tries to maximize p[0]. This rational is assumed to be in reduced form. |
@@ -75,7 +76,6 @@ These return a non-null result only when the result is known to be rational.
 | [ToInt32()](PreciseCalc.BoundedRational.ToInt32().md 'PreciseCalc.BoundedRational.ToInt32()') | Returns the integer value of this rational number.<br/>Throws an exception if this is not an integer. |
 | [ToString()](PreciseCalc.BoundedRational.ToString().md 'PreciseCalc.BoundedRational.ToString()') | Converts to a string representation. |
 | [ToStringTruncated(int)](PreciseCalc.BoundedRational.ToStringTruncated(int).md 'PreciseCalc.BoundedRational.ToStringTruncated(int)') | Truncate the rational representation to specified digits. |
-| [WholeNumberBits()](PreciseCalc.BoundedRational.WholeNumberBits().md 'PreciseCalc.BoundedRational.WholeNumberBits()') | Approximate number of bits to left of binary point.<br/>Negative indicates leading zeroes to the right of binary point. |
 
 | Operators | |
 | :--- | :--- |
