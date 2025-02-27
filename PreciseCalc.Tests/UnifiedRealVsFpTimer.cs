@@ -185,8 +185,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
         double result;
         do
         {
-            long bits = BitConverter.DoubleToInt64Bits(0.0) | ((long)Rand.Next() << 32) | Rand.NextInt64();
-            result = BitConverter.Int64BitsToDouble(bits);
+            result = BitConverter.Int64BitsToDouble(Rand.NextInt64());
         } while (double.IsNaN(result) || double.IsInfinity(result));
 
         return result;
