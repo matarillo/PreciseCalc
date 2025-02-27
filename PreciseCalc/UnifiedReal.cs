@@ -2132,7 +2132,7 @@ public class UnifiedReal
             int i = (int)piTwelfths.Value;
             if (i is 6 or 18)
             {
-                throw new ArithmeticException("Tangent undefined"); //DomainException
+                throw new DomainException("Tangent undefined");
             }
 
             UnifiedReal? top = SinPiTwelfths(i);
@@ -2171,7 +2171,7 @@ public class UnifiedReal
     {
         if (IsComparable(One) && (CompareTo(One) > 0 || CompareTo(MinusOne) < 0))
         {
-            throw new ArithmeticException("inverse trig argument out of range"); //DomainException
+            throw new DomainException("inverse trig argument out of range");
         }
     }
 
@@ -2252,7 +2252,7 @@ public class UnifiedReal
     /// Return the arctangent of this number.
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="Exception"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public UnifiedReal Atan()
     {
         if (CompareTo(Zero, -10) < 0)
@@ -2393,7 +2393,7 @@ public class UnifiedReal
             }
 
             // Base is known to be exactly zero.
-            throw new ArithmeticException("0^0"); //ZeroToTheZerothException
+            throw new ZeroToTheZerothException("0^0");
         }
 
         if (DefinitelyZero() && expSign < 0)
@@ -2408,7 +2408,7 @@ public class UnifiedReal
             // Both multiplicands may be negative. That still implies a huge answer.
             if (resultLen > BitLimit /* +INFINITY qualifies */)
             {
-                throw new ArithmeticException("Power result is too big"); //TooBigException
+                throw new TooBigException("Power result is too big");
             }
 
             if (absExp.CompareTo(HardRecursivePowLimit) <= 0)
@@ -2537,7 +2537,7 @@ public class UnifiedReal
             }
 
             // Unclear we can get here.
-            throw new ArithmeticException("0^0"); //ZeroToTheZerothException
+            throw new ZeroToTheZerothException("0^0");
         }
 
         if (sign < 0)
@@ -2708,14 +2708,14 @@ public class UnifiedReal
         int sign = ApproxSign(DefaultComparisonTolerance);
         if (sign < 0)
         {
-            throw new ArithmeticException("log(negative)"); //DomainException
+            throw new DomainException("log(negative)");
         }
 
         if (IsComparable(Zero))
         {
             if (sign == 0)
             {
-                throw new ArithmeticException("log(zero)"); //DomainException
+                throw new DomainException("log(zero)");
             }
 
             int compare1 = CompareTo(One, DefaultComparisonTolerance);
@@ -2829,7 +2829,7 @@ public class UnifiedReal
 
         if (CompareTo(BitLimitAsUReal, 0) > 0)
         {
-            throw new ArithmeticException("exp argument is too big"); //TooBigException
+            throw new TooBigException("exp argument is too big");
         }
 
         CRProperty? newCrProperty = null;
@@ -2897,19 +2897,19 @@ public class UnifiedReal
             asBigInt = ToConstructiveReal().GetApproximation(0); // Correct if it was an integer.
             if (!ApproxEquals(new UnifiedReal(asBigInt.Value), DefaultComparisonTolerance))
             {
-                throw new ArithmeticException("Non-integral factorial argument"); //DomainException
+                throw new DomainException("Non-integral factorial argument");
             }
         }
 
         if (asBigInt.Value.Sign < 0)
         {
-            throw new ArithmeticException("Negative factorial argument"); //DomainException
+            throw new DomainException("Negative factorial argument");
         }
 
         if (asBigInt.Value.GetBitLength() > 18)
         {
             // Several million digits. Will fail.  LongValue() may not work. Punt now.
-            throw new ArithmeticException("Factorial argument too big"); //TooBigException
+            throw new TooBigException("Factorial argument too big");
         }
 
         BigInteger biResult = GenFactorial((long)asBigInt.Value, 1);
@@ -2988,7 +2988,7 @@ public class UnifiedReal
             case PropertyKind.IsIrrational:
                 return int.MinValue;
             default:
-                throw new Exception("Unexpected PropertyKind"); // Can't get here.
+                throw new InvalidOperationException("Unexpected PropertyKind"); // Can't get here.
         }
     }
 

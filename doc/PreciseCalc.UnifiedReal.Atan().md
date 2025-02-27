@@ -13,4 +13,4 @@ public PreciseCalc.UnifiedReal Atan();
 
 #### Exceptions
 
-[System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception')
+[System.InvalidOperationException](https://docs.microsoft.com/en-us/dotnet/api/System.InvalidOperationException 'System.InvalidOperationException')
