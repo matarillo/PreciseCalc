@@ -59,17 +59,17 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <summary>
     /// Singleton for one third.
     /// </summary>
-    public static readonly BoundedRational Third = new(-1, 2);
+    public static readonly BoundedRational Third = new(1, 3);
 
     /// <summary>
     /// Singleton for one fourth.
     /// </summary>
-    public static readonly BoundedRational Quarter = new(-1, 2);
+    public static readonly BoundedRational Quarter = new(1, 4);
 
     /// <summary>
     /// Singleton for one sixth.
     /// </summary>
-    public static readonly BoundedRational Sixth = new(-1, 2);
+    public static readonly BoundedRational Sixth = new(1, 6);
 
     /// <summary>
     /// Singleton for one.
@@ -1060,7 +1060,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public BoundedRational[] ExtractSquareReduced()
     {
-        if (!IsNull)
+        if (!_isValid)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
