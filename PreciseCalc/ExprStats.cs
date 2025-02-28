@@ -1,4 +1,4 @@
-﻿namespace PreciseCalc;
+namespace PreciseCalc;
 
 /// <summary>
 /// Simple helper class to hold summary statistics for the contents of an expression.

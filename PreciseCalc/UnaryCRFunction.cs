@@ -1,4 +1,4 @@
-﻿namespace PreciseCalc;
+namespace PreciseCalc;
 
 /// <summary>
 /// Represents a unary function on constructive reals.

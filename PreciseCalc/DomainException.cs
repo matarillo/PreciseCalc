@@ -1,4 +1,4 @@
-﻿namespace PreciseCalc;
+namespace PreciseCalc;
 
 /// <summary>
 /// Argument out of domain

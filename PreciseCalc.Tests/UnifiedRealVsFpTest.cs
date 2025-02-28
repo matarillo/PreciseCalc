@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Xunit.Abstractions;
 
 namespace PreciseCalc.Tests;

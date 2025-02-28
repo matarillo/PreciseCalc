@@ -1,4 +1,4 @@
-﻿namespace PreciseCalc;
+namespace PreciseCalc;
 
 /// <summary>
 /// Exception thrown when a precision overflow occurs.

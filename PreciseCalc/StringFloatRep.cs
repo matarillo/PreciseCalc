@@ -1,4 +1,4 @@
-﻿namespace PreciseCalc;
+namespace PreciseCalc;
 
 /// <summary>
 /// A scientific notation representation of an approximation to a constructive real.

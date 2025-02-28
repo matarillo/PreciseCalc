@@ -1,4 +1,4 @@
-﻿namespace PreciseCalc.Tests;
+namespace PreciseCalc.Tests;
 
 public class UnaryCRFunctionExtraTest
 {
