@@ -240,20 +240,6 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     public bool IsNull => !_isValid;
 
     /// <summary>
-    /// Returns the denominator of the bounded rational.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">When invalid</exception>
-    public BigInteger Numerator =>
-        _isValid ? _numerator : throw new InvalidOperationException("Invalid bounded rational.");
-
-    /// <summary>
-    /// Returns the denominator of the bounded rational.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">When invalid</exception>
-    public BigInteger Denominator =>
-        _isValid ? _denominator : throw new InvalidOperationException("Invalid bounded rational.");
-
-    /// <summary>
     /// Returns the sign of this rational number.
     /// </summary>
     /// <exception cref="InvalidOperationException">When invalid</exception>

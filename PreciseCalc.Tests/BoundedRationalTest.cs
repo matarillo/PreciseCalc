@@ -19,10 +19,6 @@ public class BoundedRationalTest
         Assert.True(target.Equals(BoundedRational.One));
         Assert.False(target.Equals(""));
 
-        Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.Sign);
-        Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.NumDen);
-        Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.BitLength);
-        Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.WholeNumberBits);
         Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.ToDouble());
         Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.ToConstructiveReal());
         Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.ToInt32());
@@ -43,22 +39,25 @@ public class BoundedRationalTest
         // Integer constructor
         var intRational = new BoundedRational(5);
         Assert.False(intRational.IsNull);
-        Assert.Equal(new BigInteger(5), intRational.Numerator);
-        Assert.Equal(BigInteger.One, intRational.Denominator);
+        var (iNum, iDen) = intRational.NumDen;
+        Assert.Equal(new BigInteger(5), iNum);
+        Assert.Equal(BigInteger.One, iDen);
 
         // Fraction constructor
         var fracRational = new BoundedRational(3, 4);
         Assert.False(fracRational.IsNull);
-        Assert.Equal(new BigInteger(3), fracRational.Numerator);
-        Assert.Equal(new BigInteger(4), fracRational.Denominator);
+        var (fNum, fDen) = fracRational.NumDen;
+        Assert.Equal(new BigInteger(3), fNum);
+        Assert.Equal(new BigInteger(4), fDen);
 
         // BigInteger constructor
         var bigIntNum = new BigInteger(123456789);
         var bigIntDen = new BigInteger(987654321);
         var bigIntRational = new BoundedRational(bigIntNum, bigIntDen);
         Assert.False(bigIntRational.IsNull);
-        Assert.Equal(bigIntNum, bigIntRational.Numerator);
-        Assert.Equal(bigIntDen, bigIntRational.Denominator);
+        var (biNum, biDen) = bigIntRational.NumDen;
+        Assert.Equal(new BigInteger(13717421), biNum);
+        Assert.Equal(new BigInteger(109739369), biDen);
 
         // FromDouble method
         var doubleRational = BoundedRational.FromDouble(3.125); // 25/8
@@ -85,14 +84,17 @@ public class BoundedRationalTest
     public void ConstantsAndPropertiesTest()
     {
         // Test constants
-        Assert.Equal(new BigInteger(0), BoundedRational.Zero.Numerator);
-        Assert.Equal(BigInteger.One, BoundedRational.Zero.Denominator);
+        var (num0, den0) = BoundedRational.Zero.NumDen;
+        Assert.Equal(new BigInteger(0), num0);
+        Assert.Equal(BigInteger.One, den0);
 
-        Assert.Equal(new BigInteger(1), BoundedRational.One.Numerator);
-        Assert.Equal(BigInteger.One, BoundedRational.One.Denominator);
+        var (num1, den1) = BoundedRational.One.NumDen;
+        Assert.Equal(new BigInteger(1), num1);
+        Assert.Equal(BigInteger.One, den1);
 
-        Assert.Equal(new BigInteger(1), BoundedRational.Half.Numerator);
-        Assert.Equal(new BigInteger(2), BoundedRational.Half.Denominator);
+        var (numHalf, denHalf) = BoundedRational.Half.NumDen;
+        Assert.Equal(new BigInteger(1), numHalf);
+        Assert.Equal(new BigInteger(2), denHalf);
 
         // Test properties
         var twoThirds = new BoundedRational(2, 3);
@@ -126,8 +128,6 @@ public class BoundedRationalTest
 
         // Property access on invalid rational
         var nullRational = new BoundedRational();
-        Assert.Throws<InvalidOperationException>(() => nullRational.Numerator);
-        Assert.Throws<InvalidOperationException>(() => nullRational.Denominator);
         Assert.Throws<InvalidOperationException>(() => nullRational.Sign);
         Assert.Throws<InvalidOperationException>(() => nullRational.NumDen);
         Assert.Throws<InvalidOperationException>(() => nullRational.BitLength);
