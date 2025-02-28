@@ -51,7 +51,7 @@ These return a non-null result only when the result is known to be rational.
 | :--- | :--- |
 | [BitLength](PreciseCalc.BoundedRational.BitLength.md 'PreciseCalc.BoundedRational.BitLength') | Number of bits in the representation. Makes the most sense for the result of Reduce(),<br/>since it does not implicitly reduce. |
 | [DigitsRequired](PreciseCalc.BoundedRational.DigitsRequired.md 'PreciseCalc.BoundedRational.DigitsRequired') | Computes the number of decimal digits required for exact representation. |
-| [IsNull](PreciseCalc.BoundedRational.IsNull.md 'PreciseCalc.BoundedRational.IsNull') | Returns true if the bounded rational is null (not valid). |
+| [HasValue](PreciseCalc.BoundedRational.HasValue.md 'PreciseCalc.BoundedRational.HasValue') | Returns true if the bounded rational is valid. |
 | [NumDen](PreciseCalc.BoundedRational.NumDen.md 'PreciseCalc.BoundedRational.NumDen') | Returns the pair of numerator and denominator. |
 | [Sign](PreciseCalc.BoundedRational.Sign.md 'PreciseCalc.BoundedRational.Sign') | Returns the sign of this rational number. |
 | [WholeNumberBits](PreciseCalc.BoundedRational.WholeNumberBits.md 'PreciseCalc.BoundedRational.WholeNumberBits') | Approximate number of bits to left of binary point.<br/>Negative indicates leading zeroes to the right of binary point. |

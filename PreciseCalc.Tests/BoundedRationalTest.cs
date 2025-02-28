@@ -33,19 +33,19 @@ public class BoundedRationalTest
     {
         // Default constructor creates an invalid rational number
         var nullRational = new BoundedRational();
-        Assert.True(nullRational.IsNull);
+        Assert.False(nullRational.HasValue);
         Assert.Equal(BoundedRational.Null, nullRational);
 
         // Integer constructor
         var intRational = new BoundedRational(5);
-        Assert.False(intRational.IsNull);
+        Assert.True(intRational.HasValue);
         var (iNum, iDen) = intRational.NumDen;
         Assert.Equal(new BigInteger(5), iNum);
         Assert.Equal(BigInteger.One, iDen);
 
         // Fraction constructor
         var fracRational = new BoundedRational(3, 4);
-        Assert.False(fracRational.IsNull);
+        Assert.True(fracRational.HasValue);
         var (fNum, fDen) = fracRational.NumDen;
         Assert.Equal(new BigInteger(3), fNum);
         Assert.Equal(new BigInteger(4), fDen);
@@ -54,14 +54,14 @@ public class BoundedRationalTest
         var bigIntNum = new BigInteger(123456789);
         var bigIntDen = new BigInteger(987654321);
         var bigIntRational = new BoundedRational(bigIntNum, bigIntDen);
-        Assert.False(bigIntRational.IsNull);
+        Assert.True(bigIntRational.HasValue);
         var (biNum, biDen) = bigIntRational.NumDen;
         Assert.Equal(new BigInteger(13717421), biNum);
         Assert.Equal(new BigInteger(109739369), biDen);
 
         // FromDouble method
         var doubleRational = BoundedRational.FromDouble(3.125); // 25/8
-        Assert.False(doubleRational.IsNull);
+        Assert.True(doubleRational.HasValue);
         var (numerator, denominator) = doubleRational.NumDen;
         Assert.Equal(new BigInteger(25), numerator);
         Assert.Equal(new BigInteger(8), denominator);
@@ -119,8 +119,8 @@ public class BoundedRationalTest
             new BoundedRational(1, 3).DigitsRequired); // 1/3 cannot be represented as a finite decimal
 
         // IsNull property
-        Assert.True(BoundedRational.Null.IsNull);
-        Assert.False(twoThirds.IsNull);
+        Assert.False(BoundedRational.Null.HasValue);
+        Assert.True(twoThirds.HasValue);
 
         // WholeNumberBits property
         Assert.Equal(-1, BoundedRational.Half.WholeNumberBits); // 1/2 is 0.1 in binary, so 0 whole number bits
@@ -387,13 +387,13 @@ public class BoundedRationalTest
         // Creating very large numbers
         var largeDenominator = BigInteger.Pow(2, 5000);
         var largeRational = new BoundedRational(1, largeDenominator);
-        Assert.False(largeRational.IsNull);
+        Assert.True(largeRational.HasValue);
 
         // Very large calculation results automatically become Null
         var a = new BoundedRational(BigInteger.Pow(2, 5000), 1);
         var b = new BoundedRational(BigInteger.Pow(2, 5001), 1);
         var pow = BoundedRational.Pow(a, b);
-        Assert.True(pow.IsNull); // Result is too large
+        Assert.False(pow.HasValue); // Result is too large
 
         // Reduction can make large values manageable
         var num = BigInteger.Pow(2, 5000);
@@ -404,7 +404,7 @@ public class BoundedRationalTest
         // Still too large even after reduction
         var d = new BoundedRational(BigInteger.Pow(3, 4000), BigInteger.Pow(2, 4000));
         var result = d * d; // Results in a very large number
-        Assert.True(result.IsNull);
+        Assert.False(result.HasValue);
 
         // Special case: Division by zero
         Assert.Throws<DivideByZeroException>(() => BoundedRational.One / BoundedRational.Zero);
@@ -571,7 +571,7 @@ public class BoundedRationalTest
 
         // For large integers, constructor always returns valid value
         var largeInt = new BoundedRational(BigInteger.Pow(10, 1000));
-        Assert.False(largeInt.IsNull);
+        Assert.True(largeInt.HasValue);
 
         // Very small value handling (underflow)
         var tinyValue = new BoundedRational(1, BigInteger.Pow(10, 1000));
@@ -580,7 +580,7 @@ public class BoundedRationalTest
         // Overflow testing
         var huge1 = new BoundedRational(BigInteger.Pow(10, 5000));
         var huge2 = new BoundedRational(BigInteger.Pow(10, 5001));
-        Assert.False((huge1 * huge2).IsNull); // Result is too large, but still valid
+        Assert.True((huge1 * huge2).HasValue); // Result is too large, but still valid
 
         // Special integer cases
         Assert.Equal(BoundedRational.One,
@@ -598,7 +598,7 @@ public class BoundedRationalTest
         var largeButValid1 = new BoundedRational(BigInteger.Pow(2, 4999));
         var largeButValid2 = new BoundedRational(BigInteger.Pow(2, 4999));
         var sum = largeButValid1 + largeButValid2;
-        Assert.False(sum.IsNull); // Should be valid as it doesn't exceed MaxSize
+        Assert.True(sum.HasValue); // Should be valid as it doesn't exceed MaxSize
 
         // Test with factorial calculation
         // 10! = 3628800 (small value)
@@ -614,12 +614,12 @@ public class BoundedRationalTest
         var big1 = new BoundedRational(BigInteger.Pow(2, 5001));
         var big2 = new BoundedRational(BigInteger.Pow(2, 5000));
         var bigPow = BoundedRational.Pow(big1, big2);
-        Assert.True(bigPow.IsNull);
+        Assert.False(bigPow.HasValue);
 
         // Test near ExtractSquareMaxLen boundary
         var largeSquareRoot = new BoundedRational(BigInteger.Pow(2, 4900));
         var extracted = largeSquareRoot.ExtractSquareReduced();
-        Assert.False(extracted[0].IsNull);
+        Assert.True(extracted[0].HasValue);
 
         // Verify that exceeding ExtractSquareMaxLen doesn't work properly
         var tooLargeForExtract = new BoundedRational(BigInteger.Pow(2, 6000));

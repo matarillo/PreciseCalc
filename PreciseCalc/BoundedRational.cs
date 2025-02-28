@@ -110,12 +110,12 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// Singleton for an invalid bounded rational.
     /// </summary>
     public static readonly BoundedRational Null = new();
-   
+
     #endregion
 
     private readonly BigInteger _numerator;
     private readonly BigInteger _denominator;
-    private readonly bool _isValid;
+    private readonly bool _hasValue;
 
     #region Constructors
 
@@ -126,7 +126,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     {
         _numerator = default;
         _denominator = default;
-        _isValid = false;
+        _hasValue = false;
     }
 
     /// <summary>
@@ -138,7 +138,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     {
         _numerator = numerator;
         _denominator = denominator;
-        _isValid = true;
+        _hasValue = true;
     }
 
     /// <summary>
@@ -235,15 +235,15 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     #region Properties
 
     /// <summary>
-    /// Returns true if the bounded rational is null (not valid).
+    /// Returns true if the bounded rational is valid.
     /// </summary>
-    public bool IsNull => !_isValid;
+    public bool HasValue => _hasValue;
 
     /// <summary>
     /// Returns the sign of this rational number.
     /// </summary>
     /// <exception cref="InvalidOperationException">When invalid</exception>
-    public int Sign => _isValid
+    public int Sign => _hasValue
         ? _numerator.Sign * _denominator.Sign
         : throw new InvalidOperationException("Invalid bounded rational.");
 
@@ -255,7 +255,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     {
         get
         {
-            if (!_isValid)
+            if (!_hasValue)
             {
                 throw new InvalidOperationException("Invalid bounded rational.");
             }
@@ -278,7 +278,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     {
         get
         {
-            if (!_isValid)
+            if (!_hasValue)
             {
                 return int.MaxValue;
             }
@@ -330,7 +330,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </remarks>
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public int BitLength =>
-        _isValid
+        _hasValue
             ? (int)(_numerator.GetBitLength() + _denominator.GetBitLength())
             : throw new InvalidOperationException("Invalid bounded rational.");
 
@@ -342,7 +342,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// &lt;= MaxSize
     /// </remarks>
     /// <exception cref="InvalidOperationException">When invalid</exception>
-    public int WholeNumberBits => _isValid
+    public int WholeNumberBits => _hasValue
         ? _numerator.Sign == 0 ? int.MinValue : (int)(_numerator.GetBitLength() - _denominator.GetBitLength())
         : throw new InvalidOperationException("Invalid bounded rational.");
 
@@ -354,7 +354,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// Converts to a string representation.
     /// </summary>
     /// <returns></returns>
-    public override string ToString() => _isValid ? $"{_numerator}/{_denominator}" : "Null";
+    public override string ToString() => _hasValue ? $"{_numerator}/{_denominator}" : "Null";
 
     private const char FractionSlash = '\u2044';
     private const char SuperscriptMinus = '\u207B';
@@ -375,7 +375,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </param>
     public string ToDisplayString(bool useUnicodeFractions = false, bool useMixedNumbers = false)
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             return "Null";
         }
@@ -435,7 +435,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <param name="n">Result precision, >= 0</param>
     public string ToStringTruncated(int n)
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             return "Null";
         }
@@ -470,7 +470,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public double ToDouble()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
@@ -522,7 +522,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </summary>
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public ConstructiveReal ToConstructiveReal() =>
-        _isValid
+        _hasValue
             ? ConstructiveReal.FromBigInteger(_numerator).Divide(ConstructiveReal.FromBigInteger(_denominator))
             : throw new InvalidOperationException("Invalid bounded rational.");
 
@@ -534,7 +534,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="ArithmeticException">IntValue of non-int</exception>
     public int ToInt32()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
@@ -553,7 +553,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </summary>
     public BigInteger? ToBigInteger()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             return null;
         }
@@ -570,7 +570,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public double ApproxLog2Abs()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
@@ -618,7 +618,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </summary>
     private BoundedRational WithPositiveDenominator()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             return Null;
         }
@@ -639,7 +639,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </remarks>
     public BoundedRational Reduce()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             return Null;
         }
@@ -655,7 +655,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
 
     private static BoundedRational MaybeReduce(BoundedRational r)
     {
-        if (!r._isValid)
+        if (!r._hasValue)
         {
             return Null;
         }
@@ -680,7 +680,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <returns></returns>
     public int CompareTo(BoundedRational other)
     {
-        return (_isValid, other._isValid) switch
+        return (_hasValue, other._hasValue) switch
         {
             (true, true) => (_numerator * other._denominator)
                             .CompareTo(other._numerator * _denominator)
@@ -695,7 +695,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <summary>
     /// Equivalent to CompareTo(BoundedRational.One) but faster.
     /// </summary>
-    public int CompareToOne() => _isValid ? _numerator.CompareTo(_denominator) * _denominator.Sign : -1;
+    public int CompareToOne() => _hasValue ? _numerator.CompareTo(_denominator) * _denominator.Sign : -1;
 
     /// <summary>
     /// Compares this bounded rational to another.
@@ -717,7 +717,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <returns></returns>
     public override int GetHashCode()
     {
-        if (!_isValid) return 0;
+        if (!_hasValue) return 0;
 
         var reduced = Reduce().WithPositiveDenominator();
         return HashCode.Combine(reduced._numerator, reduced._denominator);
@@ -751,7 +751,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <returns></returns>
     public static BoundedRational operator +(BoundedRational left, BoundedRational right)
     {
-        if (!left._isValid || !right._isValid)
+        if (!left._hasValue || !right._hasValue)
         {
             return Null;
         }
@@ -768,7 +768,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <returns></returns>
     public static BoundedRational operator -(BoundedRational value)
     {
-        return !value._isValid ? Null : new BoundedRational(-value._numerator, value._denominator);
+        return !value._hasValue ? Null : new BoundedRational(-value._numerator, value._denominator);
     }
 
     /// <summary>
@@ -810,7 +810,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
 
     internal static BoundedRational RawMultiply(BoundedRational left, BoundedRational right)
     {
-        if (!left._isValid || !right._isValid)
+        if (!left._hasValue || !right._hasValue)
         {
             return Null;
         }
@@ -839,7 +839,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="DivideByZeroException"></exception>
     public static BoundedRational Inverse(BoundedRational r)
     {
-        if (!r._isValid)
+        if (!r._hasValue)
         {
             return Null;
         }
@@ -858,7 +858,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public BigInteger Floor()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
@@ -947,7 +947,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </summary>
     public static BoundedRational NthRoot(BoundedRational r, int n)
     {
-        if (!r._isValid)
+        if (!r._hasValue)
         {
             return Null;
         }
@@ -955,7 +955,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         if (n < 0)
         {
             var invRoot = NthRoot(r, -n);
-            return !invRoot._isValid ? Null : Inverse(invRoot);
+            return !invRoot._hasValue ? Null : Inverse(invRoot);
         }
 
         r = r.WithPositiveDenominator().Reduce();
@@ -1046,7 +1046,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public BoundedRational[] ExtractSquareReduced()
     {
-        if (!_isValid)
+        if (!_hasValue)
         {
             throw new InvalidOperationException("Invalid bounded rational.");
         }
@@ -1076,7 +1076,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// This rational is assumed to be in reduced form.
     /// </summary>
     public bool ExtractSquareWillSucceed() =>
-        _isValid &&
+        _hasValue &&
         _numerator.GetBitLength() < ExtractSquareMaxLen &&
         _denominator.GetBitLength() < ExtractSquareMaxLen;
 
@@ -1103,7 +1103,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         var tmp = RawPow(exp >> 1);
 
         var result = RawMultiply(tmp, tmp);
-        if (!result._isValid || result.IsTooBig())
+        if (!result._hasValue || result.IsTooBig())
         {
             return Null;
         }
@@ -1165,7 +1165,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// </summary>
     public static BoundedRational Pow(BoundedRational r, BoundedRational exp)
     {
-        if (!exp._isValid || !r._isValid)
+        if (!exp._hasValue || !r._hasValue)
         {
             return Null;
         }
@@ -1183,7 +1183,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
 
         var rt = NthRoot(r, expDen);
-        return !rt._isValid ? Null : rt.Pow(exp._numerator);
+        return !rt._hasValue ? Null : rt.Pow(exp._numerator);
     }
 
     #endregion

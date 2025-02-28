@@ -195,7 +195,7 @@ public class UnifiedReal
         private static void CheckArg(PropertyKind kind, BoundedRational arg)
         {
             // Null check first
-            if (arg.IsNull)
+            if (!arg.HasValue)
             {
                 Check(kind == PropertyKind.IsOne || kind == PropertyKind.IsPi || kind == PropertyKind.IsIrrational);
                 return;
@@ -306,7 +306,7 @@ public class UnifiedReal
     /// </summary>
     private static BoundedRational ReducedArg(BoundedRational arg)
     {
-        if (arg.IsNull)
+        if (!arg.HasValue)
         {
             return BoundedRational.Null;
         }
@@ -318,7 +318,7 @@ public class UnifiedReal
         }
 
         BoundedRational argPlusHalf = arg + BoundedRational.Half;
-        if (argPlusHalf.IsNull)
+        if (!argPlusHalf.HasValue)
         {
             return BoundedRational.Null;
         }
@@ -371,7 +371,7 @@ public class UnifiedReal
     private static SignedProperty? MakeSinPiProperty(BoundedRational arg)
     {
         BoundedRational nArg = ReducedArg(arg);
-        if (!nArg.IsNull)
+        if (nArg.HasValue)
         {
             bool neg = false;
             if (nArg.CompareTo(BoundedRational.Half) >= 0)
@@ -380,13 +380,13 @@ public class UnifiedReal
                 nArg = BoundedRational.One - nArg;
             }
 
-            if (nArg is { IsNull: false, Sign: < 0 })
+            if (nArg is { HasValue: true, Sign: < 0 })
             {
                 nArg = -nArg;
                 neg = true;
             }
 
-            if (!nArg.IsNull)
+            if (nArg.HasValue)
             {
                 return new SignedProperty(MakeProperty(PropertyKind.IsSinPi, nArg), neg);
             }
@@ -405,7 +405,7 @@ public class UnifiedReal
     private static SignedProperty? MakeTanPiProperty(BoundedRational arg)
     {
         BoundedRational nArg = ReducedArg(arg);
-        if (!nArg.IsNull)
+        if (nArg.HasValue)
         {
             bool neg = false;
             if (nArg.CompareTo(BoundedRational.Half) >= 0)
@@ -414,13 +414,13 @@ public class UnifiedReal
                 nArg = nArg - BoundedRational.One;
             }
 
-            if (nArg is { IsNull: false, Sign: < 0 })
+            if (nArg is { HasValue: true, Sign: < 0 })
             {
                 nArg = -nArg;
                 neg = true;
             }
 
-            if (!nArg.IsNull)
+            if (nArg.HasValue)
             {
                 return new SignedProperty(MakeProperty(PropertyKind.IsTanPi, nArg), neg);
             }
@@ -731,7 +731,7 @@ public class UnifiedReal
         if (degrees)
         {
             BoundedRational rInDegrees = r * Br180;
-            if (!rInDegrees.IsNull)
+            if (rInDegrees.HasValue)
             {
                 return rInDegrees.ToDisplayString(unicodeFraction /* mixed fractions */);
             }
@@ -785,7 +785,7 @@ public class UnifiedReal
         }
 
         BoundedRational expArg = GetExpArg(p);
-        if (!expArg.IsNull)
+        if (expArg.HasValue)
         {
             return expArg.Equals(BoundedRational.One)
                 ? "e"
@@ -793,7 +793,7 @@ public class UnifiedReal
         }
 
         BoundedRational sqrtArg = GetSqrtArg(p);
-        if (!sqrtArg.IsNull)
+        if (sqrtArg.HasValue)
         {
             BigInteger? intSqrtArg = sqrtArg.ToBigInteger();
             return intSqrtArg != null
@@ -802,31 +802,31 @@ public class UnifiedReal
         }
 
         BoundedRational lnArg = GetLnArg(p);
-        if (!lnArg.IsNull)
+        if (lnArg.HasValue)
         {
             return $"ln({lnArg.ToDisplayString(unicodeFraction)})";
         }
 
         BoundedRational logArg = GetLogArg(p);
-        if (!logArg.IsNull)
+        if (logArg.HasValue)
         {
             return $"log({logArg.ToDisplayString(unicodeFraction)})";
         }
 
         BoundedRational sinPiArg = GetSinPiArg(p);
-        if (!sinPiArg.IsNull)
+        if (sinPiArg.HasValue)
         {
             return $"sin({SymbolicPiMultiple(sinPiArg, degrees, unicodeFraction)})";
         }
 
         BoundedRational tanPiArg = GetTanPiArg(p);
-        if (!tanPiArg.IsNull)
+        if (tanPiArg.HasValue)
         {
             return $"tan({SymbolicPiMultiple(tanPiArg, degrees, unicodeFraction)})";
         }
 
         BoundedRational aSinArg = GetASinArg(p);
-        if (!aSinArg.IsNull)
+        if (aSinArg.HasValue)
         {
             // sin superscript -1
             return
@@ -834,7 +834,7 @@ public class UnifiedReal
         }
 
         BoundedRational aTanArg = GetATanArg(p);
-        if (!aTanArg.IsNull)
+        if (aTanArg.HasValue)
         {
             return
                 $"tan{InverseString}({aTanArg.ToDisplayString(unicodeFraction)}){(degrees ? DegreeConversion : "")}";
@@ -961,7 +961,7 @@ public class UnifiedReal
         {
             // BoundedRational already propagates null as desired.
             BoundedRational inverse = CommonPower(y, x);
-            return !inverse.IsNull ? BoundedRational.Inverse(inverse) : BoundedRational.Null;
+            return inverse.HasValue ? BoundedRational.Inverse(inverse) : BoundedRational.Null;
         }
 
         if (x.CompareTo(BigInteger.One) == 0 || y.CompareTo(BigInteger.One) == 0)
@@ -987,7 +987,7 @@ public class UnifiedReal
         }
 
         BoundedRational recursiveResult = CommonPower(quotient, y);
-        return !recursiveResult.IsNull ? recursiveResult + BoundedRational.One : BoundedRational.Null;
+        return recursiveResult.HasValue ? recursiveResult + BoundedRational.One : BoundedRational.Null;
     }
 
     /// <summary>
@@ -1003,37 +1003,37 @@ public class UnifiedReal
         {
             if (ndb.denominator.CompareTo(BigInteger.One) == 0)
             {
-                return !CommonPower(numerator, ndb.numerator).IsNull;
+                return CommonPower(numerator, ndb.numerator).HasValue;
             }
 
             if (ndb.numerator.CompareTo(BigInteger.One) == 0)
             {
-                return !CommonPower(numerator, ndb.denominator).IsNull;
+                return CommonPower(numerator, ndb.denominator).HasValue;
             }
         }
         else if (numerator.CompareTo(BigInteger.One) == 0)
         {
             if (ndb.numerator.CompareTo(BigInteger.One) == 0)
             {
-                return !CommonPower(denominator, ndb.denominator).IsNull;
+                return CommonPower(denominator, ndb.denominator).HasValue;
             }
 
             if (ndb.denominator.CompareTo(BigInteger.One) == 0)
             {
-                return !CommonPower(denominator, ndb.numerator).IsNull;
+                return CommonPower(denominator, ndb.numerator).HasValue;
             }
         }
 
         // In the general case, two commonPower computations must produce the same result.
         BoundedRational commonPowerNaNb = CommonPower(numerator, ndb.numerator);
         BoundedRational commonPowerNaDb = CommonPower(numerator, ndb.denominator);
-        if (!commonPowerNaNb.IsNull && commonPowerNaNb.Equals(CommonPower(denominator, ndb.denominator)))
+        if (commonPowerNaNb.HasValue && commonPowerNaNb.Equals(CommonPower(denominator, ndb.denominator)))
         {
             // They have a common power, and both exponents have the same sign.
             return true;
         }
 
-        if (!commonPowerNaDb.IsNull && commonPowerNaDb.Equals(CommonPower(denominator, ndb.numerator)))
+        if (commonPowerNaDb.HasValue && commonPowerNaDb.Equals(CommonPower(denominator, ndb.numerator)))
         {
             // They have a common power, and exponents have different sign.
             return true;
@@ -1689,7 +1689,7 @@ public class UnifiedReal
         if (SameCrFactor(u))
         {
             BoundedRational nRatFactor = _ratFactor + u._ratFactor;
-            if (!nRatFactor.IsNull)
+            if (nRatFactor.HasValue)
             {
                 return new UnifiedReal(nRatFactor, _crFactor, _crProperty);
             }
@@ -1729,7 +1729,7 @@ public class UnifiedReal
                     BoundedRational term1 = BoundedRational.Pow(_crProperty.Arg, _ratFactor);
                     BoundedRational term2 = BoundedRational.Pow(u._crProperty.Arg, u._ratFactor);
                     BoundedRational newArg = term1 * term2;
-                    if (!newArg.IsNull)
+                    if (newArg.HasValue)
                     {
                         return LogRep(_crProperty.Kind, newArg);
                     } // The else case here is probably impossible, since we already checked the size.
@@ -1791,7 +1791,7 @@ public class UnifiedReal
             return Zero;
         }
 
-        if (!product.IsNull)
+        if (product.HasValue)
         {
             var decomposedProduct = product.ExtractSquareReduced();
             return new UnifiedReal(decomposedProduct[0], decomposedProduct[1].ToConstructiveReal().Sqrt(),
@@ -1812,7 +1812,7 @@ public class UnifiedReal
         if (_crProperty != null && IsOne(_crProperty))
         {
             BoundedRational nRatFactor1 = _ratFactor * u._ratFactor;
-            if (!nRatFactor1.IsNull)
+            if (nRatFactor1.HasValue)
             {
                 return new UnifiedReal(nRatFactor1, u._crFactor, u._crProperty);
             }
@@ -1821,7 +1821,7 @@ public class UnifiedReal
         if (u._crProperty != null && IsOne(u._crProperty))
         {
             BoundedRational nRatFactor2 = _ratFactor * u._ratFactor;
-            if (!nRatFactor2.IsNull)
+            if (nRatFactor2.HasValue)
             {
                 return new UnifiedReal(nRatFactor2, _crFactor, _crProperty);
             }
@@ -1842,7 +1842,7 @@ public class UnifiedReal
                 BoundedRational uSqrtArg = GetSqrtArg(u._crProperty);
                 UnifiedReal crPart = MultiplySqrts(sqrtArg, uSqrtArg);
                 BoundedRational ratResult = nRatFactor * crPart._ratFactor;
-                if (!ratResult.IsNull)
+                if (ratResult.HasValue)
                 {
                     return new UnifiedReal(ratResult, crPart._crFactor, crPart._crProperty);
                 }
@@ -1852,7 +1852,7 @@ public class UnifiedReal
             {
                 // exp(a) * exp(b) is exp(a + b) .
                 BoundedRational sum = _crProperty.Arg + u._crProperty.Arg;
-                if (!sum.IsNull)
+                if (sum.HasValue)
                 {
                     // we use this only for the property, since crFactors may already have been evaluated.
                     resultProp = MakeProperty(PropertyKind.IsExp, sum);
@@ -1863,7 +1863,7 @@ public class UnifiedReal
         // Probably a bit cheaper to multiply component-wise.
         // TODO: We should often be able to determine that the result is irrational.
         // But definitelyIndependent is not the right criterion. Consider e and e^-1.
-        if (!nRatFactor.IsNull)
+        if (nRatFactor.HasValue)
         {
             return new UnifiedReal(nRatFactor, _crFactor.Multiply(u._crFactor), resultProp);
         }
@@ -1894,7 +1894,7 @@ public class UnifiedReal
             // Prefer square roots of integers. 1/sqrt(n) = sqrt(n)/n
             BoundedRational nRatFactor =
                 BoundedRational.Inverse(_ratFactor * square);
-            if (!nRatFactor.IsNull)
+            if (nRatFactor.HasValue)
             {
                 return new UnifiedReal(nRatFactor, _crFactor, _crProperty);
             }
@@ -1929,7 +1929,7 @@ public class UnifiedReal
             }
 
             BoundedRational nRatFactor = _ratFactor / u._ratFactor;
-            if (!nRatFactor.IsNull)
+            if (nRatFactor.HasValue)
             {
                 return new UnifiedReal(nRatFactor);
             }
@@ -1937,13 +1937,13 @@ public class UnifiedReal
 
         // Try to reduce ln(x)/ln(10) to log(x) to keep symbolic representation.
         BoundedRational lnArg = GetLnArg(_crProperty);
-        if (!lnArg.IsNull)
+        if (lnArg.HasValue)
         {
             BoundedRational uLnArg = GetLnArg(u._crProperty);
-            if (!uLnArg.IsNull && uLnArg.Equals(BoundedRational.Ten))
+            if (uLnArg.HasValue && uLnArg.Equals(BoundedRational.Ten))
             {
                 BoundedRational ratQuotient = _ratFactor / u._ratFactor;
-                if (!ratQuotient.IsNull)
+                if (ratQuotient.HasValue)
                 {
                     return new UnifiedReal(ratQuotient, MakeProperty(PropertyKind.IsLog, lnArg));
                 }
@@ -1988,10 +1988,10 @@ public class UnifiedReal
 
         // If this is exp(a), result is exp(a/2). Track that.
         BoundedRational expArg = GetExpArg(_crProperty);
-        if (!expArg.IsNull)
+        if (expArg.HasValue)
         {
             BoundedRational newArg = expArg / BoundedRational.Two;
-            if (!newArg.IsNull)
+            if (newArg.HasValue)
             {
                 newCrProperty = MakeProperty(PropertyKind.IsExp, newArg);
             }
@@ -2085,7 +2085,7 @@ public class UnifiedReal
         }
 
         BoundedRational aSinArg = GetASinArg(_crProperty);
-        if (!aSinArg.IsNull && _ratFactor.CompareToOne() == 0)
+        if (aSinArg.HasValue && _ratFactor.CompareToOne() == 0)
         {
             return new UnifiedReal(aSinArg);
         }
@@ -2155,7 +2155,7 @@ public class UnifiedReal
         }
 
         BoundedRational aTanArg = GetATanArg(_crProperty);
-        if (!aTanArg.IsNull && _ratFactor.CompareToOne() == 0)
+        if (aTanArg.HasValue && _ratFactor.CompareToOne() == 0)
         {
             return new UnifiedReal(aTanArg);
         }
@@ -2217,7 +2217,7 @@ public class UnifiedReal
         }
 
         BoundedRational sinPiArg = GetSinPiArg(_crProperty);
-        if (!sinPiArg.IsNull)
+        if (sinPiArg.HasValue)
         {
             if (_ratFactor.CompareToOne() == 0)
             {
@@ -2287,7 +2287,7 @@ public class UnifiedReal
         }
 
         BoundedRational tanPiArg = GetTanPiArg(_crProperty);
-        if (!tanPiArg.IsNull)
+        if (tanPiArg.HasValue)
         {
             if (_ratFactor.CompareToOne() == 0)
             {
@@ -2416,7 +2416,7 @@ public class UnifiedReal
                 BoundedRational ratPow = _ratFactor.Pow(exp);
                 // We count on this to fail, e.g. for very large exponents, when it would
                 // otherwise be too expensive.
-                if (!ratPow.IsNull)
+                if (ratPow.HasValue)
                 {
                     return new UnifiedReal(ratPow);
                 }
@@ -2429,7 +2429,7 @@ public class UnifiedReal
         }
 
         BoundedRational square = GetSqrtArg(_crProperty);
-        if (!square.IsNull)
+        if (square.HasValue)
         {
             // Compute powers as UnifiedReals, so we get the limit checking above.
             UnifiedReal resultFactor1 = new UnifiedReal(_ratFactor).Pow(exp);
@@ -2472,7 +2472,7 @@ public class UnifiedReal
             if (_crProperty.Kind == PropertyKind.IsOne && _ratFactor.CompareTo(BoundedRational.Ten) == 0)
             {
                 BoundedRational expLogArg = GetLogArg(exp._crProperty);
-                if (!expLogArg.IsNull)
+                if (expLogArg.HasValue)
                 {
                     // 10^(r * log(expLogArg)) = expLogArg^r
                     return new UnifiedReal(expLogArg).Pow(new UnifiedReal(exp._ratFactor));
@@ -2483,7 +2483,7 @@ public class UnifiedReal
         int sign = ApproxSign(DefaultComparisonTolerance);
         BoundedRational expAsBr = exp.ToBoundedRational();
         bool knownIrrational = false;
-        if (!expAsBr.IsNull)
+        if (expAsBr.HasValue)
         {
             var expNumDen = expAsBr.NumDen;
             if (expNumDen.Item2 == BigInteger.One)
@@ -2503,7 +2503,7 @@ public class UnifiedReal
                 int expDen = (int)expNumDen.Item2; // Doesn't lose information.
                 // Don't just use BoundedRational.pow(), since that would bypass above checks.
                 BoundedRational rt = BoundedRational.NthRoot(_ratFactor, expDen);
-                if (!rt.IsNull)
+                if (rt.HasValue)
                 {
                     return new UnifiedReal(rt).Pow(expNumDen.Item1);
                 }
@@ -2700,7 +2700,7 @@ public class UnifiedReal
     {
         BoundedRational expArg = GetExpArg(_crProperty);
         CRProperty? newCrProperty = null;
-        if (!expArg.IsNull)
+        if (expArg.HasValue)
         {
             return new UnifiedReal(_ratFactor).Ln().Add(new UnifiedReal(expArg));
         }
@@ -2754,7 +2754,7 @@ public class UnifiedReal
                         {
                             BoundedRational nRatFactor =
                                 BoundedRational.FromLong(intLog) + BoundedRational.Half;
-                            if (!nRatFactor.IsNull)
+                            if (nRatFactor.HasValue)
                             {
                                 return new UnifiedReal(nRatFactor, ConstructiveReal.FromBigInteger(square.Value).Ln(),
                                     MakeProperty(PropertyKind.IsLn, new BoundedRational(square.Value)));
@@ -2802,7 +2802,7 @@ public class UnifiedReal
         }
 
         BoundedRational lnArg = GetLnArg(_crProperty);
-        if (!lnArg.IsNull)
+        if (lnArg.HasValue)
         {
             bool needSqrt = false;
             BoundedRational ratExponent = _ratFactor;
@@ -2815,7 +2815,7 @@ public class UnifiedReal
             }
 
             BoundedRational nRatFactor = BoundedRational.Pow(lnArg, ratExponent);
-            if (!nRatFactor.IsNull)
+            if (nRatFactor.HasValue)
             {
                 UnifiedReal result = new UnifiedReal(nRatFactor);
                 if (needSqrt)
