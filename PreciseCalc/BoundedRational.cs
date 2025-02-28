@@ -179,8 +179,8 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
             return new BoundedRational((long)longValue);
         }
 
-        long allBits = BitConverter.DoubleToInt64Bits(Math.Abs(value));
-        long mantissa = allBits & ((1L << 52) - 1);
+        ulong allBits = BitConverter.DoubleToUInt64Bits(Math.Abs(value));
+        ulong mantissa = allBits & ((1UL << 52) - 1UL);
         int biasedExp = (int)(allBits >> 52);
 
         if ((biasedExp & 0x7ff) == 0x7ff)
@@ -197,10 +197,10 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
         else
         {
-            mantissa += (1L << 52); // Implied leading one
+            mantissa += (1UL << 52); // Implied leading one
         }
 
-        var num = new BigInteger(sign * mantissa);
+        var num = new BigInteger(sign * (long)mantissa);
         var den = BigInteger.One;
 
         if (exp >= 0)
@@ -982,7 +982,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <summary>
     /// Returns the square root if rational, null otherwise.
     /// </summary>
-    public static BoundedRational? Sqrt(BoundedRational r)
+    public static BoundedRational Sqrt(BoundedRational r)
     {
         return NthRoot(r, 2);
     }
