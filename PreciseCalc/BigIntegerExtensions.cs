@@ -4,16 +4,16 @@ using System.Text;
 namespace PreciseCalc;
 
 /// <summary>
-/// Provides extension methods for <see cref="BigInteger"/> to support additional functionality.
-/// This includes base conversion and integer square root calculation, which are available in Java's BigInteger API
-/// but missing in .NET's <see cref="BigInteger"/> class.
+///     Provides extension methods for <see cref="BigInteger" /> to support additional functionality.
+///     This includes base conversion and integer square root calculation, which are available in Java's BigInteger API
+///     but missing in .NET's <see cref="BigInteger" /> class.
 /// </summary>
 internal static class BigIntegerExtensions
 {
     /// <summary>
-    /// Converts a <see cref="BigInteger"/> to a string representation in the specified radix (base).
-    /// Supports bases from 2 to 36.
-    /// This method provides similar functionality to Java's `BigInteger#toString(int radix)`.
+    ///     Converts a <see cref="BigInteger" /> to a string representation in the specified radix (base).
+    ///     Supports bases from 2 to 36.
+    ///     This method provides similar functionality to Java's `BigInteger#toString(int radix)`.
     /// </summary>
     /// <param name="value">The BigInteger value to convert.</param>
     /// <param name="radix">The base (radix) of the output string, ranging from 2 to 36.</param>
@@ -27,7 +27,7 @@ internal static class BigIntegerExtensions
         if (value.IsZero)
             return "0";
 
-        bool isNegative = value.Sign < 0;
+        var isNegative = value.Sign < 0;
         value = BigInteger.Abs(value);
         const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var result = new StringBuilder();
@@ -38,10 +38,7 @@ internal static class BigIntegerExtensions
             value /= radix;
         }
 
-        if (isNegative)
-        {
-            result.Insert(0, '-');
-        }
+        if (isNegative) result.Insert(0, '-');
 
         return result.ToString();
     }

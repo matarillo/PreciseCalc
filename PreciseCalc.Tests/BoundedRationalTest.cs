@@ -26,7 +26,7 @@ public class BoundedRationalTest
         Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.Floor());
         Assert.Throws<InvalidOperationException>(() => BoundedRational.Null.ExtractSquareReduced());
     }
-    
+
     // Test Case 1: Basic Constructors and Factory Methods
     [Fact]
     public void ConstructorAndFactoryMethodsTest()
@@ -144,7 +144,7 @@ public class BoundedRationalTest
 
         // ToDisplayString
         var threeQuarters = new BoundedRational(3, 4);
-        Assert.Equal("3/4", threeQuarters.ToDisplayString(false, false));
+        Assert.Equal("3/4", threeQuarters.ToDisplayString());
 
         // Negative rational
         var negativeRational = new BoundedRational(-5, 8);
@@ -157,7 +157,7 @@ public class BoundedRationalTest
         Assert.Equal("2 3/4", improperFraction.ToDisplayString(false, true));
 
         // Unicode fractions
-        Assert.Contains("⁄", threeQuarters.ToDisplayString(true, false)); // Unicode fraction slash
+        Assert.Contains("⁄", threeQuarters.ToDisplayString(true)); // Unicode fraction slash
 
         // Truncated string representation
         Assert.Equal("0.75", threeQuarters.ToStringTruncated(2));
@@ -602,11 +602,8 @@ public class BoundedRationalTest
 
         // Test with factorial calculation
         // 10! = 3628800 (small value)
-        BoundedRational factorial = BoundedRational.One;
-        for (int i = 1; i <= 10; i++)
-        {
-            factorial = factorial * new BoundedRational(i);
-        }
+        var factorial = BoundedRational.One;
+        for (var i = 1; i <= 10; i++) factorial = factorial * new BoundedRational(i);
 
         Assert.Equal(new BoundedRational(3628800), factorial);
 

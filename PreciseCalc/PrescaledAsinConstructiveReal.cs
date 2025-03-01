@@ -3,7 +3,7 @@ using System.Numerics;
 namespace PreciseCalc;
 
 /// <summary>
-/// Represents arcsin(x) using a Taylor series expansion. Assumes |x| &lt; (1/2)^(1/3).
+///     Represents arcsin(x) using a Taylor series expansion. Assumes |x| &lt; (1/2)^(1/3).
 /// </summary>
 internal class PrescaledAsinConstructiveReal(ConstructiveReal x) : SlowConstructiveReal
 {
@@ -20,7 +20,7 @@ internal class PrescaledAsinConstructiveReal(ConstructiveReal x) : SlowConstruct
         // But it doesn't make much difference.
         if (precision >= 2) return Big0; // Never bigger than 4.
 
-        int iterationsNeeded = -3 * precision / 2 + 4;
+        var iterationsNeeded = -3 * precision / 2 + 4;
         // conservative estimate > 0.
         // Follows from assumed bound on x and
         // the fact that only every other Taylor
@@ -31,9 +31,9 @@ internal class PrescaledAsinConstructiveReal(ConstructiveReal x) : SlowConstruct
         //  Total rounding error in series computation is
         //  2*iterations_needed*2^calc_precision,
         //  exclusive of error in op.
-        int calcPrecision = precision - BoundLog2(2 * iterationsNeeded) - 4; // for error in op, truncation.
-        int opPrec = precision - 3; // always <= -2
-        BigInteger opAppr = x.GetApproximation(opPrec);
+        var calcPrecision = precision - BoundLog2(2 * iterationsNeeded) - 4; // for error in op, truncation.
+        var opPrec = precision - 3; // always <= -2
+        var opAppr = x.GetApproximation(opPrec);
         // Error in argument results in error of < 1/4 ulp.
         // (Derivative is bounded by 2 in the specified range, and we use
         // 3 extra digits.)
@@ -45,11 +45,11 @@ internal class PrescaledAsinConstructiveReal(ConstructiveReal x) : SlowConstruct
         // 3/2 * current term.)
         // Final rounding error is <= 1/2 ulp.
         // Thus, final error is < 1 ulp (relative to p).
-        BigInteger maxLastTerm = Big1 << (precision - 4 - calcPrecision);
-        int exp = 1; // Current exponent, = 2n+1 in above expression
-        BigInteger currentTerm = opAppr << (opPrec - calcPrecision);
-        BigInteger currentSum = currentTerm;
-        BigInteger currentFactor = currentTerm;
+        var maxLastTerm = Big1 << (precision - 4 - calcPrecision);
+        var exp = 1; // Current exponent, = 2n+1 in above expression
+        var currentTerm = opAppr << (opPrec - calcPrecision);
+        var currentSum = currentTerm;
+        var currentFactor = currentTerm;
         // Current scaled Taylor series term
         // before division by the exponent.
         // Accurate to 3 ulp at calc_precision.

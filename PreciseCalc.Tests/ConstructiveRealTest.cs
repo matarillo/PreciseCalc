@@ -2,13 +2,13 @@ namespace PreciseCalc.Tests;
 
 public class ConstructiveRealTest
 {
-    private readonly ConstructiveReal _zero = ConstructiveReal.FromInt(0);
-    private readonly ConstructiveReal _one = ConstructiveReal.FromInt(1);
-    private readonly ConstructiveReal _two = ConstructiveReal.FromInt(2);
-    private readonly ConstructiveReal _three;
     private readonly ConstructiveReal _four;
-    private readonly ConstructiveReal _thirteen = ConstructiveReal.FromInt(13);
     private readonly ConstructiveReal _halfPi;
+    private readonly ConstructiveReal _one = ConstructiveReal.FromInt(1);
+    private readonly ConstructiveReal _thirteen = ConstructiveReal.FromInt(13);
+    private readonly ConstructiveReal _three;
+    private readonly ConstructiveReal _two = ConstructiveReal.FromInt(2);
+    private readonly ConstructiveReal _zero = ConstructiveReal.FromInt(0);
 
     public ConstructiveRealTest()
     {
@@ -99,7 +99,7 @@ public class ConstructiveRealTest
     public void TestExp()
     {
         Assert.Equal(0, _zero.Exp().CompareTo(_one, -50));
-        string eString = _one.Exp().ToString(20);
+        var eString = _one.Exp().ToString(20);
         Assert.StartsWith("2.718281828459045", eString);
     }
 
@@ -119,8 +119,8 @@ public class ConstructiveRealTest
     [Fact]
     public void TestIntermediateConversions()
     {
-        ConstructiveReal tmp = ConstructiveReal.PI + ConstructiveReal.FromInt(-123).Exp();
-        ConstructiveReal tmp2 = tmp - ConstructiveReal.PI;
+        var tmp = ConstructiveReal.PI + ConstructiveReal.FromInt(-123).Exp();
+        var tmp2 = tmp - ConstructiveReal.PI;
         Assert.Equal(-123, tmp2.Ln().IntValue());
         Assert.Equal(-123L, tmp2.Ln().LongValue());
         Assert.Equal(-123.0f, tmp2.Ln().FloatValue(), 0.0);
@@ -130,37 +130,29 @@ public class ConstructiveRealTest
     [Fact]
     public void TestDoubleRangeForSin()
     {
-        for (double n = -10.0; n < 10.0; n += 2.0)
-        {
+        for (var n = -10.0; n < 10.0; n += 2.0)
             Assert.Equal(Math.Sin(n), ConstructiveReal.FromDouble(n).Sin().DoubleValue(), 0.000001);
-        }
     }
 
     [Fact]
     public void TestDoubleRangeForCos()
     {
-        for (double n = -10.0; n < 10.0; n += 2.0)
-        {
+        for (var n = -10.0; n < 10.0; n += 2.0)
             Assert.Equal(Math.Cos(n), ConstructiveReal.FromDouble(n).Cos().DoubleValue(), 0.000001);
-        }
     }
 
     [Fact]
     public void TestDoubleRangeForExp()
     {
-        for (double n = -10.0; n < 10.0; n += 2.0)
-        {
+        for (var n = -10.0; n < 10.0; n += 2.0)
             Assert.Equal(Math.Exp(n), ConstructiveReal.FromDouble(n).Exp().DoubleValue(), 0.000001);
-        }
     }
 
     [Fact]
     public void TestPositiveDoubleRangeForExp()
     {
-        for (double n = 2.0; n < 10.0; n += 2.0)
-        {
+        for (var n = 2.0; n < 10.0; n += 2.0)
             Assert.Equal(Math.Exp(n), ConstructiveReal.FromDouble(n).Exp().DoubleValue(), 0.000001);
-        }
     }
 
     [Fact]

@@ -3,14 +3,14 @@ using System.Numerics;
 namespace PreciseCalc;
 
 /// <summary>
-/// Computes the derivative of a monotone function using numerical approximation.
+///     Computes the derivative of a monotone function using numerical approximation.
 /// </summary>
 internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
 {
     private readonly ConstructiveReal _arg;
+    private readonly Data _data;
     private readonly ConstructiveReal _fArg;
     private readonly int _maxDeltaMsd;
-    private readonly Data _data;
 
     public MonotoneDerivativeConstructiveReal(ConstructiveReal x, Data data)
     {
@@ -24,10 +24,7 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         var maxDeltaLeftMsd = leftDiff.GetMsd();
         var maxDeltaRightMsd = rightDiff.GetMsd();
 
-        if (leftDiff.Sign() < 0 || rightDiff.Sign() < 0)
-        {
-            throw new ArithmeticException("Function is not monotone");
-        }
+        if (leftDiff.Sign() < 0 || rightDiff.Sign() < 0) throw new ArithmeticException("Function is not monotone");
 
         _maxDeltaMsd = Math.Min(maxDeltaLeftMsd, maxDeltaRightMsd);
     }
@@ -38,14 +35,11 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         var logDelta = precision - _data.Deriv2Msd;
 
         // Ensure that we stay within the interval
-        if (logDelta > _maxDeltaMsd)
-        {
-            logDelta = _maxDeltaMsd;
-        }
+        if (logDelta > _maxDeltaMsd) logDelta = _maxDeltaMsd;
 
         logDelta -= extraPrec;
 
-        var delta = ConstructiveReal.One << logDelta;
+        var delta = One << logDelta;
 
         var left = _arg - delta;
         var right = _arg + delta;
@@ -60,42 +54,34 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         var apprRightDeriv = rightDeriv.GetApproximation(evalPrec);
         var derivDifference = BigInteger.Abs(apprRightDeriv - apprLeftDeriv);
 
-        if (derivDifference < Big8)
-        {
-            return Scale(apprLeftDeriv, -extraPrec);
-        }
-        else
-        {
-            if (PleaseStop)
-            {
-                throw new OperationCanceledException("Calculation was cancelled");
-            }
+        if (derivDifference < Big8) return Scale(apprLeftDeriv, -extraPrec);
 
-            // Update derivative bound and try again
-            _data.Deriv2Msd = evalPrec + (int)derivDifference.GetBitLength() + 4 /* slop */ - logDelta;
-            return Approximate(precision);
-        }
+        if (PleaseStop) throw new OperationCanceledException("Calculation was cancelled");
+
+        // Update derivative bound and try again
+        _data.Deriv2Msd = evalPrec + (int)derivDifference.GetBitLength() + 4 /* slop */ - logDelta;
+        return Approximate(precision);
     }
 
     /// <summary>
-    /// Contains the data needed for derivative computation.
+    ///     Contains the data needed for derivative computation.
     /// </summary>
     internal class Data
     {
+        internal readonly int DifferenceMsd;
+
         // Monotone increasing. If it was monotone decreasing, we negate it.
         internal readonly UnaryCRFunction F;
-
-        // endpoints and midpoint of interval
-        internal readonly ConstructiveReal Low;
-        internal readonly ConstructiveReal Mid;
-        internal readonly ConstructiveReal High;
+        internal readonly ConstructiveReal FHigh;
 
         // Corresponding function values.
         internal readonly ConstructiveReal FLow;
         internal readonly ConstructiveReal FMid;
-        internal readonly ConstructiveReal FHigh;
+        internal readonly ConstructiveReal High;
 
-        internal readonly int DifferenceMsd;
+        // endpoints and midpoint of interval
+        internal readonly ConstructiveReal Low;
+        internal readonly ConstructiveReal Mid;
 
         // Rough approx. of msd of second derivative.
         // This is increased to be an appr. bound on the msd of |(f'(y)-f'(x))/(x-y)|

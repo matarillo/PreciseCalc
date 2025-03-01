@@ -3,19 +3,19 @@ using System.Numerics;
 namespace PreciseCalc;
 
 /// <summary>
-/// Representation of the selection of a constructive real.
+///     Representation of the selection of a constructive real.
 /// </summary>
 /// <remarks>
-/// x     if selector &lt; 0<br/>
-/// y     if selector ^gt;= 0<br/>
-/// Assumes x = y if selector = 0
+///     x     if selector &lt; 0<br />
+///     y     if selector ^gt;= 0<br />
+///     Assumes x = y if selector = 0
 /// </remarks>
 internal class SelectConstructiveReal : ConstructiveReal
 {
-    private readonly ConstructiveReal _selector;
-    private int _selectorSign;
     private readonly ConstructiveReal _op1;
     private readonly ConstructiveReal _op2;
+    private readonly ConstructiveReal _selector;
+    private int _selectorSign;
 
     public SelectConstructiveReal(ConstructiveReal selector, ConstructiveReal x, ConstructiveReal y)
     {
@@ -30,15 +30,13 @@ internal class SelectConstructiveReal : ConstructiveReal
         if (_selectorSign < 0) return _op1.GetApproximation(precision);
         if (_selectorSign > 0) return _op2.GetApproximation(precision);
 
-        BigInteger op1Appr = _op1.GetApproximation(precision - 1);
-        BigInteger op2Appr = _op2.GetApproximation(precision - 1);
-        BigInteger diff = BigInteger.Abs(op1Appr - op2Appr);
+        var op1Appr = _op1.GetApproximation(precision - 1);
+        var op2Appr = _op2.GetApproximation(precision - 1);
+        var diff = BigInteger.Abs(op1Appr - op2Appr);
 
         if (diff.CompareTo(Big1) <= 0)
-        {
             // close enough; use either
             return Scale(op1Appr, -1);
-        }
 
         // op1 and op2 are different; selector != 0;
         // safe to get sign of selector.

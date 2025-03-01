@@ -4,7 +4,7 @@ using System.Numerics;
 namespace PreciseCalc;
 
 /// <summary>
-/// Nested class that computes the inverse function using an iterative approach.
+///     Nested class that computes the inverse function using an iterative approach.
 /// </summary>
 internal class InverseIncreasingConstructiveReal : ConstructiveReal
 {
@@ -13,16 +13,16 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
     private readonly Data _data;
 
     /// <summary>
-    /// Nested class that computes the inverse function using an iterative approach.
+    ///     Nested class that computes the inverse function using an iterative approach.
     /// </summary>
     public InverseIncreasingConstructiveReal(ConstructiveReal x, Data data)
     {
-        this._arg = data.FNegated ? -x : x;
-        this._data = data;
+        _arg = data.FNegated ? -x : x;
+        _data = data;
     }
 
     /// <summary>
-    /// Compares two BigIntegers with a difference of one treated as equality.
+    ///     Compares two BigIntegers with a difference of one treated as equality.
     /// </summary>
     private static int SloppyCompare(BigInteger x, BigInteger y)
     {
@@ -43,10 +43,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
         if (digitsNeeded < 0) return Big0;
 
         var workingArgPrec = precision - extraArgPrec;
-        if (workingArgPrec > _data.MaxArgPrec)
-        {
-            workingArgPrec = _data.MaxArgPrec;
-        }
+        if (workingArgPrec > _data.MaxArgPrec) workingArgPrec = _data.MaxArgPrec;
 
         var workingEvalPrec = workingArgPrec + _data.DerivMsd - 20; // Initial guess
 
@@ -90,9 +87,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             // Check for clear out-of-bounds case.
             // Close cases may fail in other ways.
             if (fH < argAppr - Big1 || fL > argAppr + Big1)
-            {
                 throw new ArithmeticException("Inverse: argument out of bounds");
-            }
 
             atLeft = true;
             atRight = true;
@@ -103,9 +98,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             var roughPrec = precision + digitsNeeded / 2;
 
             if (haveGoodAppr && (digitsNeeded < smallStepThreshold || MinPrec < precision + 3 * digitsNeeded / 4))
-            {
                 roughPrec = MinPrec;
-            }
 
             var roughAppr = GetApproximation(roughPrec);
             Data.Trace($"Setting interval based on prev. appr: {roughAppr}, precision: {roughPrec}");
@@ -154,10 +147,8 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             Data.Trace($"f(l) = {fL}, f(h) = {fH}");
 
             if (difference < Big6)
-            {
                 // Answer is less than 1/2 ulp away from h
                 return Scale(h, -extraArgPrec);
-            }
 
             var fDifference = fH - fL;
 
@@ -224,7 +215,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
                 if (adjPrec)
                 {
                     // Adjust workingEvalPrec to get enough resolution
-                    int adjustment = (int)-fGuess.GetBitLength() / 4;
+                    var adjustment = (int)-fGuess.GetBitLength() / 4;
                     if (adjustment > -20) adjustment = -20;
                     var lCr = FromBigInteger(l) << workingArgPrec;
                     var hCr = FromBigInteger(h) << workingArgPrec;
@@ -285,18 +276,13 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
 
     internal class Data
     {
+        internal readonly int DerivMsd; // Rough approx. of msd of first derivative.
         internal readonly UnaryCRFunction F; // Monotone increasing. If it was monotone decreasing, we negate it.
+        internal readonly ConstructiveReal FLow, FHigh;
         internal readonly bool FNegated;
         internal readonly ConstructiveReal Low, High;
-        internal readonly ConstructiveReal FLow, FHigh;
-        internal readonly int MaxMsd; // Bound on msd of both f(high) and f(low)
         internal readonly int MaxArgPrec; // base**MaxArgPrec is a small fraction of low - high.
-        internal readonly int DerivMsd; // Rough approx. of msd of first derivative.
-
-        internal static void Trace(string s)
-        {
-            Debug.WriteLine(s);
-        }
+        internal readonly int MaxMsd; // Bound on msd of both f(high) and f(low)
 
         internal Data(UnaryCRFunction func, ConstructiveReal l, ConstructiveReal h)
         {
@@ -324,6 +310,11 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             MaxMsd = l.Abs().Max(h.Abs()).GetMsd();
             MaxArgPrec = (h - l).GetMsd() - 4;
             DerivMsd = ((FHigh - FLow) / (h - l)).GetMsd();
+        }
+
+        internal static void Trace(string s)
+        {
+            Debug.WriteLine(s);
         }
     }
 }

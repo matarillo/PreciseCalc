@@ -4,20 +4,21 @@ namespace PreciseCalc.Tests;
 
 public class UnaryCRFunctionTest
 {
-    private readonly ConstructiveReal _zero = ConstructiveReal.Zero;
-    private readonly ConstructiveReal _one = ConstructiveReal.One;
-    private readonly ConstructiveReal _two = ConstructiveReal.FromInt(2);
-    private readonly ConstructiveReal _half;
-    private readonly ConstructiveReal _halfPi;
-    private readonly ConstructiveReal _three = ConstructiveReal.FromInt(3);
-    private readonly ConstructiveReal _thirteen = ConstructiveReal.FromInt(13);
-    private readonly ConstructiveReal _huge;
+    private const int Precision = -50;
+    private readonly UnaryCRFunction _acos = UnaryCRFunction.AcosFunction;
 
     private readonly UnaryCRFunction _asin = UnaryCRFunction.AsinFunction;
-    private readonly UnaryCRFunction _acos = UnaryCRFunction.AcosFunction;
     private readonly UnaryCRFunction _atan = UnaryCRFunction.AtanFunction;
-    private readonly UnaryCRFunction _tan = UnaryCRFunction.TanFunction;
+    private readonly ConstructiveReal _half;
+    private readonly ConstructiveReal _halfPi;
+    private readonly ConstructiveReal _huge;
+    private readonly ConstructiveReal _one = ConstructiveReal.One;
     private readonly UnaryCRFunction _sqrt = UnaryCRFunction.SqrtFunction;
+    private readonly UnaryCRFunction _tan = UnaryCRFunction.TanFunction;
+    private readonly ConstructiveReal _thirteen = ConstructiveReal.FromInt(13);
+    private readonly ConstructiveReal _three = ConstructiveReal.FromInt(3);
+    private readonly ConstructiveReal _two = ConstructiveReal.FromInt(2);
+    private readonly ConstructiveReal _zero = ConstructiveReal.Zero;
 
     public UnaryCRFunctionTest()
     {
@@ -27,8 +28,6 @@ public class UnaryCRFunctionTest
         BigInteger thousand = 1000;
         _huge = ConstructiveReal.FromBigInteger(million * million * thousand);
     }
-
-    private const int Precision = -50;
 
     [Fact]
     public void TestAsin()
@@ -43,7 +42,7 @@ public class UnaryCRFunctionTest
     [Fact]
     public void TestMonotoneDerivative()
     {
-        UnaryCRFunction cosine = UnaryCRFunction.SinFunction.MonotoneDerivative(_zero, ConstructiveReal.PI);
+        var cosine = UnaryCRFunction.SinFunction.MonotoneDerivative(_zero, ConstructiveReal.PI);
         Assert.Equal(0, cosine.Execute(_one).CompareTo(_one.Cos(), Precision));
         Assert.Equal(0, cosine.Execute(_three).CompareTo(_three.Cos(), Precision));
     }
@@ -65,7 +64,7 @@ public class UnaryCRFunctionTest
     [Fact]
     public void TestSqrt()
     {
-        ConstructiveReal sqrt13 = _sqrt.Execute(_thirteen);
+        var sqrt13 = _sqrt.Execute(_thirteen);
         Assert.Equal(0, (sqrt13 * sqrt13).CompareTo(_thirteen, Precision));
     }
 }

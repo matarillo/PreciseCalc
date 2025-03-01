@@ -4,7 +4,6 @@
 
 Computable real numbers, represented so that we can get exact decidable comparisons for a number  
 of interesting special cases, including rational computations.  
-  
 A real number is represented as the product of two numbers with different representations:  
 (A) A BoundedRational that can only represent a subset of the rationals, but supports exact  
 computable comparisons. (B) A lazily evaluated "constructive real number" that provides  
@@ -21,7 +20,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 UnifiedReals, as well as their three components (the rational part, the constructive real part,  
 and the property describing the constructive real part) are logically immutable. (The ConstructiveReal  
 component physically contains an evaluation cache, which is transparently mutated.)  
-  
 Arithmetic operations and operations that produce finite approximations may throw unchecked  
 exceptions produced by the underlying ConstructiveReal and BoundedRational packages, including  
 PrecisionOverflowException and AbortedException.
