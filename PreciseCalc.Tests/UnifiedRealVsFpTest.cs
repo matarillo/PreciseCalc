@@ -158,13 +158,13 @@ public class UnifiedRealVsFpTest(ITestOutputHelper testOutputHelper)
         if (x != 0.0)
         {
             Assert.True(
-                double.IsInfinity(3.0 / x) || UlpError(3.0 / x, Three.Divide(xAsUr)) == 0,
+                double.IsInfinity(3.0 / x) || UlpError(3.0 / x, Three / xAsUr) == 0,
                 "div 3: " + x);
             Assert.True(
-                double.IsInfinity(-17.0 / x) || UlpError(-17.0 / x, Minus17.Divide(xAsUr)) == 0,
+                double.IsInfinity(-17.0 / x) || UlpError(-17.0 / x, Minus17 / xAsUr) == 0,
                 "div -17: " + x);
             Assert.True(
-                !double.IsFinite(other / x) || UlpError(other / x, otherAsUr.Divide(xAsUr)) == 0,
+                !double.IsFinite(other / x) || UlpError(other / x, otherAsUr / xAsUr) == 0,
                 "div " + other + ": " + x);
         }
 

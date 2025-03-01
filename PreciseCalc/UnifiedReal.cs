@@ -1440,32 +1440,33 @@ public class UnifiedReal
     /// <summary>
     ///     Return x/y
     /// </summary>
-    /// <param name="u"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     /// <returns></returns>
     /// <exception cref="DivideByZeroException"></exception>
-    public UnifiedReal Divide(UnifiedReal u)
+    public static UnifiedReal operator /(UnifiedReal x, UnifiedReal y)
     {
-        if (SameCrFactor(u))
+        if (x.SameCrFactor(y))
         {
-            if (u.DefinitelyZero()) throw new DivideByZeroException("Division by zero");
+            if (y.DefinitelyZero()) throw new DivideByZeroException("Division by zero");
 
-            var nRatFactor = _ratFactor / u._ratFactor;
+            var nRatFactor = x._ratFactor / y._ratFactor;
             if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor);
         }
 
         // Try to reduce ln(x)/ln(10) to log(x) to keep symbolic representation.
-        var lnArg = GetLnArg(_crProperty);
+        var lnArg = GetLnArg(x._crProperty);
         if (lnArg.HasValue)
         {
-            var uLnArg = GetLnArg(u._crProperty);
+            var uLnArg = GetLnArg(y._crProperty);
             if (uLnArg.HasValue && uLnArg.Equals(BoundedRational.Ten))
             {
-                var ratQuotient = _ratFactor / u._ratFactor;
+                var ratQuotient = x._ratFactor / y._ratFactor;
                 if (ratQuotient.HasValue) return new UnifiedReal(ratQuotient, MakeProperty(PropertyKind.IsLog, lnArg));
             }
         }
 
-        return this * u.Inverse();
+        return x * y.Inverse();
     }
 
     /// <summary>
@@ -1628,7 +1629,7 @@ public class UnifiedReal
 
             var top = SinPiTwelfths(i);
             var bottom = CosPiTwelfths(i);
-            if (top != null && bottom != null) return top.Divide(bottom);
+            if (top != null && bottom != null) return top / bottom;
         }
 
         if (_crProperty != null && IsPi(_crProperty))
@@ -2131,7 +2132,7 @@ public class UnifiedReal
     /// <exception cref="ArithmeticException"></exception>
     public UnifiedReal Log()
     {
-        return Ln().Divide(Ln10);
+        return Ln() / Ln10;
     }
 
     /// <summary>

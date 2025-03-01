@@ -163,7 +163,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
             {
                 var otherAsUr = UnifiedReal.FromDouble(other);
                 _ops++;
-                Assert.Equal(0, UlpError(other / x, otherAsUr.Divide(xAsUr)));
+                Assert.Equal(0, UlpError(other / x, otherAsUr / xAsUr));
             }
         }
     }

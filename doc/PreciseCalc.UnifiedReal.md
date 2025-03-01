@@ -71,7 +71,6 @@ PrecisionOverflowException and AbortedException.
 | [DefinitelyTranscendental()](PreciseCalc.UnifiedReal.DefinitelyTranscendental().md 'PreciseCalc.UnifiedReal.DefinitelyTranscendental()') | Is this number known to be transcendental? |
 | [DefinitelyZero()](PreciseCalc.UnifiedReal.DefinitelyZero().md 'PreciseCalc.UnifiedReal.DefinitelyZero()') | Can this number be determined to be definitely zero without performing approximate<br/>evaluation? |
 | [DigitsRequired()](PreciseCalc.UnifiedReal.DigitsRequired().md 'PreciseCalc.UnifiedReal.DigitsRequired()') | Return the number of decimal digits to the right of the decimal point required to represent<br/>the argument exactly. Return Integer.MAX_VALUE if that's not possible. Never returns a value<br/>less than zero, even if r is a power of ten. |
-| [Divide(UnifiedReal)](PreciseCalc.UnifiedReal.Divide(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.Divide(PreciseCalc.UnifiedReal)') | Return x/y |
 | [Equals(object)](PreciseCalc.UnifiedReal.Equals(object).md 'PreciseCalc.UnifiedReal.Equals(object)') | UnifiedReals don't have equality or hash codes. |
 | [ExactlyDisplayable()](PreciseCalc.UnifiedReal.ExactlyDisplayable().md 'PreciseCalc.UnifiedReal.ExactlyDisplayable()') | Will ToDisplayString() produce an exact representation? |
 | [ExactlyTruncatable()](PreciseCalc.UnifiedReal.ExactlyTruncatable().md 'PreciseCalc.UnifiedReal.ExactlyTruncatable()') | Can we compute correctly truncated approximations of this number? |
@@ -102,6 +101,7 @@ PrecisionOverflowException and AbortedException.
 | Operators | |
 | :--- | :--- |
 | [operator +(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x+y |
+| [operator /(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Division(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Division(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x/y |
 | [operator *(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Multiply(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Multiply(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x*y |
 | [operator -(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Subtraction(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Subtraction(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x-y |
 | [operator -(UnifiedReal)](PreciseCalc.UnifiedReal.op_UnaryNegation(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_UnaryNegation(PreciseCalc.UnifiedReal)') | Return -x |
