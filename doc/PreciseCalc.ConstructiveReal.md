@@ -16,7 +16,7 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | [HalfPI](PreciseCalc.ConstructiveReal.HalfPI.md 'PreciseCalc.ConstructiveReal.HalfPI') | pi/2 |
 | [One](PreciseCalc.ConstructiveReal.One.md 'PreciseCalc.ConstructiveReal.One') | Predefined constant for the value 1. |
 | [PI](PreciseCalc.ConstructiveReal.PI.md 'PreciseCalc.ConstructiveReal.PI') | The ratio of a circle's circumference to its diameter. |
-| [PleaseStop](PreciseCalc.ConstructiveReal.PleaseStop.md 'PreciseCalc.ConstructiveReal.PleaseStop') | Setting this to true requests that all computations be aborted by<br/>throwing AbortedException.<br/>Must be rest to false before any further<br/>computation. |
+| [PleaseStop](PreciseCalc.ConstructiveReal.PleaseStop.md 'PreciseCalc.ConstructiveReal.PleaseStop') | Setting this to true requests that all computations be aborted by<br/>throwing [System.OperationCanceledException](https://docs.microsoft.com/en-us/dotnet/api/System.OperationCanceledException 'System.OperationCanceledException').<br/>Must be rest to false before any further computation. |
 | [Zero](PreciseCalc.ConstructiveReal.Zero.md 'PreciseCalc.ConstructiveReal.Zero') | Predefined constant for the value 0. |
 
 | Methods | |

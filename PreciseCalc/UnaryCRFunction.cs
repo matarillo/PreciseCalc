@@ -237,17 +237,17 @@ internal class SqrtUnaryCRFunction : UnaryCRFunction
 // --- Function Composition ---
 internal class ComposedUnaryCRFunction : UnaryCRFunction
 {
-    private readonly UnaryCRFunction f1, f2;
+    private readonly UnaryCRFunction _f1, _f2;
 
     public ComposedUnaryCRFunction(UnaryCRFunction f1, UnaryCRFunction f2)
     {
-        this.f1 = f1;
-        this.f2 = f2;
+        _f1 = f1;
+        _f2 = f2;
     }
 
     public override ConstructiveReal Execute(ConstructiveReal x)
     {
-        return f1.Execute(f2.Execute(x));
+        return _f1.Execute(_f2.Execute(x));
     }
 }
 

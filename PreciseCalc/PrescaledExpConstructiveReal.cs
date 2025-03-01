@@ -30,7 +30,7 @@ internal class PrescaledExpConstructiveReal(ConstructiveReal x) : ConstructiveRe
         // Sum of term eval. rounding error is < 1/16 ulp.
         // Series truncation error < 1/16 ulp.
         // Final rounding error is <= 1/2 ulp.
-        // Thus final error is < 1 ulp.
+        // Thus, final error is < 1 ulp.
         var scaledOne = Big1 << -calcPrecision;
         var currentTerm = scaledOne;
         var currentSum = scaledOne;

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Numerics;
 using System.Text;
 
@@ -396,7 +397,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         if (!HasValue) return "Null";
 
         var digits = (BigInteger.Abs(_numerator) * BigInteger.Pow(10, n) /
-                      BigInteger.Abs(_denominator)).ToString();
+                      BigInteger.Abs(_denominator)).ToString(CultureInfo.InvariantCulture);
 
         var len = digits.Length;
         if (len < n + 1)
@@ -727,6 +728,42 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
 
     #endregion
 
+    #region Comparison operator overloads
+
+    /// <summary>
+    /// Returns a value that indicates whether a BoundedRational value is less than another BoundedRational value.
+    /// </summary>
+    public static bool operator <(BoundedRational left, BoundedRational right)
+    {
+        return left.CompareTo(right) < 0;
+    }
+
+    /// <summary>
+    /// Returns a value that indicates whether a BoundedRational value is greater than another BoundedRational value.
+    /// </summary>
+    public static bool operator >(BoundedRational left, BoundedRational right)
+    {
+        return 0 < left.CompareTo(right);
+    }
+
+    /// <summary>
+    /// Returns a value that indicates whether a BoundedRational value is less than or equal to another BoundedRational value.
+    /// </summary>
+    public static bool operator <=(BoundedRational left, BoundedRational right)
+    {
+        return left.CompareTo(right) <= 0;
+    }
+
+    /// <summary>
+    /// Returns a value that indicates whether a BoundedRational value is greater than or equal to another BoundedRational value.
+    /// </summary>
+    public static bool operator >=(BoundedRational left, BoundedRational right)
+    {
+        return 0 <= left.CompareTo(right);
+    }
+
+    #endregion
+    
     #region Other arithmetic operations
 
     internal static BoundedRational RawMultiply(BoundedRational left, BoundedRational right)

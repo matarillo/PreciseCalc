@@ -5,13 +5,13 @@
 UnifiedReals don't have equality or hash codes.
 
 ```csharp
-public override bool Equals(object? r);
+public override bool Equals(object? obj);
 ```
 #### Parameters
 
-<a name='PreciseCalc.UnifiedReal.Equals(object).r'></a>
+<a name='PreciseCalc.UnifiedReal.Equals(object).obj'></a>
 
-`r` [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')
+`obj` [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')
 
 #### Returns
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')

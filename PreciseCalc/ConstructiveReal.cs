@@ -27,9 +27,8 @@ public abstract class ConstructiveReal
 
     /// <summary>
     ///     Setting this to true requests that all computations be aborted by
-    ///     throwing AbortedException.
-    ///     Must be rest to false before any further
-    ///     computation.
+    ///     throwing <see cref="OperationCanceledException"/>.
+    ///     Must be rest to false before any further computation.
     /// </summary>
     public static volatile bool PleaseStop = false;
 
@@ -483,7 +482,7 @@ public abstract class ConstructiveReal
         var resultArray = new char[whole.Length + fraction.Length];
         whole.CopyTo(resultArray);
         fraction.CopyTo(resultArray.AsSpan(whole.Length));
-        var scaledResult = BigInteger.Parse(resultArray, style);
+        var scaledResult = BigInteger.Parse(resultArray, style, CultureInfo.InvariantCulture);
         var divisor = BigInteger.Pow(radix, fraction.Length);
         return FromBigInteger(scaledResult) / FromBigInteger(divisor);
     }

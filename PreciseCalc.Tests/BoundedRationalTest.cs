@@ -461,7 +461,6 @@ public class BoundedRationalTest
 
         // Using rationals for calculator-like operations
         var num1 = new BoundedRational(22, 7); // Approximation of π
-        var num2 = BoundedRational.FromDouble(0.5); // 1/2
 
         // π * r^2 for circle area calculation
         var radius = new BoundedRational(10); // Radius 10

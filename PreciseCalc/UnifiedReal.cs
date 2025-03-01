@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Numerics;
 
 namespace PreciseCalc;
@@ -436,17 +437,15 @@ public class UnifiedReal
             var numDen = r.NumDen;
             return numDen.Item1 * Big180 + "/" + numDen.Item2;
         }
-        else
-        {
-            var numDen = r.NumDen;
-            if (numDen.Item2 == BigInteger.One) return numDen.Item1 + PIString;
 
-            if (unicodeFraction && numDen.Item1 != BigInteger.One)
-                return r.ToDisplayString(unicodeFraction /* mixed fractions */) + PIString;
+        var (numerator, denominator) = r.NumDen;
+        if (denominator == BigInteger.One) return numerator + PIString;
 
-            return (numDen.Item1 == BigInteger.One ? "" : numDen.Item1.ToString()) + PIString +
-                   "/" + numDen.Item2;
-        }
+        if (unicodeFraction && numerator != BigInteger.One)
+            return r.ToDisplayString(unicodeFraction /* mixed fractions */) + PIString;
+
+        return (numerator == BigInteger.One ? "" : numerator.ToString(CultureInfo.InvariantCulture)) +
+               PIString + "/" + denominator;
     }
 
     /// <summary>
@@ -936,7 +935,7 @@ public class UnifiedReal
             intScaled >>= ExtraPrecision;
         }
 
-        var digits = intScaled.ToString();
+        var digits = intScaled.ToString(CultureInfo.InvariantCulture);
         var len = digits.Length;
         if (len < n + 1)
         {
@@ -1145,12 +1144,12 @@ public class UnifiedReal
     /// <summary>
     ///     UnifiedReals don't have equality or hash codes.
     /// </summary>
-    /// <param name="r"></param>
+    /// <param name="obj"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public override bool Equals(object? r)
+    public override bool Equals(object? obj)
     {
-        if (r is not UnifiedReal) return false;
+        if (obj is not UnifiedReal) return false;
 
         // This is almost certainly a programming error. Don't even try.
         throw new InvalidOperationException("Can't compare UnifiedReals for exact equality");

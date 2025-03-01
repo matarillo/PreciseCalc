@@ -27,8 +27,8 @@ internal class GaussLegendrePiConstructiveReal : SlowConstructiveReal
     private static readonly BigInteger Tolerance = new(4);
     private static readonly ConstructiveReal SqrtHalf = new SqrtConstructiveReal(One >> 1);
 
-    private readonly List<int> _bPrec = new();
-    private readonly List<BigInteger> _bVal = new();
+    private readonly List<int> _bPrec = [];
+    private readonly List<BigInteger> _bVal = [];
 
     public GaussLegendrePiConstructiveReal()
     {
