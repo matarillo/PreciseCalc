@@ -52,8 +52,8 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         var fLeft = _data.F.Execute(left);
         var fRight = _data.F.Execute(right);
 
-        var leftDeriv = (_fArg - fLeft).ShiftRight(logDelta);
-        var rightDeriv = (fRight - _fArg).ShiftRight(logDelta);
+        var leftDeriv = (_fArg - fLeft) >> (logDelta);
+        var rightDeriv = (fRight - _fArg) >> (logDelta);
 
         var evalPrec = precision - extraPrec;
         var apprLeftDeriv = leftDeriv.GetApproximation(evalPrec);
@@ -108,7 +108,7 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
             F = func;
             Low = l;
             High = h;
-            Mid = (l + (h)).ShiftRight(1);
+            Mid = (l + (h)) >> (1);
 
             FLow = func.Execute(l);
             FMid = func.Execute(Mid);

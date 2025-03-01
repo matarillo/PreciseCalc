@@ -673,11 +673,12 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Multiplies the constructive real by 2^(-<paramref name="n"/>).
     /// </summary>
+    /// <param name="value">The value that is shifted right by <paramref name="n"/>.</param>
     /// <param name="n">shift count, may be negative</param>
-    public ConstructiveReal ShiftRight(int n)
+    public static ConstructiveReal operator >>(ConstructiveReal value, int n)
     {
         CheckPrecision(n);
-        return new ShiftedConstructiveReal(this, -n);
+        return new ShiftedConstructiveReal(value, -n);
     }
 
     /// <summary>
@@ -759,7 +760,7 @@ public abstract class ConstructiveReal
         // negating and computing inverse can be very expensive.
         if (roughApprox.CompareTo(Big2) > 0 || roughApprox.CompareTo(BigM2) < 0)
         {
-            ConstructiveReal squareRoot = ShiftRight(1).Exp();
+            ConstructiveReal squareRoot = (this >> (1)).Exp();
             return squareRoot * (squareRoot);
         }
         else
@@ -791,7 +792,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// pi/2
     /// </summary>
-    public static readonly ConstructiveReal HalfPI = PI.ShiftRight(1);
+    public static readonly ConstructiveReal HalfPI = PI >> (1);
 
     /// <summary>
     /// Computes the trigonometric cosine function.
@@ -809,7 +810,7 @@ public abstract class ConstructiveReal
         }
         else if (BigInteger.Abs(GetApproximation(-1)).CompareTo(Big2) >= 0)
         {
-            ConstructiveReal cosHalf = ShiftRight(1).Cos();
+            ConstructiveReal cosHalf = (this >> (1)).Cos();
             return ((cosHalf * (cosHalf)) << (1)) - (One);
         }
         else
@@ -881,7 +882,7 @@ public abstract class ConstructiveReal
             else
             {
                 int extraBits = (int)roughApprox.GetBitLength() - 3;
-                ConstructiveReal scaledResult = ShiftRight(extraBits).Ln();
+                ConstructiveReal scaledResult = (this >> (extraBits)).Ln();
                 return scaledResult + (FromInt(extraBits) * (Ln2));
             }
         }

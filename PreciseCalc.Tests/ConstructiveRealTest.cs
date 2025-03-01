@@ -41,7 +41,7 @@ public class ConstructiveRealTest
     public void TestShiftOperations()
     {
         Assert.Equal(0, (_one << (1)).CompareTo(_two, -50));
-        Assert.Equal(0, _two.ShiftRight(1).CompareTo(_one, -50));
+        Assert.Equal(0, (_two >> (1)).CompareTo(_one, -50));
     }
 
     [Fact]
