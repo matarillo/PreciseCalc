@@ -30,7 +30,7 @@ internal abstract class SlowConstructiveReal : ConstructiveReal
         }
         else
         {
-            int evalPrec = (precision >= MaxPrecision)
+            int evalPrec = precision >= MaxPrecision
                 ? MaxPrecision
                 : (precision - PrecisionIncrement + 1) & ~(PrecisionIncrement - 1);
             BigInteger result = Approximate(evalPrec);

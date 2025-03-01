@@ -89,7 +89,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
 
             // Check for clear out-of-bounds case.
             // Close cases may fail in other ways.
-            if (fH < (argAppr - Big1) || fL > (argAppr + Big1))
+            if (fH < argAppr - Big1 || fL > argAppr + Big1)
             {
                 throw new ArithmeticException("Inverse: argument out of bounds");
             }
@@ -121,7 +121,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             }
             else
             {
-                var hCr = FromBigInteger(h) << (workingArgPrec);
+                var hCr = FromBigInteger(h) << workingArgPrec;
                 fH = fn.Execute(hCr).GetApproximation(workingEvalPrec);
                 atRight = false;
             }
@@ -134,7 +134,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             }
             else
             {
-                var lCr = FromBigInteger(l) << (workingArgPrec);
+                var lCr = FromBigInteger(l) << workingArgPrec;
                 fL = fn.Execute(lCr).GetApproximation(workingEvalPrec);
                 atLeft = false;
             }
@@ -184,7 +184,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
                 // If we are within 1/1024 of either end, back off
                 // This greatly improves the odds of bounding the answer within the smaller interval.
                 // Note that interpolation will often get us MUCH closer than this.
-                if (adj < (difference >> 10))
+                if (adj < difference >> 10)
                 {
                     adj <<= 8;
                     Data.Trace("adjusting left");
@@ -209,7 +209,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
 
             for (var adjPrec = false;; adjPrec = !adjPrec)
             {
-                var guessCr = FromBigInteger(guess) << (workingArgPrec);
+                var guessCr = FromBigInteger(guess) << workingArgPrec;
                 Data.Trace($"Evaluating at {guessCr} with precision {workingEvalPrec}");
 
                 var fGuessCr = fn.Execute(guessCr);
@@ -226,8 +226,8 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
                     // Adjust workingEvalPrec to get enough resolution
                     int adjustment = (int)-fGuess.GetBitLength() / 4;
                     if (adjustment > -20) adjustment = -20;
-                    var lCr = FromBigInteger(l) << (workingArgPrec);
-                    var hCr = FromBigInteger(h) << (workingArgPrec);
+                    var lCr = FromBigInteger(l) << workingArgPrec;
+                    var hCr = FromBigInteger(h) << workingArgPrec;
                     workingEvalPrec += adjustment;
 
                     Data.Trace($"New eval prec = {workingEvalPrec}" +
@@ -273,7 +273,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             var newDifference = h - l;
             if (!binaryStep)
             {
-                if (newDifference >= (difference >> 1))
+                if (newDifference >= difference >> 1)
                     smallStepDeficit++;
                 else
                     smallStepDeficit--;
@@ -323,7 +323,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
 
             MaxMsd = l.Abs().Max(h.Abs()).GetMsd();
             MaxArgPrec = (h - l).GetMsd() - 4;
-            DerivMsd = ((FHigh - (FLow)) / (h - (l))).GetMsd();
+            DerivMsd = ((FHigh - FLow) / (h - l)).GetMsd();
         }
     }
 }

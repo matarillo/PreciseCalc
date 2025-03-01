@@ -25,7 +25,7 @@ internal class GaussLegendrePiConstructiveReal : SlowConstructiveReal
     // iterations for the sqrt approximation.
 
     private static readonly BigInteger Tolerance = new BigInteger(4);
-    private static readonly ConstructiveReal SqrtHalf = new SqrtConstructiveReal(One >> (1));
+    private static readonly ConstructiveReal SqrtHalf = new SqrtConstructiveReal(One >> 1);
 
     private readonly List<int> _bPrec = new();
     private readonly List<BigInteger> _bVal = new();
@@ -70,7 +70,7 @@ internal class GaussLegendrePiConstructiveReal : SlowConstructiveReal
             // We compute square root approximations using a nested
             // temporary CR computation, to avoid implementing BigInteger
             // square roots separately.
-            ConstructiveReal bProdAsCr = FromBigInteger(bProd) >> (-evalPrec);
+            ConstructiveReal bProdAsCr = FromBigInteger(bProd) >> -evalPrec;
 
             if (_bPrec.Count == n + 1)
             {

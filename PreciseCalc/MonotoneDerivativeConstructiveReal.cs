@@ -19,8 +19,8 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         _fArg = data.F.Execute(x);
 
         // The following must converge, since arg must be in the open interval
-        var leftDiff = _arg - (data.Low);
-        var rightDiff = data.High - (_arg);
+        var leftDiff = _arg - data.Low;
+        var rightDiff = data.High - _arg;
         var maxDeltaLeftMsd = leftDiff.GetMsd();
         var maxDeltaRightMsd = rightDiff.GetMsd();
 
@@ -45,15 +45,15 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
 
         logDelta -= extraPrec;
 
-        var delta = ConstructiveReal.One << (logDelta);
+        var delta = ConstructiveReal.One << logDelta;
 
-        var left = _arg - (delta);
-        var right = _arg + (delta);
+        var left = _arg - delta;
+        var right = _arg + delta;
         var fLeft = _data.F.Execute(left);
         var fRight = _data.F.Execute(right);
 
-        var leftDeriv = (_fArg - fLeft) >> (logDelta);
-        var rightDeriv = (fRight - _fArg) >> (logDelta);
+        var leftDeriv = (_fArg - fLeft) >> logDelta;
+        var rightDeriv = (fRight - _fArg) >> logDelta;
 
         var evalPrec = precision - extraPrec;
         var apprLeftDeriv = leftDeriv.GetApproximation(evalPrec);
@@ -108,18 +108,18 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
             F = func;
             Low = l;
             High = h;
-            Mid = (l + (h)) >> (1);
+            Mid = (l + h) >> 1;
 
             FLow = func.Execute(l);
             FMid = func.Execute(Mid);
             FHigh = func.Execute(h);
 
-            var difference = h - (l);
+            var difference = h - l;
 
             // Compute approximate msd of ((f_high - f_mid) - (f_mid - f_low))/(high - low)
             // This should be a very rough approximation to the second derivative.
             // We add a little slop to err on the high side, since a low estimate will cause extra iterations.
-            var apprDiff2 = (FHigh - (FMid << (1))) + (FLow);
+            var apprDiff2 = FHigh - (FMid << 1) + FLow;
             DifferenceMsd = difference.GetMsd();
             Deriv2Msd = apprDiff2.GetMsd() - DifferenceMsd + 4;
         }

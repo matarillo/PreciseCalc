@@ -436,7 +436,7 @@ public class BoundedRationalTest
         var c = new BoundedRational(3, 4);
 
         // a + b * c = 1/2 + 2/3 * 3/4 = 1/2 + 1/2 = 1
-        var result = a + (b * c);
+        var result = a + b * c;
         Assert.Equal(BoundedRational.One, result);
 
         // (a + b) / (a - b) = (1/2 + 2/3) / (1/2 - 2/3) = 7/6 / (-1/6) = -7

@@ -500,10 +500,10 @@ public class UnifiedReal
             PropertyKind.IsPi => CrPI,
             PropertyKind.IsExp => p.Arg.ToConstructiveReal().Exp(),
             PropertyKind.IsLn => p.Arg.ToConstructiveReal().Ln(),
-            PropertyKind.IsLog => (p.Arg.ToConstructiveReal().Ln()) / (CrLn10),
+            PropertyKind.IsLog => p.Arg.ToConstructiveReal().Ln() / CrLn10,
             PropertyKind.IsSqrt => p.Arg.ToConstructiveReal().Sqrt(),
-            PropertyKind.IsSinPi => (p.Arg.ToConstructiveReal() * (CrPI)).Sin(),
-            PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal() * (CrPI)),
+            PropertyKind.IsSinPi => (p.Arg.ToConstructiveReal() * CrPI).Sin(),
+            PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal() * CrPI),
             PropertyKind.IsASin => p.Arg.ToConstructiveReal().Asin(),
             PropertyKind.IsATan => UnaryCRFunction.AtanFunction.Execute(p.Arg.ToConstructiveReal()),
             _ => throw new InvalidOperationException("crFromProperty")
@@ -543,7 +543,7 @@ public class UnifiedReal
 
         int bound = MsbBound(_crProperty);
         if (bound != int.MinValue
-            && propertyCr.Abs().CompareTo(ConstructiveReal.One << (bound), precision) < 0)
+            && propertyCr.Abs().CompareTo(ConstructiveReal.One << bound, precision) < 0)
         {
             // msbBound produced incorrect result.
             return false;
@@ -754,8 +754,8 @@ public class UnifiedReal
                 return r.ToDisplayString(unicodeFraction /* mixed fractions */) + PIString;
             }
 
-            return ((numDen.Item1 == BigInteger.One ? "" : numDen.Item1.ToString()) + PIString +
-                    "/" + numDen.Item2);
+            return (numDen.Item1 == BigInteger.One ? "" : numDen.Item1.ToString()) + PIString +
+                   "/" + numDen.Item2;
         }
     }
 
@@ -1231,7 +1231,7 @@ public class UnifiedReal
         BoundedRational normalized = _ratFactor.Reduce();
         BigInteger? bi = normalized.ToBigInteger();
         result.TotalConstBitLength = (int?)bi?.GetBitLength() ?? normalized.BitLength;
-        result.NOps = (bi != null ? 0 : 1);
+        result.NOps = bi != null ? 0 : 1;
         if (_crProperty == null) return result;
         switch (_crProperty.Kind)
         {
@@ -1272,7 +1272,7 @@ public class UnifiedReal
                 int argBitLength = (int?)argAsBigInt?.GetBitLength() ?? arg.BitLength;
                 result.TotalConstBitLength += argBitLength;
                 result.InterestingConstBitLength = argBitLength;
-                result.NOps += (argAsBigInt != null ? 1 : 2); // 1 for main function, maybe 1 for quotient.
+                result.NOps += argAsBigInt != null ? 1 : 2; // 1 for main function, maybe 1 for quotient.
                 if (degrees)
                 {
                     if (_crProperty.Kind == PropertyKind.IsASin || _crProperty.Kind == PropertyKind.IsATan)
@@ -1311,7 +1311,7 @@ public class UnifiedReal
             return _ratFactor.ToStringTruncated(n);
         }
 
-        ConstructiveReal scaled = (ConstructiveReal.FromBigInteger(BigInteger.Pow(10, n))) * (ToConstructiveReal());
+        ConstructiveReal scaled = ConstructiveReal.FromBigInteger(BigInteger.Pow(10, n)) * ToConstructiveReal();
         bool negative = false;
         BigInteger intScaled;
         if (ExactlyTruncatable())
@@ -1379,7 +1379,7 @@ public class UnifiedReal
     /// Convert to a ConstructiveReal representation
     /// </summary>
     public ConstructiveReal ToConstructiveReal() =>
-        _ratFactor.CompareToOne() == 0 ? _crFactor : (_ratFactor.ToConstructiveReal()) * (_crFactor);
+        _ratFactor.CompareToOne() == 0 ? _crFactor : _ratFactor.ToConstructiveReal() * _crFactor;
 
     private bool SameCrFactor(UnifiedReal u)
     {
@@ -1672,7 +1672,7 @@ public class UnifiedReal
         {
             return kind == PropertyKind.IsLn
                 ? new UnifiedReal(arg.ToConstructiveReal().Ln())
-                : new UnifiedReal((arg.ToConstructiveReal().Ln()) / (CrLn10));
+                : new UnifiedReal(arg.ToConstructiveReal().Ln() / CrLn10);
         }
 
         return new UnifiedReal(BoundedRational.One, MakeProperty(kind, arg));
@@ -1752,7 +1752,7 @@ public class UnifiedReal
             resultProp = MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null);
         }
 
-        return new UnifiedReal(ToConstructiveReal() + (u.ToConstructiveReal()), resultProp);
+        return new UnifiedReal(ToConstructiveReal() + u.ToConstructiveReal(), resultProp);
     }
 
     // Don't track ln() or log() arguments whose representation is larger than this.
@@ -1797,7 +1797,7 @@ public class UnifiedReal
                 MakeProperty(PropertyKind.IsSqrt, decomposedProduct[1]));
         }
 
-        return new UnifiedReal(((x.ToConstructiveReal()) * (y.ToConstructiveReal())).Sqrt());
+        return new UnifiedReal((x.ToConstructiveReal() * y.ToConstructiveReal()).Sqrt());
     }
 
     /// <summary>
@@ -1864,11 +1864,11 @@ public class UnifiedReal
         // But definitelyIndependent is not the right criterion. Consider e and e^-1.
         if (nRatFactor.HasValue)
         {
-            return new UnifiedReal(nRatFactor, _crFactor * (u._crFactor), resultProp);
+            return new UnifiedReal(nRatFactor, _crFactor * u._crFactor, resultProp);
         }
 
         // resultProp invalid for this computation; discard. We know that the ratFactors are nonzero.
-        return new UnifiedReal(ToConstructiveReal() * (u.ToConstructiveReal()));
+        return new UnifiedReal(ToConstructiveReal() * u.ToConstructiveReal());
     }
 
     /// <summary>
@@ -2078,7 +2078,7 @@ public class UnifiedReal
             if (newCrProperty1 != null)
             {
                 return new UnifiedReal(
-                    (newCrProperty1.Negative ? BoundedRational.MinusOne : BoundedRational.One),
+                    newCrProperty1.Negative ? BoundedRational.MinusOne : BoundedRational.One,
                     newCrProperty1.Property);
             }
         }
@@ -2180,7 +2180,7 @@ public class UnifiedReal
     public static UnifiedReal AsinHalves(int n) =>
         n switch
         {
-            < 0 => (AsinHalves(-n).Negate()),
+            < 0 => AsinHalves(-n).Negate(),
             0 => Zero,
             1 => new UnifiedReal(BoundedRational.Sixth, CrPI),
             2 => new UnifiedReal(BoundedRational.Half, CrPI),
@@ -2321,12 +2321,12 @@ public class UnifiedReal
 
         if ((exp & BigInteger.One) != BigInteger.Zero) // exp.testBit(0)
         {
-            return @base * (RecursivePow(@base, exp - BigInteger.One));
+            return @base * RecursivePow(@base, exp - BigInteger.One);
         }
 
         ConstructiveReal tmp = RecursivePow(@base, exp >> 1);
 
-        return tmp * (tmp);
+        return tmp * tmp;
     }
 
     /// <summary>
@@ -2340,12 +2340,12 @@ public class UnifiedReal
         {
             // Safe to take the log. This avoids deep recursion for huge exponents, which
             // may actually make sense here.
-            return new UnifiedReal((ToConstructiveReal().Ln() * (ConstructiveReal.FromBigInteger(exp))).Exp());
+            return new UnifiedReal((ToConstructiveReal().Ln() * ConstructiveReal.FromBigInteger(exp)).Exp());
         }
 
         if (sign < 0)
         {
-            ConstructiveReal result = (((  -(ToConstructiveReal())).Ln()) * (ConstructiveReal.FromBigInteger(exp))).Exp();
+            ConstructiveReal result = ((  -ToConstructiveReal()).Ln() * ConstructiveReal.FromBigInteger(exp)).Exp();
             if ((exp & BigInteger.One) != BigInteger.Zero) /* odd exponent */
             {
                 result = -result;
@@ -2545,11 +2545,11 @@ public class UnifiedReal
 
         if (knownIrrational)
         {
-            return new UnifiedReal(((ToConstructiveReal().Ln()) * (exp.ToConstructiveReal())).Exp(),
+            return new UnifiedReal((ToConstructiveReal().Ln() * exp.ToConstructiveReal()).Exp(),
                 MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null));
         }
 
-        return new UnifiedReal(((ToConstructiveReal().Ln()) * (exp.ToConstructiveReal())).Exp());
+        return new UnifiedReal((ToConstructiveReal().Ln() * exp.ToConstructiveReal()).Exp());
     }
 
     /// <summary>
@@ -2613,7 +2613,7 @@ public class UnifiedReal
 
             powers.Add(next);
             // Since we have the quotient, opportunistically reduce n.
-            result += (1L << i);
+            result += 1L << i;
             nReduced = quotient;
         }
 
@@ -2631,7 +2631,7 @@ public class UnifiedReal
                     return 0;
                 }
 
-                result += (1L << i);
+                result += 1L << i;
                 nReduced = quotient;
                 // Now power.GetBitLength() > nReduced.GetBitLength() .
                 // Otherwise we would have divided by the next bigger power, which is power^2.
@@ -2670,7 +2670,7 @@ public class UnifiedReal
                         return new UnifiedReal(new BoundedRational(intLog));
                     }
 
-                    newCrValue = (ConstructiveReal.FromInt(m).Ln()) / (CrLn10);
+                    newCrValue = ConstructiveReal.FromInt(m).Ln() / CrLn10;
                 }
                 else
                 {
@@ -2958,7 +2958,7 @@ public class UnifiedReal
                     if (sign >= 0)
                     {
                         // multiply by a bit less than 1/ln(2).
-                        return ((int)result / 5) * 7;
+                        return (int)result / 5 * 7;
                     }
 
                     // multiply by a bit more than 1/ln(2), making sure we err on correct side.

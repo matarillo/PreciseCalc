@@ -157,7 +157,7 @@ class SinUnaryCRFunction : UnaryCRFunction
 
 class TanUnaryCRFunction : UnaryCRFunction
 {
-    public override ConstructiveReal Execute(ConstructiveReal x) => (x.Sin()) / (x.Cos());
+    public override ConstructiveReal Execute(ConstructiveReal x) => x.Sin() / x.Cos();
 }
 
 class AsinUnaryCRFunction : UnaryCRFunction
@@ -174,8 +174,8 @@ class AtanUnaryCRFunction : UnaryCRFunction
 {
     public override ConstructiveReal Execute(ConstructiveReal x)
     {
-        var x2 = x * (x);
-        var absSinAtan = (x2 / (ConstructiveReal.One + (x2))).Sqrt();
+        var x2 = x * x;
+        var absSinAtan = (x2 / (ConstructiveReal.One + x2)).Sqrt();
         ConstructiveReal sinAtan = x.Select(-absSinAtan, absSinAtan);
         return sinAtan.Asin();
     }

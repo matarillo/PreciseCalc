@@ -128,7 +128,7 @@ public abstract class ConstructiveReal
         else
             mantissa <<= 1;
 
-        ConstructiveReal result = FromBigInteger(mantissa) << (exponent);
+        ConstructiveReal result = FromBigInteger(mantissa) << exponent;
         return negative ? -result : result;
     }
 
@@ -249,7 +249,7 @@ public abstract class ConstructiveReal
 
         while (precision > initialPrecision + 30)
         {
-            precision = (precision * 3) / 2 - 16;
+            precision = precision * 3 / 2 - 16;
             int msd = GetMsd(precision);
             if (msd != int.MinValue)
                 return msd;
@@ -281,20 +281,20 @@ public abstract class ConstructiveReal
     /// <remarks>
     /// ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)
     /// </remarks>
-    private ConstructiveReal SimpleLn() => new PrescaledLnConstructiveReal(this - (One));
+    private ConstructiveReal SimpleLn() => new PrescaledLnConstructiveReal(this - One);
 
     private static ConstructiveReal CalculateLn2()
     {
-        ConstructiveReal tenNinths = FromInt(10) / (FromInt(9));
-        ConstructiveReal firstTerm = FromInt(7) * (tenNinths.SimpleLn());
+        ConstructiveReal tenNinths = FromInt(10) / FromInt(9);
+        ConstructiveReal firstTerm = FromInt(7) * tenNinths.SimpleLn();
 
-        ConstructiveReal twentyFiveTwentyFourths = FromInt(25) / (FromInt(24));
-        ConstructiveReal secondTerm = FromInt(2) * (twentyFiveTwentyFourths.SimpleLn());
+        ConstructiveReal twentyFiveTwentyFourths = FromInt(25) / FromInt(24);
+        ConstructiveReal secondTerm = FromInt(2) * twentyFiveTwentyFourths.SimpleLn();
 
-        ConstructiveReal eightyOneEightieths = FromInt(81) / (FromInt(80));
-        ConstructiveReal thirdTerm = FromInt(3) * (eightyOneEightieths.SimpleLn());
+        ConstructiveReal eightyOneEightieths = FromInt(81) / FromInt(80);
+        ConstructiveReal thirdTerm = FromInt(3) * eightyOneEightieths.SimpleLn();
         // ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)
-        return (firstTerm - (secondTerm)) + (thirdTerm);
+        return firstTerm - secondTerm + thirdTerm;
     }
 
     // Natural log of 2.  Needed for some pre-scaling below.
@@ -451,7 +451,7 @@ public abstract class ConstructiveReal
         fraction.CopyTo(resultArray.AsSpan(whole.Length));
         BigInteger scaledResult = BigInteger.Parse(resultArray, style);
         BigInteger divisor = BigInteger.Pow(radix, fraction.Length);
-        return FromBigInteger(scaledResult) / (FromBigInteger(divisor));
+        return FromBigInteger(scaledResult) / FromBigInteger(divisor);
     }
 
     /// <summary>
@@ -474,7 +474,7 @@ public abstract class ConstructiveReal
         else
         {
             BigInteger scaleFactor = BigInteger.Pow(radix, n);
-            scaledCr = this * (FromBigInteger(scaleFactor));
+            scaledCr = this * FromBigInteger(scaleFactor);
         }
 
         BigInteger scaledInt = scaledCr.GetApproximation(0);
@@ -562,14 +562,14 @@ public abstract class ConstructiveReal
             ? FromBigInteger(BigInteger.Pow(radix, scaleExp)).Inverse()
             : FromBigInteger(BigInteger.Pow(radix, -scaleExp));
 
-        ConstructiveReal scaledResult = this * (scaledValue);
+        ConstructiveReal scaledResult = this * scaledValue;
         BigInteger scaledInt = scaledResult.GetApproximation(0);
         int sign = scaledInt.Sign;
         string mantissa = BigInteger.Abs(scaledInt).ToString(radix);
 
         while (mantissa.Length < precision)
         {
-            scaledResult = scaledResult * (FromBigInteger(bigRadix));
+            scaledResult = scaledResult * FromBigInteger(bigRadix);
             exponent -= 1;
             scaledInt = scaledResult.GetApproximation(0);
             sign = scaledInt.Sign;
@@ -760,8 +760,8 @@ public abstract class ConstructiveReal
         // negating and computing inverse can be very expensive.
         if (roughApprox.CompareTo(Big2) > 0 || roughApprox.CompareTo(BigM2) < 0)
         {
-            ConstructiveReal squareRoot = (this >> (1)).Exp();
-            return squareRoot * (squareRoot);
+            ConstructiveReal squareRoot = (this >> 1).Exp();
+            return squareRoot * squareRoot;
         }
         else
         {
@@ -787,12 +787,12 @@ public abstract class ConstructiveReal
     /// experimentation, this is roughly as good as the more complex formulas.
     /// </remarks>
     public static readonly ConstructiveReal AtanPI =
-        Four * ((Four * (AtanReciprocal(5))) - (AtanReciprocal(239)));
+        Four * (Four * AtanReciprocal(5) - AtanReciprocal(239));
 
     /// <summary>
     /// pi/2
     /// </summary>
-    public static readonly ConstructiveReal HalfPI = PI >> (1);
+    public static readonly ConstructiveReal HalfPI = PI >> 1;
 
     /// <summary>
     /// Computes the trigonometric cosine function.
@@ -805,13 +805,13 @@ public abstract class ConstructiveReal
         if (absHalfPiMultiples.CompareTo(Big2) >= 0)
         {
             BigInteger piMultiples = Scale(halfPiMultiples, -1);
-            ConstructiveReal adjustment = PI * (FromBigInteger(piMultiples));
-            return piMultiples.IsEven ? (this - (adjustment)).Cos() : -((this - (adjustment)).Cos());
+            ConstructiveReal adjustment = PI * FromBigInteger(piMultiples);
+            return piMultiples.IsEven ? (this - adjustment).Cos() : -(this - adjustment).Cos();
         }
         else if (BigInteger.Abs(GetApproximation(-1)).CompareTo(Big2) >= 0)
         {
-            ConstructiveReal cosHalf = (this >> (1)).Cos();
-            return ((cosHalf * (cosHalf)) << (1)) - (One);
+            ConstructiveReal cosHalf = (this >> 1).Cos();
+            return ((cosHalf * cosHalf) << 1) - One;
         }
         else
         {
@@ -822,7 +822,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The trigonometric sine function.
     /// </summary>
-    public ConstructiveReal Sin() => (HalfPI - (this)).Cos();
+    public ConstructiveReal Sin() => (HalfPI - this).Cos();
 
     /// <summary>
     /// Computes the trigonometric arc sine function.
@@ -832,12 +832,12 @@ public abstract class ConstructiveReal
         BigInteger roughApprox = GetApproximation(-10);
         if (roughApprox.CompareTo(Big750) > 0) // 1/sqrt(2) + a bit
         {
-            ConstructiveReal newArg = (One - (this * (this))).Sqrt();
+            ConstructiveReal newArg = (One - this * this).Sqrt();
             return newArg.Acos();
         }
         else if (roughApprox.CompareTo(BigM750) < 0)
         {
-            return -((-this).Asin());
+            return -(-this).Asin();
         }
         else
         {
@@ -848,7 +848,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Computes the trigonometric arc cosine function.
     /// </summary>
-    public ConstructiveReal Acos() => HalfPI - (Asin());
+    public ConstructiveReal Acos() => HalfPI - Asin();
 
     private static readonly BigInteger LowLnLimit = Big8; // sixteenths, i.e. 1/2
     private static readonly BigInteger HighLnLimit = new BigInteger(24); // 1.5 * 16
@@ -869,7 +869,7 @@ public abstract class ConstructiveReal
 
         if (roughApprox.CompareTo(LowLnLimit) <= 0)
         {
-            return -(Inverse().Ln());
+            return -Inverse().Ln();
         }
 
         if (roughApprox.CompareTo(HighLnLimit) >= 0)
@@ -877,13 +877,13 @@ public abstract class ConstructiveReal
             if (roughApprox.CompareTo(Scaled4) <= 0)
             {
                 ConstructiveReal quarter = Sqrt().Sqrt().Ln();
-                return quarter << (2);
+                return quarter << 2;
             }
             else
             {
                 int extraBits = (int)roughApprox.GetBitLength() - 3;
-                ConstructiveReal scaledResult = (this >> (extraBits)).Ln();
-                return scaledResult + (FromInt(extraBits) * (Ln2));
+                ConstructiveReal scaledResult = (this >> extraBits).Ln();
+                return scaledResult + FromInt(extraBits) * Ln2;
             }
         }
 

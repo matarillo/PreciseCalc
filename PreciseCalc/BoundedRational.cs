@@ -197,7 +197,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
         else
         {
-            mantissa += (1UL << 52); // Implied leading one
+            mantissa += 1UL << 52; // Implied leading one
         }
 
         var num = new BigInteger(sign * (long)mantissa);
@@ -501,7 +501,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
         else
         {
-            extraBits += (-1022 - exponent) + 1;
+            extraBits += -1022 - exponent + 1;
             exponent = -1023;
         }
 
@@ -523,7 +523,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public ConstructiveReal ToConstructiveReal() =>
         _hasValue
-            ? ConstructiveReal.FromBigInteger(_numerator) / (ConstructiveReal.FromBigInteger(_denominator))
+            ? ConstructiveReal.FromBigInteger(_numerator) / ConstructiveReal.FromBigInteger(_denominator)
             : throw new InvalidOperationException("Invalid bounded rational.");
 
     /// <summary>
@@ -610,7 +610,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     private bool IsTooBig()
     {
         return !_denominator.Equals(BigInteger.One) &&
-               (_numerator.GetBitLength() + _denominator.GetBitLength() > MaxSize);
+               _numerator.GetBitLength() + _denominator.GetBitLength() > MaxSize;
     }
 
     /// <summary>
@@ -779,7 +779,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <returns></returns>
     public static BoundedRational operator -(BoundedRational left, BoundedRational right)
     {
-        return left + (-right);
+        return left + -right;
     }
 
     /// <summary>
@@ -911,7 +911,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
         else
         {
-            rootAsCr = ((xAsCr.Ln()) / (ConstructiveReal.FromInt(n))).Exp();
+            rootAsCr = (xAsCr.Ln() / ConstructiveReal.FromInt(n)).Exp();
         }
 
         const int scale = -10;
@@ -962,7 +962,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         var numRt = NthRoot(r._numerator, n);
         var denRt = NthRoot(r._denominator, n);
 
-        return (numRt == null || denRt == null) ? Null : new BoundedRational(numRt.Value, denRt.Value);
+        return numRt == null || denRt == null ? Null : new BoundedRational(numRt.Value, denRt.Value);
     }
 
     /// <summary>

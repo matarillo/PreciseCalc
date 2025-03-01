@@ -12,9 +12,9 @@ public class ConstructiveRealTest
 
     public ConstructiveRealTest()
     {
-        _three = _two + (_one);
-        _four = _two + (_two);
-        _halfPi = ConstructiveReal.PI / (_two);
+        _three = _two + _one;
+        _four = _two + _two;
+        _halfPi = ConstructiveReal.PI / _two;
     }
 
     [Fact]
@@ -40,8 +40,8 @@ public class ConstructiveRealTest
     [Fact]
     public void TestShiftOperations()
     {
-        Assert.Equal(0, (_one << (1)).CompareTo(_two, -50));
-        Assert.Equal(0, (_two >> (1)).CompareTo(_one, -50));
+        Assert.Equal(0, (_one << 1).CompareTo(_two, -50));
+        Assert.Equal(0, (_two >> 1).CompareTo(_one, -50));
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class ConstructiveRealTest
         Assert.Equal(0, (_one + _one).CompareTo(_two, -50));
         Assert.Equal(0, ConstructiveReal.FromInt(4).CompareTo(_four, -50));
         Assert.Equal(0, ConstructiveReal.FromInt(3).CompareTo(_three, -50));
-        Assert.Equal(0, ((-_one) + (_two)).CompareTo(_one, -50));
+        Assert.Equal(0, (-_one + _two).CompareTo(_one, -50));
     }
 
     [Fact]
@@ -81,9 +81,9 @@ public class ConstructiveRealTest
     [Fact]
     public void TestDivision()
     {
-        Assert.Equal(0, ((_one / (_four)) << (4)).CompareTo(_four, -50));
-        Assert.Equal(0, (_two / (-_one)).CompareTo(-_two, -50));
-        Assert.Equal(0, ((_one / (_thirteen)) * (_thirteen)).CompareTo(_one, -50));
+        Assert.Equal(0, ((_one / _four) << 4).CompareTo(_four, -50));
+        Assert.Equal(0, (_two / -_one).CompareTo(-_two, -50));
+        Assert.Equal(0, (_one / _thirteen * _thirteen).CompareTo(_one, -50));
     }
 
     [Fact]
@@ -119,8 +119,8 @@ public class ConstructiveRealTest
     [Fact]
     public void TestIntermediateConversions()
     {
-        ConstructiveReal tmp = ConstructiveReal.PI + (ConstructiveReal.FromInt(-123).Exp());
-        ConstructiveReal tmp2 = tmp - (ConstructiveReal.PI);
+        ConstructiveReal tmp = ConstructiveReal.PI + ConstructiveReal.FromInt(-123).Exp();
+        ConstructiveReal tmp2 = tmp - ConstructiveReal.PI;
         Assert.Equal(-123, tmp2.Ln().IntValue());
         Assert.Equal(-123L, tmp2.Ln().LongValue());
         Assert.Equal(-123.0f, tmp2.Ln().FloatValue(), 0.0);
