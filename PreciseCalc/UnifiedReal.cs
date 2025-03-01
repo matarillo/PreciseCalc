@@ -21,7 +21,10 @@ namespace PreciseCalc;
 ///     exceptions produced by the underlying ConstructiveReal and BoundedRational packages, including
 ///     PrecisionOverflowException and AbortedException.
 /// </remarks>
-public class UnifiedReal
+public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedReal>,
+    ISubtractionOperators<UnifiedReal, UnifiedReal, UnifiedReal>,
+    IMultiplyOperators<UnifiedReal, UnifiedReal, UnifiedReal>,
+    IDivisionOperators<UnifiedReal, UnifiedReal, UnifiedReal>
 {
     private const string PIString = "\u03C0"; // GREEK SMALL LETTER PI
     private const string SqrtString = "\u221A";
@@ -129,6 +132,172 @@ public class UnifiedReal
     public UnifiedReal(long n)
         : this(new BoundedRational(n))
     {
+    }
+
+    /// <summary>
+    ///     Return x+y
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public static UnifiedReal operator +(UnifiedReal x, UnifiedReal y)
+    {
+        if (x.SameCrFactor(y))
+        {
+            var nRatFactor = x._ratFactor + y._ratFactor;
+            if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, x._crFactor, x._crProperty);
+        }
+
+        if (x.DefinitelyZero())
+            // Avoid creating new crFactor, even if they don't currently match.
+            return y;
+
+        if (y.DefinitelyZero()) return x;
+
+        // Consider "simplifying" sums of logs.
+        if (x._crProperty != null && y._crProperty != null
+                                  && x._crProperty.Kind == y._crProperty.Kind
+                                  && (x._crProperty.Kind == PropertyKind.IsLn ||
+                                      x._crProperty.Kind == PropertyKind.IsLog))
+        {
+            // a ln(b) + c ln(d) = ln(b^a * d^c)
+            // a log(b) + c log(d) = log(b^a * d^c)
+            // If the resulting ln argument is reasonably compact, compute the sum as the right side
+            // instead, since that preserves the symbolic representation.
+            var ratAsInt = x._ratFactor.ToBigInteger();
+            var uRatAsInt = y._ratFactor.ToBigInteger();
+            if (ratAsInt != null && uRatAsInt != null)
+            {
+                var ratAsDouble = (double)ratAsInt.Value;
+                var uRatAsDouble = (double)uRatAsInt.Value;
+                // Estimate size of resulting argument.
+                var estimatedSize = Math.Abs(ratAsDouble) * x._crProperty.Arg.BitLength
+                                    + Math.Abs(uRatAsDouble) * y._crProperty.Arg.BitLength;
+                if (estimatedSize <= (float)LogArgCandidateBits)
+                {
+                    var term1 = BoundedRational.Pow(x._crProperty.Arg, x._ratFactor);
+                    var term2 = BoundedRational.Pow(y._crProperty.Arg, y._ratFactor);
+                    var newArg = term1 * term2;
+                    if (newArg.HasValue)
+                        return LogRep(x._crProperty.Kind,
+                            newArg); // The else case here is probably impossible, since we already checked the size.
+                }
+            }
+        }
+
+        // Since we got here, neither ratFactor is zero.
+        // We can still conclude that the result is irrational, so long as the two arguments
+        // are independent. But it can be counter-productive to track this if the arguments
+        // are of greatly differing magnitude. We know that 1 + e^(-e^10000) is irrational,
+        // but we still don't want to evaluate it sufficiently to distinguish it from 1.
+        // Thus, we want to treat 1 + e^(-e^10000) as not comparable to rationals.
+        // We in fact don't track this if either argument might be ridiculously small, where
+        // ridiculously small is < 10^-1000, and thus also way outside of IEEE exponent range.
+        CRProperty? resultProp = null;
+        if (x.DefinitelyIndependent(y)
+            && x.LeadingBinaryZeroes() < -DefaultComparisonTolerance
+            && y.LeadingBinaryZeroes() < -DefaultComparisonTolerance)
+            resultProp = MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null);
+
+        return new UnifiedReal(x.ToConstructiveReal() + y.ToConstructiveReal(), resultProp);
+    }
+
+    /// <summary>
+    ///     Return x/y
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    /// <exception cref="DivideByZeroException"></exception>
+    public static UnifiedReal operator /(UnifiedReal x, UnifiedReal y)
+    {
+        if (x.SameCrFactor(y))
+        {
+            if (y.DefinitelyZero()) throw new DivideByZeroException("Division by zero");
+
+            var nRatFactor = x._ratFactor / y._ratFactor;
+            if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor);
+        }
+
+        // Try to reduce ln(x)/ln(10) to log(x) to keep symbolic representation.
+        var lnArg = GetLnArg(x._crProperty);
+        if (lnArg.HasValue)
+        {
+            var uLnArg = GetLnArg(y._crProperty);
+            if (uLnArg.HasValue && uLnArg.Equals(BoundedRational.Ten))
+            {
+                var ratQuotient = x._ratFactor / y._ratFactor;
+                if (ratQuotient.HasValue) return new UnifiedReal(ratQuotient, MakeProperty(PropertyKind.IsLog, lnArg));
+            }
+        }
+
+        return x * y.Inverse();
+    }
+
+    /// <summary>
+    ///     Return x*y
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public static UnifiedReal operator *(UnifiedReal x, UnifiedReal y)
+    {
+        // Preserve a preexisting crFactor when we can.
+        if (x._crProperty != null && IsOne(x._crProperty))
+        {
+            var nRatFactor1 = x._ratFactor * y._ratFactor;
+            if (nRatFactor1.HasValue) return new UnifiedReal(nRatFactor1, y._crFactor, y._crProperty);
+        }
+
+        if (y._crProperty != null && IsOne(y._crProperty))
+        {
+            var nRatFactor2 = x._ratFactor * y._ratFactor;
+            if (nRatFactor2.HasValue) return new UnifiedReal(nRatFactor2, x._crFactor, x._crProperty);
+        }
+
+        if (x.DefinitelyZero() || y.DefinitelyZero()) return Zero;
+
+        CRProperty? resultProp = null; // Property for product of crFactors.
+        var nRatFactor = x._ratFactor * y._ratFactor;
+        if (x._crProperty != null && y._crProperty != null)
+        {
+            if (x._crProperty.Kind == PropertyKind.IsSqrt && y._crProperty.Kind == PropertyKind.IsSqrt)
+            {
+                var sqrtArg = GetSqrtArg(x._crProperty);
+                var uSqrtArg = GetSqrtArg(y._crProperty);
+                var crPart = MultiplySqrts(sqrtArg, uSqrtArg);
+                var ratResult = nRatFactor * crPart._ratFactor;
+                if (ratResult.HasValue) return new UnifiedReal(ratResult, crPart._crFactor, crPart._crProperty);
+            }
+
+            if (x._crProperty.Kind == PropertyKind.IsExp && y._crProperty.Kind == PropertyKind.IsExp)
+            {
+                // exp(a) * exp(b) is exp(a + b) .
+                var sum = x._crProperty.Arg + y._crProperty.Arg;
+                if (sum.HasValue)
+                    // we use this only for the property, since crFactors may already have been evaluated.
+                    resultProp = MakeProperty(PropertyKind.IsExp, sum);
+            }
+        }
+
+        // Probably a bit cheaper to multiply component-wise.
+        // TODO: We should often be able to determine that the result is irrational.
+        // But definitelyIndependent is not the right criterion. Consider e and e^-1.
+        if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, x._crFactor * y._crFactor, resultProp);
+
+        // resultProp invalid for this computation; discard. We know that the ratFactors are nonzero.
+        return new UnifiedReal(x.ToConstructiveReal() * y.ToConstructiveReal());
+    }
+
+    /// <summary>
+    ///     Return x-y
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public static UnifiedReal operator -(UnifiedReal x, UnifiedReal y)
+    {
+        return x + -y;
     }
 
     /// <summary>
@@ -1248,91 +1417,12 @@ public class UnifiedReal
     }
 
     /// <summary>
-    ///     Return x+y
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    public static UnifiedReal operator +(UnifiedReal x, UnifiedReal y)
-    {
-        if (x.SameCrFactor(y))
-        {
-            var nRatFactor = x._ratFactor + y._ratFactor;
-            if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, x._crFactor, x._crProperty);
-        }
-
-        if (x.DefinitelyZero())
-            // Avoid creating new crFactor, even if they don't currently match.
-            return y;
-
-        if (y.DefinitelyZero()) return x;
-
-        // Consider "simplifying" sums of logs.
-        if (x._crProperty != null && y._crProperty != null
-                                  && x._crProperty.Kind == y._crProperty.Kind
-                                  && (x._crProperty.Kind == PropertyKind.IsLn ||
-                                      x._crProperty.Kind == PropertyKind.IsLog))
-        {
-            // a ln(b) + c ln(d) = ln(b^a * d^c)
-            // a log(b) + c log(d) = log(b^a * d^c)
-            // If the resulting ln argument is reasonably compact, compute the sum as the right side
-            // instead, since that preserves the symbolic representation.
-            var ratAsInt = x._ratFactor.ToBigInteger();
-            var uRatAsInt = y._ratFactor.ToBigInteger();
-            if (ratAsInt != null && uRatAsInt != null)
-            {
-                var ratAsDouble = (double)ratAsInt.Value;
-                var uRatAsDouble = (double)uRatAsInt.Value;
-                // Estimate size of resulting argument.
-                var estimatedSize = Math.Abs(ratAsDouble) * x._crProperty.Arg.BitLength
-                                    + Math.Abs(uRatAsDouble) * y._crProperty.Arg.BitLength;
-                if (estimatedSize <= (float)LogArgCandidateBits)
-                {
-                    var term1 = BoundedRational.Pow(x._crProperty.Arg, x._ratFactor);
-                    var term2 = BoundedRational.Pow(y._crProperty.Arg, y._ratFactor);
-                    var newArg = term1 * term2;
-                    if (newArg.HasValue)
-                        return LogRep(x._crProperty.Kind,
-                            newArg); // The else case here is probably impossible, since we already checked the size.
-                }
-            }
-        }
-
-        // Since we got here, neither ratFactor is zero.
-        // We can still conclude that the result is irrational, so long as the two arguments
-        // are independent. But it can be counter-productive to track this if the arguments
-        // are of greatly differing magnitude. We know that 1 + e^(-e^10000) is irrational,
-        // but we still don't want to evaluate it sufficiently to distinguish it from 1.
-        // Thus, we want to treat 1 + e^(-e^10000) as not comparable to rationals.
-        // We in fact don't track this if either argument might be ridiculously small, where
-        // ridiculously small is < 10^-1000, and thus also way outside of IEEE exponent range.
-        CRProperty? resultProp = null;
-        if (x.DefinitelyIndependent(y)
-            && x.LeadingBinaryZeroes() < -DefaultComparisonTolerance
-            && y.LeadingBinaryZeroes() < -DefaultComparisonTolerance)
-            resultProp = MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null);
-
-        return new UnifiedReal(x.ToConstructiveReal() + y.ToConstructiveReal(), resultProp);
-    }
-
-    /// <summary>
     ///     Return -x
     /// </summary>
     /// <returns></returns>
     public static UnifiedReal operator -(UnifiedReal x)
     {
         return new UnifiedReal(-x._ratFactor, x._crFactor, x._crProperty);
-    }
-
-    /// <summary>
-    ///     Return x-y
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    public static UnifiedReal operator -(UnifiedReal x, UnifiedReal y)
-    {
-        return x + -y;
     }
 
     /// <summary>
@@ -1353,61 +1443,6 @@ public class UnifiedReal
         }
 
         return new UnifiedReal((x.ToConstructiveReal() * y.ToConstructiveReal()).Sqrt());
-    }
-
-    /// <summary>
-    ///     Return x*y
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    public static UnifiedReal operator *(UnifiedReal x, UnifiedReal y)
-    {
-        // Preserve a preexisting crFactor when we can.
-        if (x._crProperty != null && IsOne(x._crProperty))
-        {
-            var nRatFactor1 = x._ratFactor * y._ratFactor;
-            if (nRatFactor1.HasValue) return new UnifiedReal(nRatFactor1, y._crFactor, y._crProperty);
-        }
-
-        if (y._crProperty != null && IsOne(y._crProperty))
-        {
-            var nRatFactor2 = x._ratFactor * y._ratFactor;
-            if (nRatFactor2.HasValue) return new UnifiedReal(nRatFactor2, x._crFactor, x._crProperty);
-        }
-
-        if (x.DefinitelyZero() || y.DefinitelyZero()) return Zero;
-
-        CRProperty? resultProp = null; // Property for product of crFactors.
-        var nRatFactor = x._ratFactor * y._ratFactor;
-        if (x._crProperty != null && y._crProperty != null)
-        {
-            if (x._crProperty.Kind == PropertyKind.IsSqrt && y._crProperty.Kind == PropertyKind.IsSqrt)
-            {
-                var sqrtArg = GetSqrtArg(x._crProperty);
-                var uSqrtArg = GetSqrtArg(y._crProperty);
-                var crPart = MultiplySqrts(sqrtArg, uSqrtArg);
-                var ratResult = nRatFactor * crPart._ratFactor;
-                if (ratResult.HasValue) return new UnifiedReal(ratResult, crPart._crFactor, crPart._crProperty);
-            }
-
-            if (x._crProperty.Kind == PropertyKind.IsExp && y._crProperty.Kind == PropertyKind.IsExp)
-            {
-                // exp(a) * exp(b) is exp(a + b) .
-                var sum = x._crProperty.Arg + y._crProperty.Arg;
-                if (sum.HasValue)
-                    // we use this only for the property, since crFactors may already have been evaluated.
-                    resultProp = MakeProperty(PropertyKind.IsExp, sum);
-            }
-        }
-
-        // Probably a bit cheaper to multiply component-wise.
-        // TODO: We should often be able to determine that the result is irrational.
-        // But definitelyIndependent is not the right criterion. Consider e and e^-1.
-        if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, x._crFactor * y._crFactor, resultProp);
-
-        // resultProp invalid for this computation; discard. We know that the ratFactors are nonzero.
-        return new UnifiedReal(x.ToConstructiveReal() * y.ToConstructiveReal());
     }
 
     /// <summary>
@@ -1435,38 +1470,6 @@ public class UnifiedReal
         else if (DefinitelyIrrational()) newProperty = MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null);
 
         return new UnifiedReal(BoundedRational.Inverse(_ratFactor), _crFactor.Inverse(), newProperty);
-    }
-
-    /// <summary>
-    ///     Return x/y
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    /// <exception cref="DivideByZeroException"></exception>
-    public static UnifiedReal operator /(UnifiedReal x, UnifiedReal y)
-    {
-        if (x.SameCrFactor(y))
-        {
-            if (y.DefinitelyZero()) throw new DivideByZeroException("Division by zero");
-
-            var nRatFactor = x._ratFactor / y._ratFactor;
-            if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor);
-        }
-
-        // Try to reduce ln(x)/ln(10) to log(x) to keep symbolic representation.
-        var lnArg = GetLnArg(x._crProperty);
-        if (lnArg.HasValue)
-        {
-            var uLnArg = GetLnArg(y._crProperty);
-            if (uLnArg.HasValue && uLnArg.Equals(BoundedRational.Ten))
-            {
-                var ratQuotient = x._ratFactor / y._ratFactor;
-                if (ratQuotient.HasValue) return new UnifiedReal(ratQuotient, MakeProperty(PropertyKind.IsLog, lnArg));
-            }
-        }
-
-        return x * y.Inverse();
     }
 
     /// <summary>
