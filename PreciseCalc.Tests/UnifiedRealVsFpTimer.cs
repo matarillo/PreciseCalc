@@ -338,7 +338,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
 
     private void ManyRandomDoubleChecks()
     {
-        const int nIters = 100; // TODO: 10000;
+        const int nIters = 10000;
 
         InitTiming();
         for (var i = 0; i < nIters; i++) CheckDivAt(GetRandomDouble(), GetRandomDouble());

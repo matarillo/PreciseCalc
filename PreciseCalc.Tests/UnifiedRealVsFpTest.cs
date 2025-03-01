@@ -268,7 +268,7 @@ public class UnifiedRealVsFpTest(ITestOutputHelper testOutputHelper)
     public void ManyRandomDoubleChecks()
     {
         var printTimes = true;
-        var nIters = 100; // TODO: 10000;
+        var nIters = 10000;
         var startTime = DateTime.Now;
         for (var i = 0; i < nIters; i++)
         {

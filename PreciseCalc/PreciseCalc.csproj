@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>PreciseCalc</PackageId>
-        <Version>0.6.0</Version>
+        <Version>0.7.0</Version>
         <Authors>Kentaro Inomata</Authors>
         <PackageDescription>A .NET port of the real arithmetic library which enables arbitrary-precision real number calculations.</PackageDescription>
         <PackageTags>Android calculator, Arbitrary-precision, Real arithmetic</PackageTags>
