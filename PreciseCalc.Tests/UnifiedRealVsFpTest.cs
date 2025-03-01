@@ -41,7 +41,7 @@ public class UnifiedRealVsFpTest(ITestOutputHelper testOutputHelper)
         var errorSign = fpAsUr.CompareTo(urVal);
         if (errorSign == 0) return 0; // Exactly equal.
 
-        if (errorSign < 0) return UlpError(-fpVal, urVal.Negate());
+        if (errorSign < 0) return UlpError(-fpVal, -urVal);
 
         // errorSign > 0
         var prevFp = Math.BitDecrement(fpVal);
@@ -90,7 +90,7 @@ public class UnifiedRealVsFpTest(ITestOutputHelper testOutputHelper)
         var errorSign = fpAsUr.CompareTo(urVal, ComparePrec);
         if (errorSign == 0) return 0; // Exactly equal.
 
-        if (errorSign < 0) return ApproxUlpError(-fpVal, urVal.Negate());
+        if (errorSign < 0) return ApproxUlpError(-fpVal, -urVal);
 
         // errorSign > 0
         var prevFp = Math.BitDecrement(fpVal);

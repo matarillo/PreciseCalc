@@ -86,7 +86,6 @@ PrecisionOverflowException and AbortedException.
 | [Ln()](PreciseCalc.UnifiedReal.Ln().md 'PreciseCalc.UnifiedReal.Ln()') | Natural logarithm |
 | [Log()](PreciseCalc.UnifiedReal.Log().md 'PreciseCalc.UnifiedReal.Log()') | Base 10 logarithm |
 | [Multiply(UnifiedReal)](PreciseCalc.UnifiedReal.Multiply(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.Multiply(PreciseCalc.UnifiedReal)') | Return x*y |
-| [Negate()](PreciseCalc.UnifiedReal.Negate().md 'PreciseCalc.UnifiedReal.Negate()') | Return -x |
 | [Pow(UnifiedReal)](PreciseCalc.UnifiedReal.Pow(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.Pow(PreciseCalc.UnifiedReal)') | Return this ^ exp. This is really only well-defined for a positive base, particularly since<br/>0^x is not continuous at zero. 0^0 = 1 (as is epsilon^0), but 0^epsilon is 0. We nonetheless<br/>try to do reasonable things at zero, when we recognize that case. |
 | [PropertyCorrect(int)](PreciseCalc.UnifiedReal.PropertyCorrect(int).md 'PreciseCalc.UnifiedReal.PropertyCorrect(int)') | Check that if crProperty uniquely defines a constructive real, then crProperty<br/>and crFactor both describe approximately the same number. |
 | [Sin()](PreciseCalc.UnifiedReal.Sin().md 'PreciseCalc.UnifiedReal.Sin()') | Return the sine of this number. |
@@ -105,3 +104,4 @@ PrecisionOverflowException and AbortedException.
 | :--- | :--- |
 | [operator +(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x+y |
 | [operator -(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Subtraction(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Subtraction(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x-y |
+| [operator -(UnifiedReal)](PreciseCalc.UnifiedReal.op_UnaryNegation(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_UnaryNegation(PreciseCalc.UnifiedReal)') | Return -x |

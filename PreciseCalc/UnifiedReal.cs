@@ -1230,7 +1230,7 @@ public class UnifiedReal
         if (arg.CompareToOne() < 0)
             // Convert to an argument larger than one. Normalizing arguments in this way increases the
             // chance of repeat occurrences of the same argument, and makes them cleaner to display.
-            return LogRep(kind, BoundedRational.Inverse(arg)).Negate();
+            return -LogRep(kind, BoundedRational.Inverse(arg));
 
         var intArg = arg.ToBigInteger();
         if (intArg != null)
@@ -1319,9 +1319,9 @@ public class UnifiedReal
     ///     Return -x
     /// </summary>
     /// <returns></returns>
-    public UnifiedReal Negate()
+    public static UnifiedReal operator -(UnifiedReal x)
     {
-        return new UnifiedReal(-_ratFactor, _crFactor, _crProperty);
+        return new UnifiedReal(-x._ratFactor, x._crFactor, x._crProperty);
     }
 
     /// <summary>
@@ -1332,7 +1332,7 @@ public class UnifiedReal
     /// <returns></returns>
     public static UnifiedReal operator -(UnifiedReal x, UnifiedReal y)
     {
-        return x + y.Negate();
+        return x + -y;
     }
 
     /// <summary>
@@ -1531,7 +1531,7 @@ public class UnifiedReal
         if (n >= 12)
         {
             var negResult = SinPiTwelfths(n - 12);
-            return negResult?.Negate();
+            return negResult is not null ? -negResult : null;
         }
 
         return n switch
@@ -1662,7 +1662,7 @@ public class UnifiedReal
     {
         return n switch
         {
-            < 0 => AsinHalves(-n).Negate(),
+            < 0 => -AsinHalves(-n),
             0 => Zero,
             1 => new UnifiedReal(BoundedRational.Sixth, CrPI),
             2 => new UnifiedReal(BoundedRational.Half, CrPI),
@@ -1680,7 +1680,7 @@ public class UnifiedReal
         var halves = Multiply(Two).ToBigInteger();
         if (halves != null) return AsinHalves((int)halves.Value);
 
-        if (CompareTo(Zero, -10) < 0) return Negate().Asin().Negate();
+        if (CompareTo(Zero, -10) < 0) return -(-this).Asin();
 
         if (DefinitelyEquals(HalfSqrt2)) return new UnifiedReal(BoundedRational.Quarter, CrPI);
 
@@ -1720,7 +1720,7 @@ public class UnifiedReal
     /// <exception cref="InvalidOperationException"></exception>
     public UnifiedReal Atan()
     {
-        if (CompareTo(Zero, -10) < 0) return Negate().Atan().Negate();
+        if (CompareTo(Zero, -10) < 0) return -(-this).Atan();
 
         var asBigInt = ToBigInteger();
         if (asBigInt != null && asBigInt.Value.CompareTo(BigInteger.One) <= 0)
@@ -2085,7 +2085,7 @@ public class UnifiedReal
             }
             else if (compare1 < 0)
             {
-                return Inverse().Ln().Negate();
+                return -Inverse().Ln();
             }
 
             var bi = _ratFactor.ToBigInteger();
@@ -2182,7 +2182,7 @@ public class UnifiedReal
     /// </summary>
     public UnifiedReal Abs()
     {
-        if (IsComparable(Zero)) return DefinitelySign() < 0 ? Negate() : this;
+        if (IsComparable(Zero)) return DefinitelySign() < 0 ? -this : this;
 
         return new UnifiedReal(ToConstructiveReal().Abs(),
             _crProperty != null && IsUnknownIrrational(_crProperty)
