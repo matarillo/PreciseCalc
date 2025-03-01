@@ -45,7 +45,7 @@ PrecisionOverflowException and AbortedException.
 | [MinusHalf](PreciseCalc.UnifiedReal.MinusHalf.md 'PreciseCalc.UnifiedReal.MinusHalf') | The number -1/2. |
 | [MinusOne](PreciseCalc.UnifiedReal.MinusOne.md 'PreciseCalc.UnifiedReal.MinusOne') | The number -1. |
 | [One](PreciseCalc.UnifiedReal.One.md 'PreciseCalc.UnifiedReal.One') | The number 1. |
-| [PI](PreciseCalc.UnifiedReal.PI.md 'PreciseCalc.UnifiedReal.PI') | The number pi. |
+| [Pi](PreciseCalc.UnifiedReal.Pi.md 'PreciseCalc.UnifiedReal.Pi') | The number pi. |
 | [RadiansPerDegree](PreciseCalc.UnifiedReal.RadiansPerDegree.md 'PreciseCalc.UnifiedReal.RadiansPerDegree') | The number pi/180. |
 | [Ten](PreciseCalc.UnifiedReal.Ten.md 'PreciseCalc.UnifiedReal.Ten') | The number 10. |
 | [Two](PreciseCalc.UnifiedReal.Two.md 'PreciseCalc.UnifiedReal.Two') | The number 2. |

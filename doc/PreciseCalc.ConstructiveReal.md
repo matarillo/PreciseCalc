@@ -18,10 +18,10 @@ Implements [System.Numerics.IAdditionOperators&lt;](https://docs.microsoft.com/e
 
 | Fields | |
 | :--- | :--- |
-| [AtanPI](PreciseCalc.ConstructiveReal.AtanPI.md 'PreciseCalc.ConstructiveReal.AtanPI') | Our old PI implementation. pi/4 = 4*atan(1/5) - atan(1/239) |
-| [HalfPI](PreciseCalc.ConstructiveReal.HalfPI.md 'PreciseCalc.ConstructiveReal.HalfPI') | pi/2 |
+| [AtanPi](PreciseCalc.ConstructiveReal.AtanPi.md 'PreciseCalc.ConstructiveReal.AtanPi') | Our old PI implementation. pi/4 = 4*atan(1/5) - atan(1/239) |
+| [HalfPi](PreciseCalc.ConstructiveReal.HalfPi.md 'PreciseCalc.ConstructiveReal.HalfPi') | pi/2 |
 | [One](PreciseCalc.ConstructiveReal.One.md 'PreciseCalc.ConstructiveReal.One') | Predefined constant for the value 1. |
-| [PI](PreciseCalc.ConstructiveReal.PI.md 'PreciseCalc.ConstructiveReal.PI') | The ratio of a circle's circumference to its diameter. |
+| [Pi](PreciseCalc.ConstructiveReal.Pi.md 'PreciseCalc.ConstructiveReal.Pi') | The ratio of a circle's circumference to its diameter. |
 | [PleaseStop](PreciseCalc.ConstructiveReal.PleaseStop.md 'PreciseCalc.ConstructiveReal.PleaseStop') | Setting this to true requests that all computations be aborted by<br/>throwing [System.OperationCanceledException](https://docs.microsoft.com/en-us/dotnet/api/System.OperationCanceledException 'System.OperationCanceledException').<br/>Must be rest to false before any further computation. |
 | [Zero](PreciseCalc.ConstructiveReal.Zero.md 'PreciseCalc.ConstructiveReal.Zero') | Predefined constant for the value 0. |
 

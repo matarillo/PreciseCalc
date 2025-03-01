@@ -26,11 +26,11 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     IMultiplyOperators<UnifiedReal, UnifiedReal, UnifiedReal>,
     IDivisionOperators<UnifiedReal, UnifiedReal, UnifiedReal>
 {
-    private const string PIString = "\u03C0"; // GREEK SMALL LETTER PI
+    private const string PiString = "\u03C0"; // GREEK SMALL LETTER PI
     private const string SqrtString = "\u221A";
     private const string MultString = "\u00D7";
     private const string InverseString = "\u207B\u00B9"; // -1 superscript
-    private const string DegreeConversion = MultString + "180/" + PIString;
+    private const string DegreeConversion = MultString + "180/" + PiString;
 
     // Don't track ln() or log() arguments whose representation is larger than this.
     private const int LogArgBits = 100;
@@ -326,7 +326,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
                                        || (kind == PropertyKind.IsExp && arg.Sign == 0))
             return CRProperty.PropOne;
 
-        if (kind == PropertyKind.IsPi) return CRProperty.PropPI;
+        if (kind == PropertyKind.IsPi) return CRProperty.PropPi;
 
         if (kind == PropertyKind.IsIrrational) return CRProperty.PropIrrational;
 
@@ -453,13 +453,13 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
         {
             PropertyKind.IsIrrational => null,
             PropertyKind.IsOne => CrOne,
-            PropertyKind.IsPi => CrPI,
+            PropertyKind.IsPi => CrPi,
             PropertyKind.IsExp => p.Arg.ToConstructiveReal().Exp(),
             PropertyKind.IsLn => p.Arg.ToConstructiveReal().Ln(),
             PropertyKind.IsLog => p.Arg.ToConstructiveReal().Ln() / CrLn10,
             PropertyKind.IsSqrt => p.Arg.ToConstructiveReal().Sqrt(),
-            PropertyKind.IsSinPi => (p.Arg.ToConstructiveReal() * CrPI).Sin(),
-            PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal() * CrPI),
+            PropertyKind.IsSinPi => (p.Arg.ToConstructiveReal() * CrPi).Sin(),
+            PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal() * CrPi),
             PropertyKind.IsASin => p.Arg.ToConstructiveReal().Asin(),
             PropertyKind.IsATan => UnaryCRFunction.AtanFunction.Execute(p.Arg.ToConstructiveReal()),
             _ => throw new InvalidOperationException("crFromProperty")
@@ -482,7 +482,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     private static CRProperty? PropertyFor(ConstructiveReal cr)
     {
         return cr == CrOne ? CRProperty.PropOne :
-            cr == CrPI ? CRProperty.PropPI :
+            cr == CrPi ? CRProperty.PropPi :
             cr == CrSqrt2 ? CRProperty.PropSqrt2 :
             cr == CrSqrt3 ? CRProperty.PropSqrt3 :
             cr == CrExp ? CRProperty.PropExp :
@@ -608,13 +608,13 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
         }
 
         var (numerator, denominator) = r.NumDen;
-        if (denominator == BigInteger.One) return numerator + PIString;
+        if (denominator == BigInteger.One) return numerator + PiString;
 
         if (unicodeFraction && numerator != BigInteger.One)
-            return r.ToDisplayString(unicodeFraction /* mixed fractions */) + PIString;
+            return r.ToDisplayString(unicodeFraction /* mixed fractions */) + PiString;
 
         return (numerator == BigInteger.One ? "" : numerator.ToString(CultureInfo.InvariantCulture)) +
-               PIString + "/" + denominator;
+               PiString + "/" + denominator;
     }
 
     /// <summary>
@@ -632,7 +632,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
 
         if (IsOne(p)) return "";
 
-        if (IsPi(p)) return PIString;
+        if (IsPi(p)) return PiString;
 
         var expArg = GetExpArg(p);
         if (expArg.HasValue)
@@ -1208,7 +1208,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
         {
             Debug.Assert(_crProperty != null && u._crProperty != null);
             if (_ratFactor.Equals(u._ratFactor))
-                // kind cannot be IS_PI or IS_ONE, since sameCrFactor() would have been true.
+                // kind cannot be IsPi or IsOne, since sameCrFactor() would have been true.
                 // sameMonotonicCrKind() precludes IS_IRRATIONAL.
                 // All other kinds represent monotonically increasing functions over the range we allow.
                 // Just compare the arguments.
@@ -1612,9 +1612,9 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
         if (DefinitelyAlgebraic() && DefinitelyNonzero())
             // We know from Lindemann-Weierstrass that the result is transcendental, and therefore
             // irrational.
-            return TagIrrational((this + PIOver2).Sin());
+            return TagIrrational((this + PiOver2).Sin());
 
-        return (this + PIOver2).Sin();
+        return (this + PiOver2).Sin();
     }
 
     /// <summary>
@@ -1669,8 +1669,8 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
         {
             < 0 => -AsinHalves(-n),
             0 => Zero,
-            1 => new UnifiedReal(BoundedRational.Sixth, CrPI),
-            2 => new UnifiedReal(BoundedRational.Half, CrPI),
+            1 => new UnifiedReal(BoundedRational.Sixth, CrPi),
+            2 => new UnifiedReal(BoundedRational.Half, CrPi),
             _ => throw new ArgumentOutOfRangeException(nameof(n))
         };
     }
@@ -1687,17 +1687,17 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
 
         if (CompareTo(Zero, -10) < 0) return -(-this).Asin();
 
-        if (DefinitelyEquals(HalfSqrt2)) return new UnifiedReal(BoundedRational.Quarter, CrPI);
+        if (DefinitelyEquals(HalfSqrt2)) return new UnifiedReal(BoundedRational.Quarter, CrPi);
 
-        if (DefinitelyEquals(HalfSqrt3)) return new UnifiedReal(BoundedRational.Third, CrPI);
+        if (DefinitelyEquals(HalfSqrt3)) return new UnifiedReal(BoundedRational.Third, CrPi);
 
         var sinPiArg = GetSinPiArg(_crProperty);
         if (sinPiArg.HasValue)
         {
-            if (_ratFactor.CompareToOne() == 0) return new UnifiedReal(sinPiArg, CrPI);
+            if (_ratFactor.CompareToOne() == 0) return new UnifiedReal(sinPiArg, CrPi);
 
             if (_ratFactor.CompareTo(BoundedRational.MinusOne) == 0)
-                return new UnifiedReal(-sinPiArg, CrPI, CRProperty.PropPI);
+                return new UnifiedReal(-sinPiArg, CrPi, CRProperty.PropPi);
         }
 
         if (_crProperty != null && IsOne(_crProperty))
@@ -1715,7 +1715,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     /// <returns></returns>
     public UnifiedReal Acos()
     {
-        return PIOver2 - Asin();
+        return PiOver2 - Asin();
     }
 
     /// <summary>
@@ -1737,22 +1737,22 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
                 case 0:
                     return Zero;
                 case 1:
-                    return PIOver4;
+                    return PiOver4;
                 default:
                     throw new InvalidOperationException("Impossible r_int");
             }
         }
 
-        if (DefinitelyEquals(ThirdSqrt3)) return PIOver6;
+        if (DefinitelyEquals(ThirdSqrt3)) return PiOver6;
 
-        if (DefinitelyEquals(Sqrt3)) return PIOver3;
+        if (DefinitelyEquals(Sqrt3)) return PiOver3;
 
         var tanPiArg = GetTanPiArg(_crProperty);
         if (tanPiArg.HasValue)
         {
-            if (_ratFactor.CompareToOne() == 0) return new UnifiedReal(tanPiArg, CrPI);
+            if (_ratFactor.CompareToOne() == 0) return new UnifiedReal(tanPiArg, CrPi);
 
-            if (_ratFactor.CompareTo(BoundedRational.MinusOne) == 0) return new UnifiedReal(-tanPiArg, CrPI);
+            if (_ratFactor.CompareTo(BoundedRational.MinusOne) == 0) return new UnifiedReal(-tanPiArg, CrPi);
         }
 
         if (_crProperty != null && IsOne(_crProperty))
@@ -2409,9 +2409,9 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     /// </summary>
     internal class CRProperty
     {
-        // The only instances of IS_ONE, IS_PI, and IS_IRRATIONAL properties.
+        // The only instances of IsOne, IsPi, and IsIrrational properties.
         public static readonly CRProperty PropOne = new(PropertyKind.IsOne, BoundedRational.Null);
-        public static readonly CRProperty PropPI = new(PropertyKind.IsPi, BoundedRational.Null);
+        public static readonly CRProperty PropPi = new(PropertyKind.IsPi, BoundedRational.Null);
         public static readonly CRProperty PropIrrational = new(PropertyKind.IsIrrational, BoundedRational.Null);
 
         public static readonly CRProperty PropSqrt2 = new(PropertyKind.IsSqrt, BoundedRational.Two);
@@ -2556,7 +2556,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
 
     // Well-known CR constants we try to use in the crFactor position:
     private static readonly ConstructiveReal CrOne = ConstructiveReal.One;
-    private static readonly ConstructiveReal CrPI = ConstructiveReal.PI;
+    private static readonly ConstructiveReal CrPi = ConstructiveReal.Pi;
     private static readonly ConstructiveReal CrExp = ConstructiveReal.One.Exp();
     private static readonly ConstructiveReal CrSqrt2 = CrTwo.Sqrt();
     private static readonly ConstructiveReal CrSqrt3 = CrThree.Sqrt();
@@ -2566,7 +2566,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     /// <summary>
     ///     The number pi.
     /// </summary>
-    public static readonly UnifiedReal PI = new(CrPI);
+    public static readonly UnifiedReal Pi = new(CrPi);
 
     /// <summary>
     ///     The number e.
@@ -2611,7 +2611,7 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     /// <summary>
     ///     The number pi/180.
     /// </summary>
-    public static readonly UnifiedReal RadiansPerDegree = new(BoundedRational.Inverse(Br180), CrPI);
+    public static readonly UnifiedReal RadiansPerDegree = new(BoundedRational.Inverse(Br180), CrPi);
 
     /// <summary>
     ///     The square root of 2.
@@ -2623,10 +2623,10 @@ public class UnifiedReal : IAdditionOperators<UnifiedReal, UnifiedReal, UnifiedR
     private static readonly UnifiedReal Sqrt3 = new(CrSqrt3);
     private static readonly UnifiedReal HalfSqrt3 = new(BoundedRational.Half, CrSqrt3);
     private static readonly UnifiedReal ThirdSqrt3 = new(BoundedRational.Third, CrSqrt3);
-    private static readonly UnifiedReal PIOver2 = new(BoundedRational.Half, CrPI);
-    private static readonly UnifiedReal PIOver3 = new(BoundedRational.Third, CrPI);
-    private static readonly UnifiedReal PIOver4 = new(BoundedRational.Quarter, CrPI);
-    private static readonly UnifiedReal PIOver6 = new(BoundedRational.Sixth, CrPI);
+    private static readonly UnifiedReal PiOver2 = new(BoundedRational.Half, CrPi);
+    private static readonly UnifiedReal PiOver3 = new(BoundedRational.Third, CrPi);
+    private static readonly UnifiedReal PiOver4 = new(BoundedRational.Quarter, CrPi);
+    private static readonly UnifiedReal PiOver6 = new(BoundedRational.Sixth, CrPi);
 
     #endregion
 }

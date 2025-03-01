@@ -56,7 +56,7 @@ public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, Co
     /// <summary>
     ///     The ratio of a circle's circumference to its diameter.
     /// </summary>
-    public static readonly ConstructiveReal PI = new GaussLegendrePiConstructiveReal();
+    public static readonly ConstructiveReal Pi = new GaussLegendrePiConstructiveReal();
 
     /// <summary>
     ///     Our old PI implementation. pi/4 = 4*atan(1/5) - atan(1/239)
@@ -70,13 +70,13 @@ public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, Co
     ///     atan-based formulas are possible, but based on superficial
     ///     experimentation, this is roughly as good as the more complex formulas.
     /// </remarks>
-    public static readonly ConstructiveReal AtanPI =
+    public static readonly ConstructiveReal AtanPi =
         Four * (Four * AtanReciprocal(5) - AtanReciprocal(239));
 
     /// <summary>
     ///     pi/2
     /// </summary>
-    public static readonly ConstructiveReal HalfPI = PI >> 1;
+    public static readonly ConstructiveReal HalfPi = Pi >> 1;
 
     private static readonly BigInteger LowLnLimit = Big8; // sixteenths, i.e. 1/2
     private static readonly BigInteger HighLnLimit = new(24); // 1.5 * 16
@@ -375,7 +375,7 @@ public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, Co
     ///     Computes the arctangent of the reciprocal of an integer.
     /// </summary>
     /// <remarks>
-    ///     Atan of integer reciprocal.  Used for <see cref="AtanPI" />.  Could perhaps be made public.
+    ///     Atan of integer reciprocal.  Used for <see cref="AtanPi" />.  Could perhaps be made public.
     /// </remarks>
     internal static ConstructiveReal AtanReciprocal(int n)
     {
@@ -852,13 +852,13 @@ public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, Co
     /// </summary>
     public ConstructiveReal Cos()
     {
-        var halfPiMultiples = (this / PI).GetApproximation(-1);
+        var halfPiMultiples = (this / Pi).GetApproximation(-1);
         var absHalfPiMultiples = BigInteger.Abs(halfPiMultiples);
 
         if (absHalfPiMultiples.CompareTo(Big2) >= 0)
         {
             var piMultiples = Scale(halfPiMultiples, -1);
-            var adjustment = PI * FromBigInteger(piMultiples);
+            var adjustment = Pi * FromBigInteger(piMultiples);
             return piMultiples.IsEven ? (this - adjustment).Cos() : -(this - adjustment).Cos();
         }
 
@@ -876,7 +876,7 @@ public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, Co
     /// </summary>
     public ConstructiveReal Sin()
     {
-        return (HalfPI - this).Cos();
+        return (HalfPi - this).Cos();
     }
 
     /// <summary>
@@ -901,7 +901,7 @@ public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, Co
     /// </summary>
     public ConstructiveReal Acos()
     {
-        return HalfPI - Asin();
+        return HalfPi - Asin();
     }
 
     /// <summary>

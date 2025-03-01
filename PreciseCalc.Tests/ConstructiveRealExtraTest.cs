@@ -28,9 +28,9 @@ public class ConstructiveRealExtraTest
     }
 
     [Fact]
-    public void TestAtanPI()
+    public void TestAtanPi()
     {
-        var result = ConstructiveReal.AtanPI;
+        var result = ConstructiveReal.AtanPi;
         var expected = ConstructiveReal.FromDouble(Math.PI);
         Assert.Equal(0, result.CompareTo(expected, -50));
     }

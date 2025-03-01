@@ -1,11 +1,11 @@
 ### [PreciseCalc](PreciseCalc.md 'PreciseCalc').[ConstructiveReal](PreciseCalc.ConstructiveReal.md 'PreciseCalc.ConstructiveReal')
 
-## ConstructiveReal.PI Field
+## ConstructiveReal.HalfPi Field
 
-The ratio of a circle's circumference to its diameter.
+pi/2
 
 ```csharp
-public static readonly ConstructiveReal PI;
+public static readonly ConstructiveReal HalfPi;
 ```
 
 #### Field Value

@@ -14,7 +14,7 @@ public class ConstructiveRealTest
     {
         _three = _two + _one;
         _four = _two + _two;
-        _halfPi = ConstructiveReal.PI / _two;
+        _halfPi = ConstructiveReal.Pi / _two;
     }
 
     [Fact]
@@ -113,14 +113,14 @@ public class ConstructiveRealTest
     public void TestTrigFunctions()
     {
         Assert.Equal(0, _halfPi.Sin().CompareTo(_one, -50));
-        Assert.Equal(0, ConstructiveReal.PI.Cos().CompareTo(-_one, -50));
+        Assert.Equal(0, ConstructiveReal.Pi.Cos().CompareTo(-_one, -50));
     }
 
     [Fact]
     public void TestIntermediateConversions()
     {
-        var tmp = ConstructiveReal.PI + ConstructiveReal.FromInt(-123).Exp();
-        var tmp2 = tmp - ConstructiveReal.PI;
+        var tmp = ConstructiveReal.Pi + ConstructiveReal.FromInt(-123).Exp();
+        var tmp2 = tmp - ConstructiveReal.Pi;
         Assert.Equal(-123, tmp2.Ln().IntValue());
         Assert.Equal(-123L, tmp2.Ln().LongValue());
         Assert.Equal(-123.0f, tmp2.Ln().FloatValue(), 0.0);

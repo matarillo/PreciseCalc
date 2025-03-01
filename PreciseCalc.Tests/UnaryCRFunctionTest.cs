@@ -23,7 +23,7 @@ public class UnaryCRFunctionTest
     public UnaryCRFunctionTest()
     {
         _half = _one / _two;
-        _halfPi = ConstructiveReal.PI / _two;
+        _halfPi = ConstructiveReal.Pi / _two;
         BigInteger million = 1000 * 1000;
         BigInteger thousand = 1000;
         _huge = ConstructiveReal.FromBigInteger(million * million * thousand);
@@ -42,7 +42,7 @@ public class UnaryCRFunctionTest
     [Fact]
     public void TestMonotoneDerivative()
     {
-        var cosine = UnaryCRFunction.SinFunction.MonotoneDerivative(_zero, ConstructiveReal.PI);
+        var cosine = UnaryCRFunction.SinFunction.MonotoneDerivative(_zero, ConstructiveReal.Pi);
         Assert.Equal(0, cosine.Execute(_one).CompareTo(_one.Cos(), Precision));
         Assert.Equal(0, cosine.Execute(_three).CompareTo(_three.Cos(), Precision));
     }

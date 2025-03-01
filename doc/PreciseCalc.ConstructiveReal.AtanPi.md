@@ -1,11 +1,11 @@
 ### [PreciseCalc](PreciseCalc.md 'PreciseCalc').[ConstructiveReal](PreciseCalc.ConstructiveReal.md 'PreciseCalc.ConstructiveReal')
 
-## ConstructiveReal.AtanPI Field
+## ConstructiveReal.AtanPi Field
 
 Our old PI implementation. pi/4 = 4*atan(1/5) - atan(1/239)
 
 ```csharp
-public static readonly ConstructiveReal AtanPI;
+public static readonly ConstructiveReal AtanPi;
 ```
 
 #### Field Value
