@@ -34,7 +34,7 @@ public class UnaryCRFunctionTest
     public void TestAsin()
     {
         Assert.Equal(0, _asin.Execute(_one).CompareTo(_halfPi, Precision));
-        Assert.Equal(0, _asin.Execute(_one.Negate()).CompareTo(_halfPi.Negate(), Precision));
+        Assert.Equal(0, _asin.Execute(-_one).CompareTo(-_halfPi, Precision));
         Assert.Equal(0, _asin.Execute(_zero).CompareTo(_zero, Precision));
         Assert.Equal(0, _asin.Execute(_half.Sin()).CompareTo(_half, Precision));
         Assert.Equal(0, _asin.Execute(_one.Sin()).CompareTo(_one, Precision));
@@ -58,7 +58,7 @@ public class UnaryCRFunctionTest
     public void TestAtanTan()
     {
         Assert.Equal(0, _atan.Execute(_tan.Execute(_one)).CompareTo(_one, Precision));
-        Assert.Equal(0, _atan.Execute(_tan.Execute(_one.Negate())).CompareTo(_one.Negate(), Precision));
+        Assert.Equal(0, _atan.Execute(_tan.Execute(-_one)).CompareTo(-_one, Precision));
         Assert.Equal(0, _tan.Execute(_atan.Execute(_huge)).CompareTo(_huge, Precision));
     }
 

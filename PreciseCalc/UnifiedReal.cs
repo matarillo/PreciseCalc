@@ -2345,10 +2345,10 @@ public class UnifiedReal
 
         if (sign < 0)
         {
-            ConstructiveReal result = ((ToConstructiveReal().Negate().Ln()) * (ConstructiveReal.FromBigInteger(exp))).Exp();
+            ConstructiveReal result = (((  -(ToConstructiveReal())).Ln()) * (ConstructiveReal.FromBigInteger(exp))).Exp();
             if ((exp & BigInteger.One) != BigInteger.Zero) /* odd exponent */
             {
-                result = result.Negate();
+                result = -result;
             }
 
             return new UnifiedReal(result);

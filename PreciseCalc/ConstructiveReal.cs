@@ -129,7 +129,7 @@ public abstract class ConstructiveReal
             mantissa <<= 1;
 
         ConstructiveReal result = FromBigInteger(mantissa).ShiftLeft(exponent);
-        return negative ? result.Negate() : result;
+        return negative ? -result : result;
     }
 
     /// <summary>
@@ -693,12 +693,12 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Negates the constructive real number.
     /// </summary>
-    public ConstructiveReal Negate() => new NegateConstructiveReal(this);
+    public static ConstructiveReal operator -(ConstructiveReal value) => new NegateConstructiveReal(value);
 
     /// <summary>
     /// The difference between two constructive reals
     /// </summary>
-    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right) => new AddConstructiveReal(left, right.Negate());
+    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right) => new AddConstructiveReal(left, -right);
 
     /// <summary>
     /// Multiplies two constructive real numbers.
@@ -745,7 +745,7 @@ public abstract class ConstructiveReal
     /// <remarks>
     /// Note that this cannot be written as a conditional.
     /// </remarks>
-    public ConstructiveReal Abs() => Select(Negate(), this);
+    public ConstructiveReal Abs() => Select(-this, this);
 
     /// <summary>
     /// Computes the exponential function e^this.
@@ -804,7 +804,7 @@ public abstract class ConstructiveReal
         {
             BigInteger piMultiples = Scale(halfPiMultiples, -1);
             ConstructiveReal adjustment = PI * (FromBigInteger(piMultiples));
-            return piMultiples.IsEven ? (this - (adjustment)).Cos() : (this - (adjustment)).Cos().Negate();
+            return piMultiples.IsEven ? (this - (adjustment)).Cos() : -((this - (adjustment)).Cos());
         }
         else if (BigInteger.Abs(GetApproximation(-1)).CompareTo(Big2) >= 0)
         {
@@ -835,7 +835,7 @@ public abstract class ConstructiveReal
         }
         else if (roughApprox.CompareTo(BigM750) < 0)
         {
-            return Negate().Asin().Negate();
+            return -((-this).Asin());
         }
         else
         {
@@ -867,7 +867,7 @@ public abstract class ConstructiveReal
 
         if (roughApprox.CompareTo(LowLnLimit) <= 0)
         {
-            return Inverse().Ln().Negate();
+            return -(Inverse().Ln());
         }
 
         if (roughApprox.CompareTo(HighLnLimit) >= 0)

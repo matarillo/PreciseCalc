@@ -21,7 +21,7 @@ public class ConstructiveRealTest
     public void TestSignum()
     {
         Assert.Equal(1, _one.Sign());
-        Assert.Equal(-1, _one.Negate().Sign());
+        Assert.Equal(-1, (-_one).Sign());
         Assert.Equal(0, _zero.Sign(-100));
     }
 
@@ -50,7 +50,7 @@ public class ConstructiveRealTest
         Assert.Equal(0, (_one + _one).CompareTo(_two, -50));
         Assert.Equal(0, ConstructiveReal.FromInt(4).CompareTo(_four, -50));
         Assert.Equal(0, ConstructiveReal.FromInt(3).CompareTo(_three, -50));
-        Assert.Equal(0, (_one.Negate() + (_two)).CompareTo(_one, -50));
+        Assert.Equal(0, ((-_one) + (_two)).CompareTo(_one, -50));
     }
 
     [Fact]
@@ -63,13 +63,13 @@ public class ConstructiveRealTest
     [Fact]
     public void TestAbs()
     {
-        Assert.Equal(0, _one.Negate().Abs().CompareTo(_one, -50));
+        Assert.Equal(0, (-_one).Abs().CompareTo(_one, -50));
     }
 
     [Fact]
     public void TestNegate()
     {
-        Assert.Equal(-1, _one.Negate().Sign());
+        Assert.Equal(-1, (-_one).Sign());
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public class ConstructiveRealTest
     public void TestDivision()
     {
         Assert.Equal(0, (_one / (_four)).ShiftLeft(4).CompareTo(_four, -50));
-        Assert.Equal(0, (_two / (_one.Negate())).CompareTo(_two.Negate(), -50));
+        Assert.Equal(0, (_two / (-_one)).CompareTo(-_two, -50));
         Assert.Equal(0, ((_one / (_thirteen)) * (_thirteen)).CompareTo(_one, -50));
     }
 
@@ -113,7 +113,7 @@ public class ConstructiveRealTest
     public void TestTrigFunctions()
     {
         Assert.Equal(0, _halfPi.Sin().CompareTo(_one, -50));
-        Assert.Equal(0, ConstructiveReal.PI.Cos().CompareTo(_one.Negate(), -50));
+        Assert.Equal(0, ConstructiveReal.PI.Cos().CompareTo(-_one, -50));
     }
 
     [Fact]

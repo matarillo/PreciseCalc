@@ -17,7 +17,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
     /// </summary>
     public InverseIncreasingConstructiveReal(ConstructiveReal x, Data data)
     {
-        this._arg = data.FNegated ? x.Negate() : x;
+        this._arg = data.FNegated ? -x : x;
         this._data = data;
     }
 
@@ -310,8 +310,8 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             {
                 F = UnaryCRFunction.NegateFunction.Compose(func);
                 FNegated = true;
-                FLow = tmpFLow.Negate();
-                FHigh = tmpFHigh.Negate();
+                FLow = -tmpFLow;
+                FHigh = -tmpFHigh;
             }
             else
             {

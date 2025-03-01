@@ -127,7 +127,7 @@ class IdentityUnaryCRFunction : UnaryCRFunction
 
 class NegateUnaryCRFunction : UnaryCRFunction
 {
-    public override ConstructiveReal Execute(ConstructiveReal x) => x.Negate();
+    public override ConstructiveReal Execute(ConstructiveReal x) => -x;
 }
 
 class InverseUnaryCRFunction : UnaryCRFunction
@@ -176,7 +176,7 @@ class AtanUnaryCRFunction : UnaryCRFunction
     {
         var x2 = x * (x);
         var absSinAtan = (x2 / (ConstructiveReal.One + (x2))).Sqrt();
-        ConstructiveReal sinAtan = x.Select(absSinAtan.Negate(), absSinAtan);
+        ConstructiveReal sinAtan = x.Select(-absSinAtan, absSinAtan);
         return sinAtan.Asin();
     }
 }
