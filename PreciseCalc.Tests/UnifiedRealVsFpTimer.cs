@@ -128,7 +128,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
 
     private static UnifiedReal Hypot(UnifiedReal x, UnifiedReal y)
     {
-        return (x.Multiply(x) + y.Multiply(y)).Sqrt();
+        return (x * x + y * y).Sqrt();
     }
 
     /// <summary>

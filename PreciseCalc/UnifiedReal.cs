@@ -1358,42 +1358,43 @@ public class UnifiedReal
     /// <summary>
     ///     Return x*y
     /// </summary>
-    /// <param name="u"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     /// <returns></returns>
-    public UnifiedReal Multiply(UnifiedReal u)
+    public static UnifiedReal operator *(UnifiedReal x, UnifiedReal y)
     {
         // Preserve a preexisting crFactor when we can.
-        if (_crProperty != null && IsOne(_crProperty))
+        if (x._crProperty != null && IsOne(x._crProperty))
         {
-            var nRatFactor1 = _ratFactor * u._ratFactor;
-            if (nRatFactor1.HasValue) return new UnifiedReal(nRatFactor1, u._crFactor, u._crProperty);
+            var nRatFactor1 = x._ratFactor * y._ratFactor;
+            if (nRatFactor1.HasValue) return new UnifiedReal(nRatFactor1, y._crFactor, y._crProperty);
         }
 
-        if (u._crProperty != null && IsOne(u._crProperty))
+        if (y._crProperty != null && IsOne(y._crProperty))
         {
-            var nRatFactor2 = _ratFactor * u._ratFactor;
-            if (nRatFactor2.HasValue) return new UnifiedReal(nRatFactor2, _crFactor, _crProperty);
+            var nRatFactor2 = x._ratFactor * y._ratFactor;
+            if (nRatFactor2.HasValue) return new UnifiedReal(nRatFactor2, x._crFactor, x._crProperty);
         }
 
-        if (DefinitelyZero() || u.DefinitelyZero()) return Zero;
+        if (x.DefinitelyZero() || y.DefinitelyZero()) return Zero;
 
         CRProperty? resultProp = null; // Property for product of crFactors.
-        var nRatFactor = _ratFactor * u._ratFactor;
-        if (_crProperty != null && u._crProperty != null)
+        var nRatFactor = x._ratFactor * y._ratFactor;
+        if (x._crProperty != null && y._crProperty != null)
         {
-            if (_crProperty.Kind == PropertyKind.IsSqrt && u._crProperty.Kind == PropertyKind.IsSqrt)
+            if (x._crProperty.Kind == PropertyKind.IsSqrt && y._crProperty.Kind == PropertyKind.IsSqrt)
             {
-                var sqrtArg = GetSqrtArg(_crProperty);
-                var uSqrtArg = GetSqrtArg(u._crProperty);
+                var sqrtArg = GetSqrtArg(x._crProperty);
+                var uSqrtArg = GetSqrtArg(y._crProperty);
                 var crPart = MultiplySqrts(sqrtArg, uSqrtArg);
                 var ratResult = nRatFactor * crPart._ratFactor;
                 if (ratResult.HasValue) return new UnifiedReal(ratResult, crPart._crFactor, crPart._crProperty);
             }
 
-            if (_crProperty.Kind == PropertyKind.IsExp && u._crProperty.Kind == PropertyKind.IsExp)
+            if (x._crProperty.Kind == PropertyKind.IsExp && y._crProperty.Kind == PropertyKind.IsExp)
             {
                 // exp(a) * exp(b) is exp(a + b) .
-                var sum = _crProperty.Arg + u._crProperty.Arg;
+                var sum = x._crProperty.Arg + y._crProperty.Arg;
                 if (sum.HasValue)
                     // we use this only for the property, since crFactors may already have been evaluated.
                     resultProp = MakeProperty(PropertyKind.IsExp, sum);
@@ -1403,10 +1404,10 @@ public class UnifiedReal
         // Probably a bit cheaper to multiply component-wise.
         // TODO: We should often be able to determine that the result is irrational.
         // But definitelyIndependent is not the right criterion. Consider e and e^-1.
-        if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, _crFactor * u._crFactor, resultProp);
+        if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, x._crFactor * y._crFactor, resultProp);
 
         // resultProp invalid for this computation; discard. We know that the ratFactors are nonzero.
-        return new UnifiedReal(ToConstructiveReal() * u.ToConstructiveReal());
+        return new UnifiedReal(x.ToConstructiveReal() * y.ToConstructiveReal());
     }
 
     /// <summary>
@@ -1464,7 +1465,7 @@ public class UnifiedReal
             }
         }
 
-        return Multiply(u.Inverse());
+        return this * u.Inverse();
     }
 
     /// <summary>
@@ -1677,7 +1678,7 @@ public class UnifiedReal
     public UnifiedReal Asin()
     {
         CheckAsinDomain();
-        var halves = Multiply(Two).ToBigInteger();
+        var halves = (this * Two).ToBigInteger();
         if (halves != null) return AsinHalves((int)halves.Value);
 
         if (CompareTo(Zero, -10) < 0) return -(-this).Asin();
@@ -1854,10 +1855,10 @@ public class UnifiedReal
             var resultFactor1 = new UnifiedReal(_ratFactor).Pow(exp);
             var squareAsUReal = new UnifiedReal(square);
             var resultFactor2 = squareAsUReal.Pow(exp >> 1);
-            var product = resultFactor1.Multiply(resultFactor2);
+            var product = resultFactor1 * resultFactor2;
             if ((exp & BigInteger.One) == BigInteger.One)
                 // Odd power: Multiply by remaining square root.
-                return product.Multiply(squareAsUReal.Sqrt());
+                return product * squareAsUReal.Sqrt();
 
             return product;
         }
@@ -1880,7 +1881,7 @@ public class UnifiedReal
 
                 // (<ratFactor>e)^<exp> = <ratFactor>^<exp> * e^<exp>
                 var ratPart = new UnifiedReal(_ratFactor).Pow(exp);
-                return exp.Exp().Multiply(ratPart);
+                return exp.Exp() * ratPart;
             }
 
             if (_crProperty.Kind == PropertyKind.IsOne && _ratFactor.CompareTo(BoundedRational.Ten) == 0)
