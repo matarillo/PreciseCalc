@@ -69,8 +69,8 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
             return 2;
         }
 
-        var prevDiff = urVal.Subtract(prev);
-        var fpValDiff = fpAsUr.Subtract(urVal);
+        var prevDiff = urVal - prev;
+        var fpValDiff = fpAsUr - urVal;
         CheckComparable(fpValDiff, prevDiff);
 
         if (fpValDiff.CompareTo(prevDiff) <= 0) return 0;
@@ -118,8 +118,8 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
             return 2;
         }
 
-        var prevDiff = urVal.Subtract(prev);
-        var fpValDiff = fpAsUr.Subtract(urVal);
+        var prevDiff = urVal - prev;
+        var fpValDiff = fpAsUr - urVal;
 
         if (fpValDiff.CompareTo(prevDiff, ComparePrecision) <= 0) return 0;
 

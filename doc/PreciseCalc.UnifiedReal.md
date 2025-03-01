@@ -91,7 +91,6 @@ PrecisionOverflowException and AbortedException.
 | [PropertyCorrect(int)](PreciseCalc.UnifiedReal.PropertyCorrect(int).md 'PreciseCalc.UnifiedReal.PropertyCorrect(int)') | Check that if crProperty uniquely defines a constructive real, then crProperty<br/>and crFactor both describe approximately the same number. |
 | [Sin()](PreciseCalc.UnifiedReal.Sin().md 'PreciseCalc.UnifiedReal.Sin()') | Return the sine of this number. |
 | [Sqrt()](PreciseCalc.UnifiedReal.Sqrt().md 'PreciseCalc.UnifiedReal.Sqrt()') | Return the square root. This may return a value with a null property, rather than a known<br/>rational, even when the result is rational. |
-| [Subtract(UnifiedReal)](PreciseCalc.UnifiedReal.Subtract(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.Subtract(PreciseCalc.UnifiedReal)') | Return x-y |
 | [Tan()](PreciseCalc.UnifiedReal.Tan().md 'PreciseCalc.UnifiedReal.Tan()') | Return the tangent of this number. |
 | [ToBigInteger()](PreciseCalc.UnifiedReal.ToBigInteger().md 'PreciseCalc.UnifiedReal.ToBigInteger()') | Returns equivalent BigInteger result if it exists, null if not. |
 | [ToBoundedRational()](PreciseCalc.UnifiedReal.ToBoundedRational().md 'PreciseCalc.UnifiedReal.ToBoundedRational()') | Return equivalent BoundedRational, if known to exist, null otherwise |
@@ -105,3 +104,4 @@ PrecisionOverflowException and AbortedException.
 | Operators | |
 | :--- | :--- |
 | [operator +(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x+y |
+| [operator -(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Subtraction(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Subtraction(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x-y |

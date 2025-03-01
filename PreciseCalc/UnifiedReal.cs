@@ -1327,11 +1327,12 @@ public class UnifiedReal
     /// <summary>
     ///     Return x-y
     /// </summary>
-    /// <param name="u"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     /// <returns></returns>
-    public UnifiedReal Subtract(UnifiedReal u)
+    public static UnifiedReal operator -(UnifiedReal x, UnifiedReal y)
     {
-        return this + u.Negate();
+        return x + y.Negate();
     }
 
     /// <summary>
@@ -1709,7 +1710,7 @@ public class UnifiedReal
     /// <returns></returns>
     public UnifiedReal Acos()
     {
-        return PIOver2.Subtract(Asin());
+        return PIOver2 - Asin();
     }
 
     /// <summary>
