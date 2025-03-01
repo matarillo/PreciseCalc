@@ -285,9 +285,9 @@ public abstract class ConstructiveReal
 
     // Predefined constants for logarithm calculations
 
-    private static readonly ConstructiveReal TenNinths = FromInt(10).Divide(FromInt(9));
-    private static readonly ConstructiveReal TwentyFiveTwentyFourths = FromInt(25).Divide(FromInt(24));
-    private static readonly ConstructiveReal EightyOneEightieths = FromInt(81).Divide(FromInt(80));
+    private static readonly ConstructiveReal TenNinths = FromInt(10) / (FromInt(9));
+    private static readonly ConstructiveReal TwentyFiveTwentyFourths = FromInt(25) / (FromInt(24));
+    private static readonly ConstructiveReal EightyOneEightieths = FromInt(81) / (FromInt(80));
 
     // ReSharper disable once InconsistentNaming
     private static readonly ConstructiveReal Ln2_1 = FromInt(7) * (TenNinths.SimpleLn());
@@ -454,7 +454,7 @@ public abstract class ConstructiveReal
         fraction.CopyTo(resultArray.AsSpan(whole.Length));
         BigInteger scaledResult = BigInteger.Parse(resultArray, style);
         BigInteger divisor = BigInteger.Pow(radix, fraction.Length);
-        return FromBigInteger(scaledResult).Divide(FromBigInteger(divisor));
+        return FromBigInteger(scaledResult) / (FromBigInteger(divisor));
     }
 
     /// <summary>
@@ -716,7 +716,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The quotient of two constructive reals.
     /// </summary>
-    public ConstructiveReal Divide(ConstructiveReal other) => new MultiplyConstructiveReal(this, other.Inverse());
+    public static ConstructiveReal operator /(ConstructiveReal left,ConstructiveReal right) => new MultiplyConstructiveReal(left, right.Inverse());
 
     /// <summary>
     /// Selects one of two constructive reals based on the sign of this value.
@@ -797,7 +797,7 @@ public abstract class ConstructiveReal
     /// </summary>
     public ConstructiveReal Cos()
     {
-        BigInteger halfPiMultiples = Divide(PI).GetApproximation(-1);
+        BigInteger halfPiMultiples = (this / PI).GetApproximation(-1);
         BigInteger absHalfPiMultiples = BigInteger.Abs(halfPiMultiples);
 
         if (absHalfPiMultiples.CompareTo(Big2) >= 0)

@@ -14,7 +14,7 @@ public class ConstructiveRealTest
     {
         _three = _two + (_one);
         _four = _two + (_two);
-        _halfPi = ConstructiveReal.PI.Divide(_two);
+        _halfPi = ConstructiveReal.PI / (_two);
     }
 
     [Fact]
@@ -81,9 +81,9 @@ public class ConstructiveRealTest
     [Fact]
     public void TestDivision()
     {
-        Assert.Equal(0, _one.Divide(_four).ShiftLeft(4).CompareTo(_four, -50));
-        Assert.Equal(0, _two.Divide(_one.Negate()).CompareTo(_two.Negate(), -50));
-        Assert.Equal(0, ((_one.Divide(_thirteen)) * (_thirteen)).CompareTo(_one, -50));
+        Assert.Equal(0, (_one / (_four)).ShiftLeft(4).CompareTo(_four, -50));
+        Assert.Equal(0, (_two / (_one.Negate())).CompareTo(_two.Negate(), -50));
+        Assert.Equal(0, ((_one / (_thirteen)) * (_thirteen)).CompareTo(_one, -50));
     }
 
     [Fact]

@@ -500,7 +500,7 @@ public class UnifiedReal
             PropertyKind.IsPi => CrPI,
             PropertyKind.IsExp => p.Arg.ToConstructiveReal().Exp(),
             PropertyKind.IsLn => p.Arg.ToConstructiveReal().Ln(),
-            PropertyKind.IsLog => p.Arg.ToConstructiveReal().Ln().Divide(CrLn10),
+            PropertyKind.IsLog => (p.Arg.ToConstructiveReal().Ln()) / (CrLn10),
             PropertyKind.IsSqrt => p.Arg.ToConstructiveReal().Sqrt(),
             PropertyKind.IsSinPi => (p.Arg.ToConstructiveReal() * (CrPI)).Sin(),
             PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal() * (CrPI)),
@@ -1672,7 +1672,7 @@ public class UnifiedReal
         {
             return kind == PropertyKind.IsLn
                 ? new UnifiedReal(arg.ToConstructiveReal().Ln())
-                : new UnifiedReal(arg.ToConstructiveReal().Ln().Divide(CrLn10));
+                : new UnifiedReal((arg.ToConstructiveReal().Ln()) / (CrLn10));
         }
 
         return new UnifiedReal(BoundedRational.One, MakeProperty(kind, arg));
@@ -2670,7 +2670,7 @@ public class UnifiedReal
                         return new UnifiedReal(new BoundedRational(intLog));
                     }
 
-                    newCrValue = ConstructiveReal.FromInt(m).Ln().Divide(CrLn10);
+                    newCrValue = (ConstructiveReal.FromInt(m).Ln()) / (CrLn10);
                 }
                 else
                 {

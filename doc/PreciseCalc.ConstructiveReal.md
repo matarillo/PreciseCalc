@@ -31,7 +31,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | [CompareTo(ConstructiveReal, int)](PreciseCalc.ConstructiveReal.CompareTo(PreciseCalc.ConstructiveReal,int).md 'PreciseCalc.ConstructiveReal.CompareTo(PreciseCalc.ConstructiveReal, int)') | Compares this value with another constructive real at a given precision. |
 | [CompareTo(ConstructiveReal)](PreciseCalc.ConstructiveReal.CompareTo(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.CompareTo(PreciseCalc.ConstructiveReal)') | Compares this value with another constructive real. |
 | [Cos()](PreciseCalc.ConstructiveReal.Cos().md 'PreciseCalc.ConstructiveReal.Cos()') | Computes the trigonometric cosine function. |
-| [Divide(ConstructiveReal)](PreciseCalc.ConstructiveReal.Divide(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Divide(PreciseCalc.ConstructiveReal)') | The quotient of two constructive reals. |
 | [DoubleValue()](PreciseCalc.ConstructiveReal.DoubleValue().md 'PreciseCalc.ConstructiveReal.DoubleValue()') | Returns a double which differs by less than one in the least represented bit from the constructive real. |
 | [Exp()](PreciseCalc.ConstructiveReal.Exp().md 'PreciseCalc.ConstructiveReal.Exp()') | Computes the exponential function e^this. |
 | [FloatValue()](PreciseCalc.ConstructiveReal.FloatValue().md 'PreciseCalc.ConstructiveReal.FloatValue()') | Returns a float which differs by less than one in the least represented bit from the constructive real. |
@@ -64,5 +63,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | Operators | |
 | :--- | :--- |
 | [operator +(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Add two constructive reals. |
+| [operator /(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Division(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Division(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | The quotient of two constructive reals. |
 | [operator *(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Multiply(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Multiply(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Multiplies two constructive real numbers. |
 | [operator -(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Subtraction(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Subtraction(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | The difference between two constructive reals |

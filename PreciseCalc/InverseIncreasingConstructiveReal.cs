@@ -323,7 +323,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
 
             MaxMsd = l.Abs().Max(h.Abs()).GetMsd();
             MaxArgPrec = (h - l).GetMsd() - 4;
-            DerivMsd = (FHigh - (FLow)).Divide(h - (l)).GetMsd();
+            DerivMsd = ((FHigh - (FLow)) / (h - (l))).GetMsd();
         }
     }
 }

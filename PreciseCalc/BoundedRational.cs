@@ -523,7 +523,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     /// <exception cref="InvalidOperationException">When invalid</exception>
     public ConstructiveReal ToConstructiveReal() =>
         _hasValue
-            ? ConstructiveReal.FromBigInteger(_numerator).Divide(ConstructiveReal.FromBigInteger(_denominator))
+            ? ConstructiveReal.FromBigInteger(_numerator) / (ConstructiveReal.FromBigInteger(_denominator))
             : throw new InvalidOperationException("Invalid bounded rational.");
 
     /// <summary>
@@ -911,7 +911,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
         }
         else
         {
-            rootAsCr = xAsCr.Ln().Divide(ConstructiveReal.FromInt(n)).Exp();
+            rootAsCr = ((xAsCr.Ln()) / (ConstructiveReal.FromInt(n))).Exp();
         }
 
         const int scale = -10;

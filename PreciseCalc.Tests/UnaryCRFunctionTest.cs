@@ -21,8 +21,8 @@ public class UnaryCRFunctionTest
 
     public UnaryCRFunctionTest()
     {
-        _half = _one.Divide(_two);
-        _halfPi = ConstructiveReal.PI.Divide(_two);
+        _half = _one / (_two);
+        _halfPi = ConstructiveReal.PI / (_two);
         BigInteger million = 1000 * 1000;
         BigInteger thousand = 1000;
         _huge = ConstructiveReal.FromBigInteger(million * million * thousand);
