@@ -283,24 +283,22 @@ public abstract class ConstructiveReal
     /// </remarks>
     private ConstructiveReal SimpleLn() => new PrescaledLnConstructiveReal(this - (One));
 
-    // Predefined constants for logarithm calculations
+    private static ConstructiveReal CalculateLn2()
+    {
+        ConstructiveReal tenNinths = FromInt(10) / (FromInt(9));
+        ConstructiveReal firstTerm = FromInt(7) * (tenNinths.SimpleLn());
 
-    private static readonly ConstructiveReal TenNinths = FromInt(10) / (FromInt(9));
-    private static readonly ConstructiveReal TwentyFiveTwentyFourths = FromInt(25) / (FromInt(24));
-    private static readonly ConstructiveReal EightyOneEightieths = FromInt(81) / (FromInt(80));
+        ConstructiveReal twentyFiveTwentyFourths = FromInt(25) / (FromInt(24));
+        ConstructiveReal secondTerm = FromInt(2) * (twentyFiveTwentyFourths.SimpleLn());
 
-    // ReSharper disable once InconsistentNaming
-    private static readonly ConstructiveReal Ln2_1 = FromInt(7) * (TenNinths.SimpleLn());
+        ConstructiveReal eightyOneEightieths = FromInt(81) / (FromInt(80));
+        ConstructiveReal thirdTerm = FromInt(3) * (eightyOneEightieths.SimpleLn());
+        // ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)
+        return (firstTerm - (secondTerm)) + (thirdTerm);
+    }
 
-    // ReSharper disable once InconsistentNaming
-    private static readonly ConstructiveReal Ln2_2 = FromInt(2) * (TwentyFiveTwentyFourths.SimpleLn());
-
-    // ReSharper disable once InconsistentNaming
-    private static readonly ConstructiveReal Ln2_3 = FromInt(3) * (EightyOneEightieths.SimpleLn());
-
-    /// <summary>Natural log of 2.  Needed for some pre-scaling below.</summary>
-    /// <remarks>ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)</remarks>
-    internal static readonly ConstructiveReal Ln2 = (Ln2_1 - (Ln2_2)) + (Ln2_3);
+    // Natural log of 2.  Needed for some pre-scaling below.
+    private static readonly ConstructiveReal Ln2 = CalculateLn2();
 
     /// <summary>
     /// Computes the arctangent of the reciprocal of an integer.
@@ -310,8 +308,7 @@ public abstract class ConstructiveReal
     /// </remarks>
     internal static ConstructiveReal AtanReciprocal(int n) => new IntegralAtanConstructiveReal(n);
 
-    // Other constants used for AtanPI computation.
-
+    // used for AtanPI computation.
     private static readonly ConstructiveReal Four = FromInt(4);
 
     // Public operations.    
@@ -675,7 +672,7 @@ public abstract class ConstructiveReal
     /// </summary>
     /// <param name="value">The value that is shifted right by <paramref name="n"/>.</param>
     /// <param name="n">shift count, may be negative</param>
-    public static ConstructiveReal operator >>(ConstructiveReal value, int n)
+    public static ConstructiveReal operator >> (ConstructiveReal value, int n)
     {
         CheckPrecision(n);
         return new ShiftedConstructiveReal(value, -n);
@@ -700,12 +697,14 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The difference between two constructive reals
     /// </summary>
-    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right) => new AddConstructiveReal(left, -right);
+    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right) =>
+        new AddConstructiveReal(left, -right);
 
     /// <summary>
     /// Multiplies two constructive real numbers.
     /// </summary>
-    public static ConstructiveReal operator *(ConstructiveReal left,ConstructiveReal right) => new MultiplyConstructiveReal(left, right);
+    public static ConstructiveReal operator *(ConstructiveReal left, ConstructiveReal right) =>
+        new MultiplyConstructiveReal(left, right);
 
     /// <summary>
     /// Returns the multiplicative inverse of a constructive real number.
@@ -718,7 +717,8 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The quotient of two constructive reals.
     /// </summary>
-    public static ConstructiveReal operator /(ConstructiveReal left,ConstructiveReal right) => new MultiplyConstructiveReal(left, right.Inverse());
+    public static ConstructiveReal operator /(ConstructiveReal left, ConstructiveReal right) =>
+        new MultiplyConstructiveReal(left, right.Inverse());
 
     /// <summary>
     /// Selects one of two constructive reals based on the sign of this value.
