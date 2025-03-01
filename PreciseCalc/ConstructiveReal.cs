@@ -6,7 +6,10 @@ namespace PreciseCalc;
 /// <summary>
 ///     Represents a constructive real number, allowing arbitrary-precision calculations.
 /// </summary>
-public abstract class ConstructiveReal
+public abstract class ConstructiveReal : IAdditionOperators<ConstructiveReal, ConstructiveReal, ConstructiveReal>,
+    ISubtractionOperators<ConstructiveReal, ConstructiveReal, ConstructiveReal>,
+    IMultiplyOperators<ConstructiveReal, ConstructiveReal, ConstructiveReal>,
+    IDivisionOperators<ConstructiveReal, ConstructiveReal, ConstructiveReal>
 {
     // First some frequently used constants, so we don't have to
     // recompute these all over the place.
@@ -27,7 +30,7 @@ public abstract class ConstructiveReal
 
     /// <summary>
     ///     Setting this to true requests that all computations be aborted by
-    ///     throwing <see cref="OperationCanceledException"/>.
+    ///     throwing <see cref="OperationCanceledException" />.
     ///     Must be rest to false before any further computation.
     /// </summary>
     public static volatile bool PleaseStop = false;
@@ -89,6 +92,38 @@ public abstract class ConstructiveReal
 
     /// <summary>The smallest precision value with which the above has been called.</summary>
     private protected int MinPrec;
+
+    /// <summary>
+    ///     Add two constructive reals.
+    /// </summary>
+    public static ConstructiveReal operator +(ConstructiveReal left, ConstructiveReal right)
+    {
+        return new AddConstructiveReal(left, right);
+    }
+
+    /// <summary>
+    ///     The quotient of two constructive reals.
+    /// </summary>
+    public static ConstructiveReal operator /(ConstructiveReal left, ConstructiveReal right)
+    {
+        return new MultiplyConstructiveReal(left, right.Inverse());
+    }
+
+    /// <summary>
+    ///     Multiplies two constructive real numbers.
+    /// </summary>
+    public static ConstructiveReal operator *(ConstructiveReal left, ConstructiveReal right)
+    {
+        return new MultiplyConstructiveReal(left, right);
+    }
+
+    /// <summary>
+    ///     The difference between two constructive reals
+    /// </summary>
+    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right)
+    {
+        return new AddConstructiveReal(left, -right);
+    }
 
     /// <summary>
     ///     Subclasses must implement this method to approximate the value to a given precision.
@@ -696,14 +731,6 @@ public abstract class ConstructiveReal
     }
 
     /// <summary>
-    ///     Add two constructive reals.
-    /// </summary>
-    public static ConstructiveReal operator +(ConstructiveReal left, ConstructiveReal right)
-    {
-        return new AddConstructiveReal(left, right);
-    }
-
-    /// <summary>
     ///     Shifts left by n bits.
     /// </summary>
     /// <remarks>
@@ -751,22 +778,6 @@ public abstract class ConstructiveReal
     }
 
     /// <summary>
-    ///     The difference between two constructive reals
-    /// </summary>
-    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right)
-    {
-        return new AddConstructiveReal(left, -right);
-    }
-
-    /// <summary>
-    ///     Multiplies two constructive real numbers.
-    /// </summary>
-    public static ConstructiveReal operator *(ConstructiveReal left, ConstructiveReal right)
-    {
-        return new MultiplyConstructiveReal(left, right);
-    }
-
-    /// <summary>
     ///     Returns the multiplicative inverse of a constructive real number.
     /// </summary>
     /// <remarks>
@@ -775,14 +786,6 @@ public abstract class ConstructiveReal
     public ConstructiveReal Inverse()
     {
         return new InverseConstructiveReal(this);
-    }
-
-    /// <summary>
-    ///     The quotient of two constructive reals.
-    /// </summary>
-    public static ConstructiveReal operator /(ConstructiveReal left, ConstructiveReal right)
-    {
-        return new MultiplyConstructiveReal(left, right.Inverse());
     }
 
     /// <summary>

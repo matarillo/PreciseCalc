@@ -19,7 +19,11 @@ namespace PreciseCalc;
 ///         These return a non-null result only when the result is known to be rational.
 ///     </para>
 /// </remarks>
-public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparable<BoundedRational>
+public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparable<BoundedRational>,
+    IAdditionOperators<BoundedRational, BoundedRational, BoundedRational>,
+    ISubtractionOperators<BoundedRational, BoundedRational, BoundedRational>,
+    IMultiplyOperators<BoundedRational, BoundedRational, BoundedRational>,
+    IDivisionOperators<BoundedRational, BoundedRational, BoundedRational>
 {
     // TODO: Consider returning null for integers.  With some care, large factorials might become much faster.
     // TODO: Maybe eventually make this extend Number?
@@ -731,7 +735,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     #region Comparison operator overloads
 
     /// <summary>
-    /// Returns a value that indicates whether a BoundedRational value is less than another BoundedRational value.
+    ///     Returns a value that indicates whether a BoundedRational value is less than another BoundedRational value.
     /// </summary>
     public static bool operator <(BoundedRational left, BoundedRational right)
     {
@@ -739,7 +743,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     }
 
     /// <summary>
-    /// Returns a value that indicates whether a BoundedRational value is greater than another BoundedRational value.
+    ///     Returns a value that indicates whether a BoundedRational value is greater than another BoundedRational value.
     /// </summary>
     public static bool operator >(BoundedRational left, BoundedRational right)
     {
@@ -747,7 +751,8 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     }
 
     /// <summary>
-    /// Returns a value that indicates whether a BoundedRational value is less than or equal to another BoundedRational value.
+    ///     Returns a value that indicates whether a BoundedRational value is less than or equal to another BoundedRational
+    ///     value.
     /// </summary>
     public static bool operator <=(BoundedRational left, BoundedRational right)
     {
@@ -755,7 +760,8 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     }
 
     /// <summary>
-    /// Returns a value that indicates whether a BoundedRational value is greater than or equal to another BoundedRational value.
+    ///     Returns a value that indicates whether a BoundedRational value is greater than or equal to another BoundedRational
+    ///     value.
     /// </summary>
     public static bool operator >=(BoundedRational left, BoundedRational right)
     {
@@ -763,7 +769,7 @@ public readonly struct BoundedRational : IEquatable<BoundedRational>, IComparabl
     }
 
     #endregion
-    
+
     #region Other arithmetic operations
 
     internal static BoundedRational RawMultiply(BoundedRational left, BoundedRational right)

@@ -2,7 +2,8 @@
 
 ## BoundedRational.operator <=(BoundedRational, BoundedRational) Operator
 
-Returns a value that indicates whether a BoundedRational value is less than or equal to another BoundedRational value.
+Returns a value that indicates whether a BoundedRational value is less than or equal to another BoundedRational  
+value.
 
 ```csharp
 public static bool operator <=(PreciseCalc.BoundedRational left, PreciseCalc.BoundedRational right);
