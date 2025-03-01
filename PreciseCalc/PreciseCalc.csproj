@@ -1,13 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>PreciseCalc</PackageId>
+        <Version>0.6.0</Version>
+        <Authors>Kentaro Inomata</Authors>
+        <PackageDescription>A .NET port of the real arithmetic library which enables arbitrary-precision real number calculations.</PackageDescription>
+        <PackageTags>Android calculator, Arbitrary-precision, Real arithmetic</PackageTags>
+        <PackageProjectUrl>https://github.com/matarillo/PreciseCalc/</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/matarillo/PreciseCalc.git</RepositoryUrl>
+        <Copyright>Copyright (c) 2025, Kentaro Inomata; The Android Open Source Project; 2001-2004, Hewlett-Packard Development Company, L.P.; 1999, Silicon Graphics, Inc.</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DefaultDocumentationFolder>../doc</DefaultDocumentationFolder>
         <DefaultDocumentationGeneratedAccessModifiers>Public,Protected,ProtectedInternal</DefaultDocumentationGeneratedAccessModifiers>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="../LICENSE" Pack="true" PackagePath=""/>
+        <None Include="../README.md" Pack="true" PackagePath=""/>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="DefaultDocumentation" Version="0.8.2">
