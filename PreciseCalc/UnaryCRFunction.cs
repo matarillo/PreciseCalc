@@ -174,7 +174,7 @@ class AtanUnaryCRFunction : UnaryCRFunction
 {
     public override ConstructiveReal Execute(ConstructiveReal x)
     {
-        var x2 = x.Multiply(x);
+        var x2 = x * (x);
         var absSinAtan = x2.Divide(ConstructiveReal.One + (x2)).Sqrt();
         ConstructiveReal sinAtan = x.Select(absSinAtan.Negate(), absSinAtan);
         return sinAtan.Asin();

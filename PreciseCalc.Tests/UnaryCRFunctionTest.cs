@@ -66,6 +66,6 @@ public class UnaryCRFunctionTest
     public void TestSqrt()
     {
         ConstructiveReal sqrt13 = _sqrt.Execute(_thirteen);
-        Assert.Equal(0, sqrt13.Multiply(sqrt13).CompareTo(_thirteen, Precision));
+        Assert.Equal(0, (sqrt13 * sqrt13).CompareTo(_thirteen, Precision));
     }
 }

@@ -290,13 +290,13 @@ public abstract class ConstructiveReal
     private static readonly ConstructiveReal EightyOneEightieths = FromInt(81).Divide(FromInt(80));
 
     // ReSharper disable once InconsistentNaming
-    private static readonly ConstructiveReal Ln2_1 = FromInt(7).Multiply(TenNinths.SimpleLn());
+    private static readonly ConstructiveReal Ln2_1 = FromInt(7) * (TenNinths.SimpleLn());
 
     // ReSharper disable once InconsistentNaming
-    private static readonly ConstructiveReal Ln2_2 = FromInt(2).Multiply(TwentyFiveTwentyFourths.SimpleLn());
+    private static readonly ConstructiveReal Ln2_2 = FromInt(2) * (TwentyFiveTwentyFourths.SimpleLn());
 
     // ReSharper disable once InconsistentNaming
-    private static readonly ConstructiveReal Ln2_3 = FromInt(3).Multiply(EightyOneEightieths.SimpleLn());
+    private static readonly ConstructiveReal Ln2_3 = FromInt(3) * (EightyOneEightieths.SimpleLn());
 
     /// <summary>Natural log of 2.  Needed for some pre-scaling below.</summary>
     /// <remarks>ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)</remarks>
@@ -477,7 +477,7 @@ public abstract class ConstructiveReal
         else
         {
             BigInteger scaleFactor = BigInteger.Pow(radix, n);
-            scaledCr = Multiply(FromBigInteger(scaleFactor));
+            scaledCr = this * (FromBigInteger(scaleFactor));
         }
 
         BigInteger scaledInt = scaledCr.GetApproximation(0);
@@ -565,14 +565,14 @@ public abstract class ConstructiveReal
             ? FromBigInteger(BigInteger.Pow(radix, scaleExp)).Inverse()
             : FromBigInteger(BigInteger.Pow(radix, -scaleExp));
 
-        ConstructiveReal scaledResult = Multiply(scaledValue);
+        ConstructiveReal scaledResult = this * (scaledValue);
         BigInteger scaledInt = scaledResult.GetApproximation(0);
         int sign = scaledInt.Sign;
         string mantissa = BigInteger.Abs(scaledInt).ToString(radix);
 
         while (mantissa.Length < precision)
         {
-            scaledResult = scaledResult.Multiply(FromBigInteger(bigRadix));
+            scaledResult = scaledResult * (FromBigInteger(bigRadix));
             exponent -= 1;
             scaledInt = scaledResult.GetApproximation(0);
             sign = scaledInt.Sign;
@@ -703,7 +703,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Multiplies two constructive real numbers.
     /// </summary>
-    public ConstructiveReal Multiply(ConstructiveReal other) => new MultiplyConstructiveReal(this, other);
+    public static ConstructiveReal operator *(ConstructiveReal left,ConstructiveReal right) => new MultiplyConstructiveReal(left, right);
 
     /// <summary>
     /// Returns the multiplicative inverse of a constructive real number.
@@ -759,7 +759,7 @@ public abstract class ConstructiveReal
         if (roughApprox.CompareTo(Big2) > 0 || roughApprox.CompareTo(BigM2) < 0)
         {
             ConstructiveReal squareRoot = ShiftRight(1).Exp();
-            return squareRoot.Multiply(squareRoot);
+            return squareRoot * (squareRoot);
         }
         else
         {
@@ -785,7 +785,7 @@ public abstract class ConstructiveReal
     /// experimentation, this is roughly as good as the more complex formulas.
     /// </remarks>
     public static readonly ConstructiveReal AtanPI =
-        Four.Multiply((Four.Multiply(AtanReciprocal(5))) - (AtanReciprocal(239)));
+        Four * ((Four * (AtanReciprocal(5))) - (AtanReciprocal(239)));
 
     /// <summary>
     /// pi/2
@@ -803,13 +803,13 @@ public abstract class ConstructiveReal
         if (absHalfPiMultiples.CompareTo(Big2) >= 0)
         {
             BigInteger piMultiples = Scale(halfPiMultiples, -1);
-            ConstructiveReal adjustment = PI.Multiply(FromBigInteger(piMultiples));
+            ConstructiveReal adjustment = PI * (FromBigInteger(piMultiples));
             return piMultiples.IsEven ? (this - (adjustment)).Cos() : (this - (adjustment)).Cos().Negate();
         }
         else if (BigInteger.Abs(GetApproximation(-1)).CompareTo(Big2) >= 0)
         {
             ConstructiveReal cosHalf = ShiftRight(1).Cos();
-            return cosHalf.Multiply(cosHalf).ShiftLeft(1) - (One);
+            return (cosHalf * (cosHalf)).ShiftLeft(1) - (One);
         }
         else
         {
@@ -830,7 +830,7 @@ public abstract class ConstructiveReal
         BigInteger roughApprox = GetApproximation(-10);
         if (roughApprox.CompareTo(Big750) > 0) // 1/sqrt(2) + a bit
         {
-            ConstructiveReal newArg = (One - (Multiply(this))).Sqrt();
+            ConstructiveReal newArg = (One - (this * (this))).Sqrt();
             return newArg.Acos();
         }
         else if (roughApprox.CompareTo(BigM750) < 0)
@@ -881,7 +881,7 @@ public abstract class ConstructiveReal
             {
                 int extraBits = (int)roughApprox.GetBitLength() - 3;
                 ConstructiveReal scaledResult = ShiftRight(extraBits).Ln();
-                return scaledResult + (FromInt(extraBits).Multiply(Ln2));
+                return scaledResult + (FromInt(extraBits) * (Ln2));
             }
         }
 

@@ -502,8 +502,8 @@ public class UnifiedReal
             PropertyKind.IsLn => p.Arg.ToConstructiveReal().Ln(),
             PropertyKind.IsLog => p.Arg.ToConstructiveReal().Ln().Divide(CrLn10),
             PropertyKind.IsSqrt => p.Arg.ToConstructiveReal().Sqrt(),
-            PropertyKind.IsSinPi => p.Arg.ToConstructiveReal().Multiply(CrPI).Sin(),
-            PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal().Multiply(CrPI)),
+            PropertyKind.IsSinPi => (p.Arg.ToConstructiveReal() * (CrPI)).Sin(),
+            PropertyKind.IsTanPi => UnaryCRFunction.TanFunction.Execute(p.Arg.ToConstructiveReal() * (CrPI)),
             PropertyKind.IsASin => p.Arg.ToConstructiveReal().Asin(),
             PropertyKind.IsATan => UnaryCRFunction.AtanFunction.Execute(p.Arg.ToConstructiveReal()),
             _ => throw new InvalidOperationException("crFromProperty")
@@ -1311,8 +1311,7 @@ public class UnifiedReal
             return _ratFactor.ToStringTruncated(n);
         }
 
-        ConstructiveReal scaled = ConstructiveReal.FromBigInteger(BigInteger.Pow(10, n))
-            .Multiply(ToConstructiveReal());
+        ConstructiveReal scaled = (ConstructiveReal.FromBigInteger(BigInteger.Pow(10, n))) * (ToConstructiveReal());
         bool negative = false;
         BigInteger intScaled;
         if (ExactlyTruncatable())
@@ -1380,7 +1379,7 @@ public class UnifiedReal
     /// Convert to a ConstructiveReal representation
     /// </summary>
     public ConstructiveReal ToConstructiveReal() =>
-        _ratFactor.CompareToOne() == 0 ? _crFactor : _ratFactor.ToConstructiveReal().Multiply(_crFactor);
+        _ratFactor.CompareToOne() == 0 ? _crFactor : (_ratFactor.ToConstructiveReal()) * (_crFactor);
 
     private bool SameCrFactor(UnifiedReal u)
     {
@@ -1798,7 +1797,7 @@ public class UnifiedReal
                 MakeProperty(PropertyKind.IsSqrt, decomposedProduct[1]));
         }
 
-        return new UnifiedReal(x.ToConstructiveReal().Multiply(y.ToConstructiveReal()).Sqrt());
+        return new UnifiedReal(((x.ToConstructiveReal()) * (y.ToConstructiveReal())).Sqrt());
     }
 
     /// <summary>
@@ -1865,11 +1864,11 @@ public class UnifiedReal
         // But definitelyIndependent is not the right criterion. Consider e and e^-1.
         if (nRatFactor.HasValue)
         {
-            return new UnifiedReal(nRatFactor, _crFactor.Multiply(u._crFactor), resultProp);
+            return new UnifiedReal(nRatFactor, _crFactor * (u._crFactor), resultProp);
         }
 
         // resultProp invalid for this computation; discard. We know that the ratFactors are nonzero.
-        return new UnifiedReal(ToConstructiveReal().Multiply(u.ToConstructiveReal()));
+        return new UnifiedReal(ToConstructiveReal() * (u.ToConstructiveReal()));
     }
 
     /// <summary>
@@ -2322,12 +2321,12 @@ public class UnifiedReal
 
         if ((exp & BigInteger.One) != BigInteger.Zero) // exp.testBit(0)
         {
-            return @base.Multiply(RecursivePow(@base, exp - BigInteger.One));
+            return @base * (RecursivePow(@base, exp - BigInteger.One));
         }
 
         ConstructiveReal tmp = RecursivePow(@base, exp >> 1);
 
-        return tmp.Multiply(tmp);
+        return tmp * (tmp);
     }
 
     /// <summary>
@@ -2341,13 +2340,12 @@ public class UnifiedReal
         {
             // Safe to take the log. This avoids deep recursion for huge exponents, which
             // may actually make sense here.
-            return new UnifiedReal(ToConstructiveReal().Ln().Multiply(ConstructiveReal.FromBigInteger(exp)).Exp());
+            return new UnifiedReal((ToConstructiveReal().Ln() * (ConstructiveReal.FromBigInteger(exp))).Exp());
         }
 
         if (sign < 0)
         {
-            ConstructiveReal result = ToConstructiveReal().Negate().Ln().Multiply(ConstructiveReal.FromBigInteger(exp))
-                .Exp();
+            ConstructiveReal result = ((ToConstructiveReal().Negate().Ln()) * (ConstructiveReal.FromBigInteger(exp))).Exp();
             if ((exp & BigInteger.One) != BigInteger.Zero) /* odd exponent */
             {
                 result = result.Negate();
@@ -2547,11 +2545,11 @@ public class UnifiedReal
 
         if (knownIrrational)
         {
-            return new UnifiedReal(ToConstructiveReal().Ln().Multiply(exp.ToConstructiveReal()).Exp(),
+            return new UnifiedReal(((ToConstructiveReal().Ln()) * (exp.ToConstructiveReal())).Exp(),
                 MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null));
         }
 
-        return new UnifiedReal(ToConstructiveReal().Ln().Multiply(exp.ToConstructiveReal()).Exp());
+        return new UnifiedReal(((ToConstructiveReal().Ln()) * (exp.ToConstructiveReal())).Exp());
     }
 
     /// <summary>

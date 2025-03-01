@@ -48,7 +48,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | [LongValue()](PreciseCalc.ConstructiveReal.LongValue().md 'PreciseCalc.ConstructiveReal.LongValue()') | Returns a long which differs by less than one from the constructive real. |
 | [Max(ConstructiveReal)](PreciseCalc.ConstructiveReal.Max(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Max(PreciseCalc.ConstructiveReal)') | Returns the maximum of this and another constructive real. |
 | [Min(ConstructiveReal)](PreciseCalc.ConstructiveReal.Min(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Min(PreciseCalc.ConstructiveReal)') | Returns the minimum of this and another constructive real. |
-| [Multiply(ConstructiveReal)](PreciseCalc.ConstructiveReal.Multiply(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Multiply(PreciseCalc.ConstructiveReal)') | Multiplies two constructive real numbers. |
 | [Negate()](PreciseCalc.ConstructiveReal.Negate().md 'PreciseCalc.ConstructiveReal.Negate()') | Negates the constructive real number. |
 | [Select(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.Select(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Select(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Selects one of two constructive reals based on the sign of this value. |
 | [ShiftLeft(int)](PreciseCalc.ConstructiveReal.ShiftLeft(int).md 'PreciseCalc.ConstructiveReal.ShiftLeft(int)') | Shifts left by n bits. |
@@ -65,4 +64,5 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | Operators | |
 | :--- | :--- |
 | [operator +(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Add two constructive reals. |
+| [operator *(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Multiply(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Multiply(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Multiplies two constructive real numbers. |
 | [operator -(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Subtraction(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Subtraction(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | The difference between two constructive reals |

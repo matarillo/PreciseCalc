@@ -75,7 +75,7 @@ public class ConstructiveRealTest
     [Fact]
     public void TestMultiplication()
     {
-        Assert.Equal(0, _two.Multiply(_two).CompareTo(_four, -50));
+        Assert.Equal(0, (_two * _two).CompareTo(_four, -50));
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class ConstructiveRealTest
     {
         Assert.Equal(0, _one.Divide(_four).ShiftLeft(4).CompareTo(_four, -50));
         Assert.Equal(0, _two.Divide(_one.Negate()).CompareTo(_two.Negate(), -50));
-        Assert.Equal(0, _one.Divide(_thirteen).Multiply(_thirteen).CompareTo(_one, -50));
+        Assert.Equal(0, ((_one.Divide(_thirteen)) * (_thirteen)).CompareTo(_one, -50));
     }
 
     [Fact]
