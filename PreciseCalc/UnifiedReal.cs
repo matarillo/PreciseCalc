@@ -1250,47 +1250,49 @@ public class UnifiedReal
     /// <summary>
     ///     Return x+y
     /// </summary>
-    /// <param name="u"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     /// <returns></returns>
-    public UnifiedReal Add(UnifiedReal u)
+    public static UnifiedReal operator +(UnifiedReal x, UnifiedReal y)
     {
-        if (SameCrFactor(u))
+        if (x.SameCrFactor(y))
         {
-            var nRatFactor = _ratFactor + u._ratFactor;
-            if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, _crFactor, _crProperty);
+            var nRatFactor = x._ratFactor + y._ratFactor;
+            if (nRatFactor.HasValue) return new UnifiedReal(nRatFactor, x._crFactor, x._crProperty);
         }
 
-        if (DefinitelyZero())
+        if (x.DefinitelyZero())
             // Avoid creating new crFactor, even if they don't currently match.
-            return u;
+            return y;
 
-        if (u.DefinitelyZero()) return this;
+        if (y.DefinitelyZero()) return x;
 
         // Consider "simplifying" sums of logs.
-        if (_crProperty != null && u._crProperty != null
-                                && _crProperty.Kind == u._crProperty.Kind
-                                && (_crProperty.Kind == PropertyKind.IsLn || _crProperty.Kind == PropertyKind.IsLog))
+        if (x._crProperty != null && y._crProperty != null
+                                  && x._crProperty.Kind == y._crProperty.Kind
+                                  && (x._crProperty.Kind == PropertyKind.IsLn ||
+                                      x._crProperty.Kind == PropertyKind.IsLog))
         {
             // a ln(b) + c ln(d) = ln(b^a * d^c)
             // a log(b) + c log(d) = log(b^a * d^c)
             // If the resulting ln argument is reasonably compact, compute the sum as the right side
             // instead, since that preserves the symbolic representation.
-            var ratAsInt = _ratFactor.ToBigInteger();
-            var uRatAsInt = u._ratFactor.ToBigInteger();
+            var ratAsInt = x._ratFactor.ToBigInteger();
+            var uRatAsInt = y._ratFactor.ToBigInteger();
             if (ratAsInt != null && uRatAsInt != null)
             {
                 var ratAsDouble = (double)ratAsInt.Value;
                 var uRatAsDouble = (double)uRatAsInt.Value;
                 // Estimate size of resulting argument.
-                var estimatedSize = Math.Abs(ratAsDouble) * _crProperty.Arg.BitLength
-                                    + Math.Abs(uRatAsDouble) * u._crProperty.Arg.BitLength;
+                var estimatedSize = Math.Abs(ratAsDouble) * x._crProperty.Arg.BitLength
+                                    + Math.Abs(uRatAsDouble) * y._crProperty.Arg.BitLength;
                 if (estimatedSize <= (float)LogArgCandidateBits)
                 {
-                    var term1 = BoundedRational.Pow(_crProperty.Arg, _ratFactor);
-                    var term2 = BoundedRational.Pow(u._crProperty.Arg, u._ratFactor);
+                    var term1 = BoundedRational.Pow(x._crProperty.Arg, x._ratFactor);
+                    var term2 = BoundedRational.Pow(y._crProperty.Arg, y._ratFactor);
                     var newArg = term1 * term2;
                     if (newArg.HasValue)
-                        return LogRep(_crProperty.Kind,
+                        return LogRep(x._crProperty.Kind,
                             newArg); // The else case here is probably impossible, since we already checked the size.
                 }
             }
@@ -1305,12 +1307,12 @@ public class UnifiedReal
         // We in fact don't track this if either argument might be ridiculously small, where
         // ridiculously small is < 10^-1000, and thus also way outside of IEEE exponent range.
         CRProperty? resultProp = null;
-        if (DefinitelyIndependent(u)
-            && LeadingBinaryZeroes() < -DefaultComparisonTolerance
-            && u.LeadingBinaryZeroes() < -DefaultComparisonTolerance)
+        if (x.DefinitelyIndependent(y)
+            && x.LeadingBinaryZeroes() < -DefaultComparisonTolerance
+            && y.LeadingBinaryZeroes() < -DefaultComparisonTolerance)
             resultProp = MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null);
 
-        return new UnifiedReal(ToConstructiveReal() + u.ToConstructiveReal(), resultProp);
+        return new UnifiedReal(x.ToConstructiveReal() + y.ToConstructiveReal(), resultProp);
     }
 
     /// <summary>
@@ -1329,7 +1331,7 @@ public class UnifiedReal
     /// <returns></returns>
     public UnifiedReal Subtract(UnifiedReal u)
     {
-        return Add(u.Negate());
+        return this + u.Negate();
     }
 
     /// <summary>
@@ -1604,9 +1606,9 @@ public class UnifiedReal
         if (DefinitelyAlgebraic() && DefinitelyNonzero())
             // We know from Lindemann-Weierstrass that the result is transcendental, and therefore
             // irrational.
-            return TagIrrational(Add(PIOver2).Sin());
+            return TagIrrational((this + PIOver2).Sin());
 
-        return Add(PIOver2).Sin();
+        return (this + PIOver2).Sin();
     }
 
     /// <summary>
@@ -2066,7 +2068,7 @@ public class UnifiedReal
     {
         var expArg = GetExpArg(_crProperty);
         CRProperty? newCrProperty = null;
-        if (expArg.HasValue) return new UnifiedReal(_ratFactor).Ln().Add(new UnifiedReal(expArg));
+        if (expArg.HasValue) return new UnifiedReal(_ratFactor).Ln() + new UnifiedReal(expArg);
 
         var sign = ApproxSign(DefaultComparisonTolerance);
         if (sign < 0) throw new DomainException("log(negative)");

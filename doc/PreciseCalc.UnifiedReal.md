@@ -49,7 +49,6 @@ PrecisionOverflowException and AbortedException.
 | :--- | :--- |
 | [Abs()](PreciseCalc.UnifiedReal.Abs().md 'PreciseCalc.UnifiedReal.Abs()') | Absolute value. |
 | [Acos()](PreciseCalc.UnifiedReal.Acos().md 'PreciseCalc.UnifiedReal.Acos()') | Return the arccosine of this number. |
-| [Add(UnifiedReal)](PreciseCalc.UnifiedReal.Add(PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.Add(PreciseCalc.UnifiedReal)') | Return x+y |
 | [ApproxEquals(UnifiedReal, int)](PreciseCalc.UnifiedReal.ApproxEquals(PreciseCalc.UnifiedReal,int).md 'PreciseCalc.UnifiedReal.ApproxEquals(PreciseCalc.UnifiedReal, int)') | Equality comparison. May erroneously return true if values differ by less than 2^a, and<br/>!isComparable(u). |
 | [ApproxSign(int)](PreciseCalc.UnifiedReal.ApproxSign(int).md 'PreciseCalc.UnifiedReal.ApproxSign(int)') | Return CompareTo(Zero, a). |
 | [ApproxWholeNumberBitsGreaterThan(int)](PreciseCalc.UnifiedReal.ApproxWholeNumberBitsGreaterThan(int).md 'PreciseCalc.UnifiedReal.ApproxWholeNumberBitsGreaterThan(int)') | Is the number of bits to the left of the decimal point greater than bound? The result is<br/>inexact: We roughly approximate the whole number bits. bound is non-negative. |
@@ -102,3 +101,7 @@ PrecisionOverflowException and AbortedException.
 | [ToDouble()](PreciseCalc.UnifiedReal.ToDouble().md 'PreciseCalc.UnifiedReal.ToDouble()') | Return a double approximation. Rational arguments are currently rounded to nearest, with ties<br/>away from zero. TODO: Improve rounding. |
 | [ToString()](PreciseCalc.UnifiedReal.ToString().md 'PreciseCalc.UnifiedReal.ToString()') | Convert to String reflecting raw representation. Debug or log messages only, not pretty. |
 | [ToStringTruncated(int)](PreciseCalc.UnifiedReal.ToStringTruncated(int).md 'PreciseCalc.UnifiedReal.ToStringTruncated(int)') | Returns a truncated representation of the result.<br/>If [ExactlyTruncatable()](PreciseCalc.UnifiedReal.ExactlyTruncatable().md 'PreciseCalc.UnifiedReal.ExactlyTruncatable()'), we round correctly towards zero. Otherwise, the resulting digit<br/>string may occasionally be rounded up instead.<br/>Always includes a decimal point in the result.<br/>The result includes n digits to the right of the decimal point. |
+
+| Operators | |
+| :--- | :--- |
+| [operator +(UnifiedReal, UnifiedReal)](PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal,PreciseCalc.UnifiedReal).md 'PreciseCalc.UnifiedReal.op_Addition(PreciseCalc.UnifiedReal, PreciseCalc.UnifiedReal)') | Return x+y |

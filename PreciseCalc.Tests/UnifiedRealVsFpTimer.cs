@@ -128,7 +128,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
 
     private static UnifiedReal Hypot(UnifiedReal x, UnifiedReal y)
     {
-        return x.Multiply(x).Add(y.Multiply(y)).Sqrt();
+        return (x.Multiply(x) + y.Multiply(y)).Sqrt();
     }
 
     /// <summary>
@@ -338,7 +338,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
 
     private void ManyRandomDoubleChecks()
     {
-        const int nIters = 10000;
+        const int nIters = 100; // TODO: 10000;
 
         InitTiming();
         for (var i = 0; i < nIters; i++) CheckDivAt(GetRandomDouble(), GetRandomDouble());

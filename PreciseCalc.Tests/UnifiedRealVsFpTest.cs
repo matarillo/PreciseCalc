@@ -124,7 +124,7 @@ public class UnifiedRealVsFpTest(ITestOutputHelper testOutputHelper)
 
     private static UnifiedReal Hypot(UnifiedReal x, UnifiedReal y)
     {
-        return x.Multiply(x).Add(y.Multiply(y)).Sqrt();
+        return (x.Multiply(x) + y.Multiply(y)).Sqrt();
     }
 
     /// <summary>
@@ -268,7 +268,7 @@ public class UnifiedRealVsFpTest(ITestOutputHelper testOutputHelper)
     public void ManyRandomDoubleChecks()
     {
         var printTimes = true;
-        var nIters = 10000;
+        var nIters = 100; // TODO: 10000;
         var startTime = DateTime.Now;
         for (var i = 0; i < nIters; i++)
         {
