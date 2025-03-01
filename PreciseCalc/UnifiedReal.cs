@@ -543,7 +543,7 @@ public class UnifiedReal
 
         int bound = MsbBound(_crProperty);
         if (bound != int.MinValue
-            && propertyCr.Abs().CompareTo(ConstructiveReal.One.ShiftLeft(bound), precision) < 0)
+            && propertyCr.Abs().CompareTo(ConstructiveReal.One << (bound), precision) < 0)
         {
             // msbBound produced incorrect result.
             return false;

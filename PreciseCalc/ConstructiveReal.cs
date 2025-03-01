@@ -128,7 +128,7 @@ public abstract class ConstructiveReal
         else
             mantissa <<= 1;
 
-        ConstructiveReal result = FromBigInteger(mantissa).ShiftLeft(exponent);
+        ConstructiveReal result = FromBigInteger(mantissa) << (exponent);
         return negative ? -result : result;
     }
 
@@ -472,7 +472,7 @@ public abstract class ConstructiveReal
         ConstructiveReal scaledCr;
         if (radix == 16)
         {
-            scaledCr = ShiftLeft(4 * n);
+            scaledCr = this << (4 * n);
         }
         else
         {
@@ -662,11 +662,12 @@ public abstract class ConstructiveReal
     /// <remarks>
     /// Multiply a constructive real by 2**<paramref name="n"/>.
     /// </remarks>
+    /// <param name="value">The value that is shifted left by <paramref name="n"/>.</param>
     /// <param name="n">shift count, may be negative</param>
-    public ConstructiveReal ShiftLeft(int n)
+    public static ConstructiveReal operator <<(ConstructiveReal value, int n)
     {
         CheckPrecision(n);
-        return new ShiftedConstructiveReal(this, n);
+        return new ShiftedConstructiveReal(value, n);
     }
 
     /// <summary>
@@ -809,7 +810,7 @@ public abstract class ConstructiveReal
         else if (BigInteger.Abs(GetApproximation(-1)).CompareTo(Big2) >= 0)
         {
             ConstructiveReal cosHalf = ShiftRight(1).Cos();
-            return (cosHalf * (cosHalf)).ShiftLeft(1) - (One);
+            return ((cosHalf * (cosHalf)) << (1)) - (One);
         }
         else
         {
@@ -875,7 +876,7 @@ public abstract class ConstructiveReal
             if (roughApprox.CompareTo(Scaled4) <= 0)
             {
                 ConstructiveReal quarter = Sqrt().Sqrt().Ln();
-                return quarter.ShiftLeft(2);
+                return quarter << (2);
             }
             else
             {

@@ -40,7 +40,7 @@ public class ConstructiveRealTest
     [Fact]
     public void TestShiftOperations()
     {
-        Assert.Equal(0, _one.ShiftLeft(1).CompareTo(_two, -50));
+        Assert.Equal(0, (_one << (1)).CompareTo(_two, -50));
         Assert.Equal(0, _two.ShiftRight(1).CompareTo(_one, -50));
     }
 
@@ -81,7 +81,7 @@ public class ConstructiveRealTest
     [Fact]
     public void TestDivision()
     {
-        Assert.Equal(0, (_one / (_four)).ShiftLeft(4).CompareTo(_four, -50));
+        Assert.Equal(0, ((_one / (_four)) << (4)).CompareTo(_four, -50));
         Assert.Equal(0, (_two / (-_one)).CompareTo(-_two, -50));
         Assert.Equal(0, ((_one / (_thirteen)) * (_thirteen)).CompareTo(_one, -50));
     }

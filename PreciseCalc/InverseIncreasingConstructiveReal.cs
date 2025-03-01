@@ -121,7 +121,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             }
             else
             {
-                var hCr = FromBigInteger(h).ShiftLeft(workingArgPrec);
+                var hCr = FromBigInteger(h) << (workingArgPrec);
                 fH = fn.Execute(hCr).GetApproximation(workingEvalPrec);
                 atRight = false;
             }
@@ -134,7 +134,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
             }
             else
             {
-                var lCr = FromBigInteger(l).ShiftLeft(workingArgPrec);
+                var lCr = FromBigInteger(l) << (workingArgPrec);
                 fL = fn.Execute(lCr).GetApproximation(workingEvalPrec);
                 atLeft = false;
             }
@@ -209,7 +209,7 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
 
             for (var adjPrec = false;; adjPrec = !adjPrec)
             {
-                var guessCr = FromBigInteger(guess).ShiftLeft(workingArgPrec);
+                var guessCr = FromBigInteger(guess) << (workingArgPrec);
                 Data.Trace($"Evaluating at {guessCr} with precision {workingEvalPrec}");
 
                 var fGuessCr = fn.Execute(guessCr);
@@ -226,8 +226,8 @@ internal class InverseIncreasingConstructiveReal : ConstructiveReal
                     // Adjust workingEvalPrec to get enough resolution
                     int adjustment = (int)-fGuess.GetBitLength() / 4;
                     if (adjustment > -20) adjustment = -20;
-                    var lCr = FromBigInteger(l).ShiftLeft(workingArgPrec);
-                    var hCr = FromBigInteger(h).ShiftLeft(workingArgPrec);
+                    var lCr = FromBigInteger(l) << (workingArgPrec);
+                    var hCr = FromBigInteger(h) << (workingArgPrec);
                     workingEvalPrec += adjustment;
 
                     Data.Trace($"New eval prec = {workingEvalPrec}" +
