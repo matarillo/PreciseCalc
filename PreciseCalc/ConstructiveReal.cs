@@ -300,7 +300,7 @@ public abstract class ConstructiveReal
 
     /// <summary>Natural log of 2.  Needed for some pre-scaling below.</summary>
     /// <remarks>ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)</remarks>
-    internal static readonly ConstructiveReal Ln2 = Ln2_1.Subtract(Ln2_2).Add(Ln2_3);
+    internal static readonly ConstructiveReal Ln2 = (Ln2_1.Subtract(Ln2_2)) + (Ln2_3);
 
     /// <summary>
     /// Computes the arctangent of the reciprocal of an integer.
@@ -653,7 +653,8 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Add two constructive reals.
     /// </summary>
-    public ConstructiveReal Add(ConstructiveReal other) => new AddConstructiveReal(this, other);
+    public static ConstructiveReal operator +(ConstructiveReal left, ConstructiveReal right) =>
+        new AddConstructiveReal(left, right);
 
     /// <summary>
     /// Shifts left by n bits.
@@ -880,7 +881,7 @@ public abstract class ConstructiveReal
             {
                 int extraBits = (int)roughApprox.GetBitLength() - 3;
                 ConstructiveReal scaledResult = ShiftRight(extraBits).Ln();
-                return scaledResult.Add(FromInt(extraBits).Multiply(Ln2));
+                return scaledResult + (FromInt(extraBits).Multiply(Ln2));
             }
         }
 

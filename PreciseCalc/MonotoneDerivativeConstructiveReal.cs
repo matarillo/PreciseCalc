@@ -48,7 +48,7 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         var delta = ConstructiveReal.One.ShiftLeft(logDelta);
 
         var left = _arg.Subtract(delta);
-        var right = _arg.Add(delta);
+        var right = _arg + (delta);
         var fLeft = _data.F.Execute(left);
         var fRight = _data.F.Execute(right);
 
@@ -108,7 +108,7 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
             F = func;
             Low = l;
             High = h;
-            Mid = l.Add(h).ShiftRight(1);
+            Mid = (l + (h)).ShiftRight(1);
 
             FLow = func.Execute(l);
             FMid = func.Execute(Mid);
@@ -119,7 +119,7 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
             // Compute approximate msd of ((f_high - f_mid) - (f_mid - f_low))/(high - low)
             // This should be a very rough approximation to the second derivative.
             // We add a little slop to err on the high side, since a low estimate will cause extra iterations.
-            var apprDiff2 = FHigh.Subtract(FMid.ShiftLeft(1)).Add(FLow);
+            var apprDiff2 = (FHigh.Subtract(FMid.ShiftLeft(1))) + (FLow);
             DifferenceMsd = difference.GetMsd();
             Deriv2Msd = apprDiff2.GetMsd() - DifferenceMsd + 4;
         }

@@ -1753,7 +1753,7 @@ public class UnifiedReal
             resultProp = MakeProperty(PropertyKind.IsIrrational, BoundedRational.Null);
         }
 
-        return new UnifiedReal(ToConstructiveReal().Add(u.ToConstructiveReal()), resultProp);
+        return new UnifiedReal(ToConstructiveReal() + (u.ToConstructiveReal()), resultProp);
     }
 
     // Don't track ln() or log() arguments whose representation is larger than this.

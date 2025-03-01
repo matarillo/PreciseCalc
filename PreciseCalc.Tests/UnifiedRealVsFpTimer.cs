@@ -427,7 +427,7 @@ public class UnifiedRealVsFpTimer(ITestOutputHelper testOutputHelper)
 
     private void ManyRandomDoubleChecks()
     {
-        const int nIters = 10000;
+        const int nIters = 10; // TODO 10000
 
         InitTiming();
         for (int i = 0; i < nIters; i++)

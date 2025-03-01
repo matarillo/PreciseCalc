@@ -12,8 +12,8 @@ public class ConstructiveRealTest
 
     public ConstructiveRealTest()
     {
-        _three = _two.Add(_one);
-        _four = _two.Add(_two);
+        _three = _two + (_one);
+        _four = _two + (_two);
         _halfPi = ConstructiveReal.PI.Divide(_two);
     }
 
@@ -47,10 +47,10 @@ public class ConstructiveRealTest
     [Fact]
     public void TestAddition()
     {
-        Assert.Equal(0, _one.Add(_one).CompareTo(_two, -50));
+        Assert.Equal(0, (_one + _one).CompareTo(_two, -50));
         Assert.Equal(0, ConstructiveReal.FromInt(4).CompareTo(_four, -50));
         Assert.Equal(0, ConstructiveReal.FromInt(3).CompareTo(_three, -50));
-        Assert.Equal(0, _one.Negate().Add(_two).CompareTo(_one, -50));
+        Assert.Equal(0, (_one.Negate() + (_two)).CompareTo(_one, -50));
     }
 
     [Fact]
@@ -119,7 +119,7 @@ public class ConstructiveRealTest
     [Fact]
     public void TestIntermediateConversions()
     {
-        ConstructiveReal tmp = ConstructiveReal.PI.Add(ConstructiveReal.FromInt(-123).Exp());
+        ConstructiveReal tmp = ConstructiveReal.PI + (ConstructiveReal.FromInt(-123).Exp());
         ConstructiveReal tmp2 = tmp.Subtract(ConstructiveReal.PI);
         Assert.Equal(-123, tmp2.Ln().IntValue());
         Assert.Equal(-123L, tmp2.Ln().LongValue());

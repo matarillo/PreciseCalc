@@ -23,7 +23,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | :--- | :--- |
 | [Abs()](PreciseCalc.ConstructiveReal.Abs().md 'PreciseCalc.ConstructiveReal.Abs()') | Returns the absolute value of the constructive real. |
 | [Acos()](PreciseCalc.ConstructiveReal.Acos().md 'PreciseCalc.ConstructiveReal.Acos()') | Computes the trigonometric arc cosine function. |
-| [Add(ConstructiveReal)](PreciseCalc.ConstructiveReal.Add(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Add(PreciseCalc.ConstructiveReal)') | Add two constructive reals. |
 | [Asin()](PreciseCalc.ConstructiveReal.Asin().md 'PreciseCalc.ConstructiveReal.Asin()') | Computes the trigonometric arc sine function. |
 | [AssumeInt()](PreciseCalc.ConstructiveReal.AssumeInt().md 'PreciseCalc.ConstructiveReal.AssumeInt()') | Assumes the constructive real is an integer, preventing unnecessary evaluations. |
 | [BigIntegerValue()](PreciseCalc.ConstructiveReal.BigIntegerValue().md 'PreciseCalc.ConstructiveReal.BigIntegerValue()') | Returns a BigInteger which differs by less than one from the constructive real. |
@@ -63,3 +62,7 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | [ToString(int, int)](PreciseCalc.ConstructiveReal.ToString(int,int).md 'PreciseCalc.ConstructiveReal.ToString(int, int)') | Converts the number to a string representation with the given precision and radix. |
 | [ToString(int)](PreciseCalc.ConstructiveReal.ToString(int).md 'PreciseCalc.ConstructiveReal.ToString(int)') | Converts the number to a decimal string with the given precision. |
 | [ToStringFloatRep(int, int, int)](PreciseCalc.ConstructiveReal.ToStringFloatRep(int,int,int).md 'PreciseCalc.ConstructiveReal.ToStringFloatRep(int, int, int)') | Returns a textual scientific notation representation. |
+
+| Operators | |
+| :--- | :--- |
+| [operator +(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Add two constructive reals. |
