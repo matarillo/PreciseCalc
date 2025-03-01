@@ -57,7 +57,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | [Sign(int)](PreciseCalc.ConstructiveReal.Sign(int).md 'PreciseCalc.ConstructiveReal.Sign(int)') | Determines the sign of the value at a given precision. |
 | [Sin()](PreciseCalc.ConstructiveReal.Sin().md 'PreciseCalc.ConstructiveReal.Sin()') | The trigonometric sine function. |
 | [Sqrt()](PreciseCalc.ConstructiveReal.Sqrt().md 'PreciseCalc.ConstructiveReal.Sqrt()') | The square root of a constructive real. |
-| [Subtract(ConstructiveReal)](PreciseCalc.ConstructiveReal.Subtract(PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.Subtract(PreciseCalc.ConstructiveReal)') | The difference between two constructive reals |
 | [ToString()](PreciseCalc.ConstructiveReal.ToString().md 'PreciseCalc.ConstructiveReal.ToString()') | Converts the number to a decimal string with default precision. |
 | [ToString(int, int)](PreciseCalc.ConstructiveReal.ToString(int,int).md 'PreciseCalc.ConstructiveReal.ToString(int, int)') | Converts the number to a string representation with the given precision and radix. |
 | [ToString(int)](PreciseCalc.ConstructiveReal.ToString(int).md 'PreciseCalc.ConstructiveReal.ToString(int)') | Converts the number to a decimal string with the given precision. |
@@ -66,3 +65,4 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 | Operators | |
 | :--- | :--- |
 | [operator +(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Addition(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | Add two constructive reals. |
+| [operator -(ConstructiveReal, ConstructiveReal)](PreciseCalc.ConstructiveReal.op_Subtraction(PreciseCalc.ConstructiveReal,PreciseCalc.ConstructiveReal).md 'PreciseCalc.ConstructiveReal.op_Subtraction(PreciseCalc.ConstructiveReal, PreciseCalc.ConstructiveReal)') | The difference between two constructive reals |

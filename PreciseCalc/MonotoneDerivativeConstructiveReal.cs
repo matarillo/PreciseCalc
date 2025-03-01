@@ -19,8 +19,8 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
         _fArg = data.F.Execute(x);
 
         // The following must converge, since arg must be in the open interval
-        var leftDiff = _arg.Subtract(data.Low);
-        var rightDiff = data.High.Subtract(_arg);
+        var leftDiff = _arg - (data.Low);
+        var rightDiff = data.High - (_arg);
         var maxDeltaLeftMsd = leftDiff.GetMsd();
         var maxDeltaRightMsd = rightDiff.GetMsd();
 
@@ -47,13 +47,13 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
 
         var delta = ConstructiveReal.One.ShiftLeft(logDelta);
 
-        var left = _arg.Subtract(delta);
+        var left = _arg - (delta);
         var right = _arg + (delta);
         var fLeft = _data.F.Execute(left);
         var fRight = _data.F.Execute(right);
 
-        var leftDeriv = _fArg.Subtract(fLeft).ShiftRight(logDelta);
-        var rightDeriv = fRight.Subtract(_fArg).ShiftRight(logDelta);
+        var leftDeriv = (_fArg - fLeft).ShiftRight(logDelta);
+        var rightDeriv = (fRight - _fArg).ShiftRight(logDelta);
 
         var evalPrec = precision - extraPrec;
         var apprLeftDeriv = leftDeriv.GetApproximation(evalPrec);
@@ -114,12 +114,12 @@ internal class MonotoneDerivativeConstructiveReal : ConstructiveReal
             FMid = func.Execute(Mid);
             FHigh = func.Execute(h);
 
-            var difference = h.Subtract(l);
+            var difference = h - (l);
 
             // Compute approximate msd of ((f_high - f_mid) - (f_mid - f_low))/(high - low)
             // This should be a very rough approximation to the second derivative.
             // We add a little slop to err on the high side, since a low estimate will cause extra iterations.
-            var apprDiff2 = (FHigh.Subtract(FMid.ShiftLeft(1))) + (FLow);
+            var apprDiff2 = (FHigh - (FMid.ShiftLeft(1))) + (FLow);
             DifferenceMsd = difference.GetMsd();
             Deriv2Msd = apprDiff2.GetMsd() - DifferenceMsd + 4;
         }

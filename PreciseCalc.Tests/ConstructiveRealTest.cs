@@ -120,7 +120,7 @@ public class ConstructiveRealTest
     public void TestIntermediateConversions()
     {
         ConstructiveReal tmp = ConstructiveReal.PI + (ConstructiveReal.FromInt(-123).Exp());
-        ConstructiveReal tmp2 = tmp.Subtract(ConstructiveReal.PI);
+        ConstructiveReal tmp2 = tmp - (ConstructiveReal.PI);
         Assert.Equal(-123, tmp2.Ln().IntValue());
         Assert.Equal(-123L, tmp2.Ln().LongValue());
         Assert.Equal(-123.0f, tmp2.Ln().FloatValue(), 0.0);

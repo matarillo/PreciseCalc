@@ -281,7 +281,7 @@ public abstract class ConstructiveReal
     /// <remarks>
     /// ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)
     /// </remarks>
-    private ConstructiveReal SimpleLn() => new PrescaledLnConstructiveReal(this.Subtract(One));
+    private ConstructiveReal SimpleLn() => new PrescaledLnConstructiveReal(this - (One));
 
     // Predefined constants for logarithm calculations
 
@@ -300,7 +300,7 @@ public abstract class ConstructiveReal
 
     /// <summary>Natural log of 2.  Needed for some pre-scaling below.</summary>
     /// <remarks>ln(2) = 7ln(10/9) - 2ln(25/24) + 3ln(81/80)</remarks>
-    internal static readonly ConstructiveReal Ln2 = (Ln2_1.Subtract(Ln2_2)) + (Ln2_3);
+    internal static readonly ConstructiveReal Ln2 = (Ln2_1 - (Ln2_2)) + (Ln2_3);
 
     /// <summary>
     /// Computes the arctangent of the reciprocal of an integer.
@@ -698,7 +698,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The difference between two constructive reals
     /// </summary>
-    public ConstructiveReal Subtract(ConstructiveReal other) => new AddConstructiveReal(this, other.Negate());
+    public static ConstructiveReal operator -(ConstructiveReal left, ConstructiveReal right) => new AddConstructiveReal(left, right.Negate());
 
     /// <summary>
     /// Multiplies two constructive real numbers.
@@ -732,12 +732,12 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Returns the maximum of this and another constructive real.
     /// </summary>
-    public ConstructiveReal Max(ConstructiveReal x) => Subtract(x).Select(x, this);
+    public ConstructiveReal Max(ConstructiveReal x) => (this - x).Select(x, this);
 
     /// <summary>
     /// Returns the minimum of this and another constructive real.
     /// </summary>
-    public ConstructiveReal Min(ConstructiveReal x) => Subtract(x).Select(this, x);
+    public ConstructiveReal Min(ConstructiveReal x) => (this - x).Select(this, x);
 
     /// <summary>
     /// Returns the absolute value of the constructive real.
@@ -785,7 +785,7 @@ public abstract class ConstructiveReal
     /// experimentation, this is roughly as good as the more complex formulas.
     /// </remarks>
     public static readonly ConstructiveReal AtanPI =
-        Four.Multiply(Four.Multiply(AtanReciprocal(5)).Subtract(AtanReciprocal(239)));
+        Four.Multiply((Four.Multiply(AtanReciprocal(5))) - (AtanReciprocal(239)));
 
     /// <summary>
     /// pi/2
@@ -804,12 +804,12 @@ public abstract class ConstructiveReal
         {
             BigInteger piMultiples = Scale(halfPiMultiples, -1);
             ConstructiveReal adjustment = PI.Multiply(FromBigInteger(piMultiples));
-            return piMultiples.IsEven ? Subtract(adjustment).Cos() : Subtract(adjustment).Cos().Negate();
+            return piMultiples.IsEven ? (this - (adjustment)).Cos() : (this - (adjustment)).Cos().Negate();
         }
         else if (BigInteger.Abs(GetApproximation(-1)).CompareTo(Big2) >= 0)
         {
             ConstructiveReal cosHalf = ShiftRight(1).Cos();
-            return cosHalf.Multiply(cosHalf).ShiftLeft(1).Subtract(One);
+            return cosHalf.Multiply(cosHalf).ShiftLeft(1) - (One);
         }
         else
         {
@@ -820,7 +820,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// The trigonometric sine function.
     /// </summary>
-    public ConstructiveReal Sin() => HalfPI.Subtract(this).Cos();
+    public ConstructiveReal Sin() => (HalfPI - (this)).Cos();
 
     /// <summary>
     /// Computes the trigonometric arc sine function.
@@ -830,7 +830,7 @@ public abstract class ConstructiveReal
         BigInteger roughApprox = GetApproximation(-10);
         if (roughApprox.CompareTo(Big750) > 0) // 1/sqrt(2) + a bit
         {
-            ConstructiveReal newArg = One.Subtract(Multiply(this)).Sqrt();
+            ConstructiveReal newArg = (One - (Multiply(this))).Sqrt();
             return newArg.Acos();
         }
         else if (roughApprox.CompareTo(BigM750) < 0)
@@ -846,7 +846,7 @@ public abstract class ConstructiveReal
     /// <summary>
     /// Computes the trigonometric arc cosine function.
     /// </summary>
-    public ConstructiveReal Acos() => HalfPI.Subtract(Asin());
+    public ConstructiveReal Acos() => HalfPI - (Asin());
 
     private static readonly BigInteger LowLnLimit = Big8; // sixteenths, i.e. 1/2
     private static readonly BigInteger HighLnLimit = new BigInteger(24); // 1.5 * 16
